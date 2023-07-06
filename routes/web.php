@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\DestinasiController;
+use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KaryawanController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +19,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Auth::check() ? redirect()->route('home') : view('auth.login');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'HomeAdmin'])->name('admin.dashboard');;
+    Route::resource('/divisi', DivisiController::class);
+    Route::resource('/destinasi', DestinasiController::class);
+    Route::resource('/karyawan', KaryawanController::class);
+});
+
+Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'HomeKaryawan'])->name('karyawan.dashboard');
+});
+
+
