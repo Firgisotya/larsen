@@ -17,6 +17,15 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
+                @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                     <form action="{{ route('karyawan.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -35,11 +44,11 @@
                         <div class="mb-3">
                             <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
                             <input type="text"
-                                class="form-control @error('nama') is-invalid
+                                class="form-control @error('nama_karyawan') is-invalid
                         @enderror"
-                                id="nama_karyawan" placeholder="Nama Karyawan" name="nama" required autofocus
-                                value="{{ old('nama') }}">
-                            @error('nama')
+                                id="nama_karyawan" placeholder="Nama Karyawan" name="nama_karyawan" required autofocus
+                                value="{{ old('nama_karyawan') }}">
+                            @error('nama_karyawan')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -92,6 +101,21 @@
                                 id="tanggal_lahir" placeholder="Tempat Lahir" name="tanggal_lahir" required autofocus
                                 value="{{ old('tanggal_lahir') }}">
                             @error('tanggal_lahir')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                            <select class="form-select @error('jenis_kelamin') is-invalid
+                        @enderror"
+                                id="jenis_kelamin" name="jenis_kelamin" required autofocus value="{{ old('jenis_kelamin') }}">
+                                <option value="">Pilih Jenis Kelamin</option>
+                                <option value="Laki-Laki">Laki-Laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                            @error('jenis_kelamin')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -171,6 +195,21 @@
                                 id="confirmation_password" placeholder="Konfirmasi Password" name="confirmation_password"
                                 required autofocus value="{{ old('confirmation_password') }}">
                             @error('confirmation_password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select @error('role') is-invalid
+                        @enderror"
+                                id="role" name="role" required autofocus value="{{ old('role') }}">
+                                <option value="">Pilih Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="karyawan">Karyawan</option>
+                            </select>
+                            @error('role')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

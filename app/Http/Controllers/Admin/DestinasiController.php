@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Destinasi;
 use Illuminate\Http\Request;
@@ -43,7 +45,7 @@ class DestinasiController extends Controller
 
         Destinasi::create($validateData);
         Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
-        return redirect()->route('admin.destinasi.index');
+        return redirect()->route('destinasi.index');
     }
 
     /**
@@ -83,7 +85,7 @@ class DestinasiController extends Controller
 
         $destinasi->update($validateData);
         Alert::success('Berhasil', 'Data Berhasil Diubah');
-        return redirect()->route('admin.destinasi.index');
+        return redirect()->route('destinasi.index');
     }
 
     /**
@@ -96,6 +98,6 @@ class DestinasiController extends Controller
     {
         $destinasi->delete();
         Alert::success('Berhasil', 'Data Berhasil Dihapus');
-        return redirect()->route('admin.destinasi.index');
+        return redirect()->route('destinasi.index');
     }
 }

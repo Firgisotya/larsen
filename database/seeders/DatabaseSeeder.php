@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             KaryawanSeeder::class,
             UserSeeder::class,
             DestinasiSeeder::class,
+            TugasSeeder::class,
         ]);
     }
 }

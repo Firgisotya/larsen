@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Destinasi;
+use App\Models\Karyawan;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TugasController extends Controller
 {
@@ -14,7 +18,9 @@ class TugasController extends Controller
      */
     public function index()
     {
-        //
+        $tugas = Tugas::with('karyawan', 'destinasi')->paginate(10);
+        return view('admin.tugas.index', compact('tugas'));
+        
     }
 
     /**
@@ -24,7 +30,10 @@ class TugasController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.tugas.create', [
+            'destinasi' => Destinasi::get(),
+            'karyawan' => Karyawan::get(),
+        ]);
     }
 
     /**
@@ -35,7 +44,21 @@ class TugasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate(
+            [
+            'nama_tugas' => 'required',
+            'deskripsi_tugas' => 'required',
+            'tanggal' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+            'karyawan_id' => 'required',
+            'destinasi_id' => 'required',
+            ]
+        );
+
+        Tugas::create($validateData);
+        Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
+        return redirect()->route('tugas.index');
     }
 
     /**
@@ -46,7 +69,7 @@ class TugasController extends Controller
      */
     public function show(Tugas $tugas)
     {
-        //
+        return view('admin.tugas.show', compact('tugas'));
     }
 
     /**
@@ -57,7 +80,12 @@ class TugasController extends Controller
      */
     public function edit(Tugas $tugas)
     {
-        //
+        return view('admin.tugas.edit', [
+            'tugas' => $tugas,
+            'destinasi' => Destinasi::get(),
+            'karyawan' => Karyawan::get(),
+        ]);
+
     }
 
     /**
@@ -69,7 +97,21 @@ class TugasController extends Controller
      */
     public function update(Request $request, Tugas $tugas)
     {
-        //
+        $validateData = $request->validate(
+            [
+            'nama_tugas' => 'required',
+            'deskripsi_tugas' => 'required',
+            'tanggal' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+            'karyawan_id' => 'required',
+            'destinasi_id' => 'required',
+            ]
+        );
+
+        $tugas->update($validateData);
+        Alert::success('Berhasil', 'Data Berhasil Diubah');
+        return redirect()->route('tugas.index');
     }
 
     /**
@@ -80,6 +122,15 @@ class TugasController extends Controller
      */
     public function destroy(Tugas $tugas)
     {
-        //
+        $tugas = Tugas::findOrFail($tugas->id);
+        try {
+            $tugas->delete();
+            Alert::success('Berhasil', 'Data Berhasil Dihapus');
+        } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                Alert::error('Gagal', 'Data Gagal Dihapus');
+            }
+        }
+        return redirect()->route('tugas.index');
     }
 }

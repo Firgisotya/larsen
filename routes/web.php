@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\DestinasiController;
-use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\Admin\DestinasiController;
+use App\Http\Controllers\Admin\DivisiController;
+use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\TugasController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\KaryawanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return Auth::check() ? redirect()->route('home') : view('auth.login');
+    return Auth::check() ? : view('auth.login');
 });
 
 Auth::routes();
@@ -29,6 +30,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::resource('/divisi', DivisiController::class);
     Route::resource('/destinasi', DestinasiController::class);
     Route::resource('/karyawan', KaryawanController::class);
+    Route::resource('/tugas', TugasController::class);
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {

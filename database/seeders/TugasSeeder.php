@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TugasSeeder extends Seeder
 {
@@ -13,6 +14,47 @@ class TugasSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('tugas')->insert([
+            [
+                'nama_tugas' => 'Membuat Laporan',
+                'karyawan_id' => '1',
+                'destinasi_id' => '1',
+                'deskripsi_tugas' => 'Membuat laporan mengenai kegiatan yang dilakukan selama di destinasi',
+                'tanggal' => '2021-01-01',
+                'jam_mulai' => '08:00:00',
+                'jam_selesai' => '17:00:00',
+                'status_tugas' => 'Selesai',
+            ],
+            [
+                'nama_tugas' => 'Membuat Laporan',
+                'karyawan_id' => '1',
+                'destinasi_id' => '1',
+                'deskripsi_tugas' => 'Membuat laporan mengenai kegiatan yang dilakukan selama di destinasi',
+                'tanggal' => '2021-01-01',
+                'jam_mulai' => '08:00:00',
+                'jam_selesai' => '17:00:00',
+                'status_tugas' => 'Belum Dikerjakan',
+            ],
+            [
+                'nama_tugas' => 'Membuat Laporan',
+                'karyawan_id' => '1',
+                'destinasi_id' => '1',
+                'deskripsi_tugas' => 'Membuat laporan mengenai kegiatan yang dilakukan selama di destinasi',
+                'tanggal' => '2021-01-01',
+                'jam_mulai' => '08:00:00',
+                'jam_selesai' => '17:00:00',
+                'status_tugas' => 'Dikerjakan',
+            ],
+            [
+                'nama_tugas' => 'Membuat Laporan',
+                'karyawan_id' => '1',
+                'destinasi_id' => '1',
+                'deskripsi_tugas' => 'Membuat laporan mengenai kegiatan yang dilakukan selama di destinasi',
+                'tanggal' => '2021-01-01',
+                'jam_mulai' => '08:00:00',
+                'jam_selesai' => '17:00:00',
+                'status_tugas' => 'Ditolak',
+            ]
+        ]);
     }
 }
