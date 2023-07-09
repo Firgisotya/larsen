@@ -50,5 +50,10 @@ class User extends Authenticatable
         return $this->hasOne(Karyawan::class);
     }
 
+    public function formIzin()
+    {
+        return $this->hasMany(FormIzin::class);
+    }
+
 
 }

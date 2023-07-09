@@ -101,6 +101,18 @@
                             <span class="hide-menu">Tugas</span>
                         </a>
                     </li>
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Form</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/karyawan/form" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-article"></i>
+                            </span>
+                            <span class="hide-menu">Form Izin</span>
+                        </a>
+                    </li>
                 @endif
 
             </ul>

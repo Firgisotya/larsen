@@ -23,6 +23,11 @@ Route::get('/', function () {
     return Auth::check() ? : view('auth.login');
 });
 
+Route::get('/ip', function () {
+    $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+    return $checkLocation->toArray();
+});
+
 Auth::routes();
 
 Route::middleware(['admin'])->prefix('admin')->group(function () {
@@ -35,6 +40,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeKaryawan'])->name('karyawan.dashboard');
+    Route::post('/tesFoto', [HomeController::class, 'tesFoto'])->name('karyawan.tesFoto');
 });
 
 
