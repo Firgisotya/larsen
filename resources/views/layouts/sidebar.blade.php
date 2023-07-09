@@ -94,7 +94,7 @@
                         <span class="hide-menu">Activity</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/karyawan/tugas" aria-expanded="false">
+                        <a class="sidebar-link" href="/karyawan/activity" aria-expanded="false">
                             <span>
                                 <i class="ti ti-article"></i>
                             </span>

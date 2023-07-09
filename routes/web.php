@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Admin\DestinasiController;
 use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\KaryawanController;
@@ -24,8 +25,11 @@ Route::get('/', function () {
 });
 
 Route::get('/ip', function () {
-    $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-    return $checkLocation->toArray();
+    // $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+    // $checkLocation = geoip()->getLocation('103.169.130.170');
+    // return $checkLocation->toArray();
+
+
 });
 
 Auth::routes();
@@ -41,6 +45,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeKaryawan'])->name('karyawan.dashboard');
     Route::post('/tesFoto', [HomeController::class, 'tesFoto'])->name('karyawan.tesFoto');
+    Route::get('/activity', [ActivityController::class, 'index'])->name('karyawan.activity.index');
+    Route::post('/teslok', [HomeController::class, 'teslok']);
 });
 
 

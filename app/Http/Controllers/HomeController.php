@@ -28,13 +28,10 @@ class HomeController extends Controller
 
     public function HomeKaryawan()
     {
-        $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-        return view('karyawan.homeKaryawan',
-        [
-            'lat' => $checkLocation->lat,
-            'lon' => $checkLocation->lon,
-        ]
-    );
+        // $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        // $checkLocation = geoip()->getLocation('103.169.130.170');
+
+        return view('karyawan.homeKaryawan');
     }
 
     public function tesFoto(Request $request)
@@ -47,5 +44,23 @@ class HomeController extends Controller
 
         file_put_contents(public_path('images/tesFoto/') . $imageName, $decodedImage);
         return response()->json(['success' => 'Image uploaded successfully']);
+    }
+
+    public function teslok (Request $request) {
+        // Cek apakah browser mendukung geolocation
+        if ($request->has('geolocation')) {
+            // Mendapatkan geolocation dari request
+            $geolocation = $request->input('geolocation');
+
+            // Memisahkan latitude dan longitude dari geolocation
+            list($latitude, $longitude) = explode(',', $geolocation);
+
+            // Lakukan pemrosesan lebih lanjut sesuai kebutuhan Anda
+            // ...
+
+            return response()->json(['latitude' => $latitude, 'longitude' => $longitude]);
+        }
+
+        return response()->json(['error' => 'Geolocation not found.']);
     }
 }
