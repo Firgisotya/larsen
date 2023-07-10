@@ -5,11 +5,11 @@
         @media (max-width: 767px) {
 
             /* Ubah ukuran sesuai dengan ukuran layar mobile yang diinginkan */
-            #webcam-pagi video {
+            #webcam-masuk video {
                 display: none;
             }
 
-            #capture-pagi {
+            #capture-masuk {
                 display: none;
             }
         }
@@ -17,7 +17,7 @@
         @media (min-width: 768px) {
 
             /* Ubah ukuran sesuai dengan ukuran layar desktop yang diinginkan */
-            #webcam-pagi input {
+            #webcam-masuk input {
                 display: none;
             }
 
@@ -29,7 +29,7 @@
                 display: none;
             }
 
-            #imagePreviewPagi {
+            #imagePreviewMasuk {
                 display: none;
             }
 
@@ -74,32 +74,32 @@
     {{-- absen --}}
     <div class="row">
 
-        {{-- pagi --}}
-        <div class="col-4">
+        {{-- masuk --}}
+        <div class="col-6">
             <!-- Button trigger modal -->
-            <div data-bs-toggle="modal" data-bs-target="#pagi">
+            <div data-bs-toggle="modal" data-bs-target="#masuk">
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title text-primary d-flex justify-content-center">
                             <i class="fas fa-camera-alt fa-5x"></i>
                         </h5>
-                        <h2 class="card-text text-primary d-flex justify-content-center">Absen Pagi</h2>
+                        <h2 class="card-text text-primary d-flex justify-content-center">Absen Masuk</h2>
                     </div>
                 </div>
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="pagi" tabindex="-1" aria-labelledby="pagiLabel" aria-hidden="true">
+            <div class="modal fade" id="masuk" tabindex="-1" aria-labelledby="masukLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Absen Pagi</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Absen Masuk</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
 
                         <div class="modal-body">
-                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
+                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
                                 <h3 class="text-center">Lokasi Anda</h3>
                                 <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
                                     Anda</button>
@@ -109,35 +109,35 @@
                                 </div>
                             </div>
 
-                            <div id="webcam-pagi" class="d-flex justify-content-center">
-                                <video id="video-pagi" width="100%" height="100%" autoplay playsinline></video>
+                            <div id="webcam-masuk" class="d-flex justify-content-center">
+                                <video id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
                                 <div class="row">
-                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-pagi">
+                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
                                     <div class="custom-file">
-                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-pagi"
-                                            class="custom-file-input" onchange="previewImage()">
-                                        <label class="custom-file-label" for="uploadInput-pagi"></label>
+                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-masuk"
+                                            class="custom-file-input" onchange="previewImage('masuk')">
+                                        <label class="custom-file-label" for="uploadInput-masuk"></label>
                                     </div>
                                 </div>
                             </div>
-                            <div id="captured-image-pagi-container" style="display: none;">
-                                <img id="captured-image-pagi" width="100%" height="100%" src=""
+                            <div id="captured-image-masuk-container" style="display: none;">
+                                <img id="captured-image-masuk" width="100%" height="100%" src=""
                                     alt="Captured Image">
                             </div>
-                            <input id="captured-image-input-pagi" type="hidden" name="webcam-pagi" value="">
-                            <input type="hidden" name="waktu-pagi" value="pagi">
+                            <input id="captured-image-input-masuk" type="hidden" name="webcam-masuk" value="">
+                            <input type="hidden" name="waktu-masuk" value="masuk">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-pagi" class="btn btn-primary" onclick="captureImage('pagi')">Ambil
+                                <button id="capture-masuk" class="btn btn-primary" onclick="captureImage('masuk')">Ambil
                                     Foto</button>
-                                <button id="reset-pagi" class="btn btn-danger" style="display: none;"
-                                    onclick="resetImage('pagi')">Reset</button>
+                                <button id="reset-masuk" class="btn btn-danger" style="display: none;"
+                                    onclick="resetImage('masuk')">Reset</button>
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="submitAbsen('pagi')"
+                            <button type="button" class="btn btn-success" onclick="submitAbsen('masuk')"
                                 data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
@@ -145,26 +145,26 @@
             </div>
         </div>
 
-        {{-- siang --}}
-        <div class="col-4">
+        {{-- pulang --}}
+        <div class="col-6">
             <!-- Button trigger modal -->
-            <div data-bs-toggle="modal" data-bs-target="#siang">
+            <div data-bs-toggle="modal" data-bs-target="#pulang">
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title text-primary d-flex justify-content-center">
                             <i class="fas fa-camera-alt fa-5x"></i>
                         </h5>
-                        <h2 class="card-text text-primary d-flex justify-content-center">Absen Siang</h2>
+                        <h2 class="card-text text-primary d-flex justify-content-center">Absen Pulang</h2>
                     </div>
                 </div>
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="siang" tabindex="-1" aria-labelledby="siangLabel" aria-hidden="true">
+            <div class="modal fade" id="pulang" tabindex="-1" aria-labelledby="pulangLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Absen Siang</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Absen Pulang</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -180,106 +180,35 @@
                                 </div>
                             </div>
 
-                            <div id="webcam-siang" class="d-flex justify-content-center">
-                                <video id="video-siang" width="100%" height="100%" autoplay playsinline></video>
+                            <div id="webcam-pulang" class="d-flex justify-content-center">
+                                <video id="video-pulang" width="100%" height="100%" autoplay playsinline></video>
                                 <div class="row">
-                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-siang">
+                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-pulang">
                                     <div class="custom-file">
-                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-siang"
-                                            class="custom-file-input" onchange="previewImage()">
-                                        <label class="custom-file-label" for="uploadInput-siang"></label>
+                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-pulang"
+                                            class="custom-file-input" onchange="previewImage('pulang')">
+                                        <label class="custom-file-label" for="uploadInput-pulang"></label>
                                     </div>
                                 </div>
                             </div>
-                            <div id="captured-image-siang-container" style="display: none;">
-                                <img id="captured-image-siang" width="100%" height="100%" src=""
+                            <div id="captured-image-pulang-container" style="display: none;">
+                                <img id="captured-image-pulang" width="100%" height="100%" src=""
                                     alt="Captured Image">
                             </div>
-                            <input id="captured-image-input-siang" type="hidden" name="webcam-siang" value="">
-                            <input type="hidden" name="waktu-siang" value="siang">
+                            <input id="captured-image-input-pulang" type="hidden" name="webcam-pulang" value="">
+                            <input type="hidden" name="waktu-pulang" value="pulang">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-siang" class="btn btn-primary" onclick="captureImage('siang')">Ambil
+                                <button id="capture-pulang" class="btn btn-primary" onclick="captureImage('pulang')">Ambil
                                     Foto</button>
-                                <button id="reset-siang" class="btn btn-danger" style="display: none;"
-                                    onclick="resetImage('siang')">Reset</button>
+                                <button id="reset-pulang" class="btn btn-danger" style="display: none;"
+                                    onclick="resetImage('pulang')">Reset</button>
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="submitAbsen('siang')"
-                                data-bs-dismiss="modal">Absen</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- sore --}}
-        <div class="col-4">
-            <!-- Button trigger modal -->
-            <div data-bs-toggle="modal" data-bs-target="#sore">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary d-flex justify-content-center">
-                            <i class="fas fa-camera-alt fa-5x"></i>
-                        </h5>
-                        <h2 class="card-text text-primary d-flex justify-content-center">Absen Sore</h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="sore" tabindex="-1" aria-labelledby="soreLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Absen Sore</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-
-                        <div class="modal-body">
-                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
-                                <h3 class="text-center">Lokasi Anda</h3>
-                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
-                                    Anda</button>
-                                <div class="d-flex justify-content-center gap-2">
-                                    Latitude: <span id="latitude" name="latitude"></span>
-                                    Longitude: <span id="longitude" name="longitude"></span>
-                                </div>
-                            </div>
-
-                            <div id="webcam-sore" class="d-flex justify-content-center">
-                                <video id="video-sore" width="100%" height="100%" autoplay playsinline></video>
-                                <div class="row">
-                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-sore">
-                                    <div class="custom-file">
-                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-sore"
-                                            class="custom-file-input" onchange="previewImage()">
-                                        <label class="custom-file-label" for="uploadInput-sore"></label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="captured-image-sore-container" style="display: none;">
-                                <img id="captured-image-sore" width="100%" height="100%" src=""
-                                    alt="Captured Image">
-                            </div>
-                            <input id="captured-image-input-sore" type="hidden" name="webcam-sore" value="">
-                            <input type="hidden" name="waktu-sore" value="sore">
-                            <div class="col-md-12 text-center">
-                                <br />
-                                <button id="capture-sore" class="btn btn-primary" onclick="captureImage('sore')">Ambil
-                                    Foto</button>
-                                <button id="reset-sore" class="btn btn-danger" style="display: none;"
-                                    onclick="resetImage('sore')">Reset</button>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="submitAbsen('sore')"
+                            <button type="button" class="btn btn-success" onclick="submitAbsen('pulang')"
                                 data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
@@ -304,53 +233,44 @@
 @section('script')
     <script>
         // Mendapatkan elemen modal body
-        var modalBodyPagi = document.querySelector("#pagi .modal-body");
-        var modalBodySiang = document.querySelector("#siang .modal-body");
-        var modalBodySore = document.querySelector("#sore .modal-body");
+        var modalBodyMasuk = document.querySelector("#masuk .modal-body");
+        var modalBodyPulang = document.querySelector("#pulang .modal-body");
 
         // Mendapatkan elemen video dan tombol ambil foto
-        var videoPagi = document.getElementById("video-pagi");
-        var captureButtonPagi = document.getElementById("capture-pagi");
-        var videoSiang = document.getElementById("video-siang");
-        var captureButtonSiang = document.getElementById("capture-siang");
-        var videoSore = document.getElementById("video-sore");
-        var captureButtonSore = document.getElementById("capture-sore");
+        var videoMasuk = document.getElementById("video-masuk");
+        var captureButtonMasuk = document.getElementById("capture-masuk");
+        var videoPulang = document.getElementById("video-pulang");
+        var captureButtonPulang = document.getElementById("capture-pulang");
 
         // Mendapatkan waktu saat ini
         var currentTime = new Date();
         var currentHour = currentTime.getHours();
 
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 18) {
-            // Mengubah isi modal body menjadi teks waktu absen pagi habis
-            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
-            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
-            modalBodySore.innerHTML = "<h4>Waktu absen sore sudah habis.</h4>";
+        if (currentHour >= 24) {
+            // Mengubah isi modal body menjadi teks waktu absen masuk habis
+            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
+            modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
 
             // Menonaktifkan video dan tombol ambil foto
-            videoPagi.style.display = "none";
-            captureButtonPagi.disabled = true;
-            videoSiang.style.display = "none";
-            captureButtonSiang.disabled = true;
-            videoSore.style.display = "none";
-            captureButtonSore.disabled = true;
-        } else if (currentHour >= 14) {
-            // Mengubah isi modal body menjadi teks waktu absen pagi habis
-            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
-            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
+            videoMasuk.style.display = "none";
+            captureButtonMasuk.disabled = true;
+            videoPulang.style.display = "none";
+            captureButtonPulang.disabled = true;
+        } else if (currentHour >= 24) {
+            // Mengubah isi modal body menjadi teks waktu absen masuk habis
+            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
             // Menonaktifkan video dan tombol ambil foto
-            videoPagi.style.display = "none";
-            captureButtonPagi.disabled = true;
-            videoSiang.style.display = "none";
-            captureButtonSiang.disabled = true;
-        } else if (currentHour >= 10) {
-            // Mengubah isi modal body menjadi teks waktu absen pagi habis
-            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
+            videoMasuk.style.display = "none";
+            captureButtonMasuk.disabled = true;
+        } else if (currentHour >= 24) {
+            // Mengubah isi modal body menjadi teks waktu absen masuk habis
+            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
             // Menonaktifkan video dan tombol ambil foto
-            videoPagi.style.display = "none";
-            captureButtonPagi.disabled = true;
+            videoMasuk.style.display = "none";
+            captureButtonMasuk.disabled = true;
         }
 
 
@@ -398,25 +318,19 @@
         }
 
         // Panggil fungsi getCameraStream saat modal ditampilkan
-        $('#pagi').on('shown.bs.modal', function() {
-            getCameraStream('pagi');
+        $('#masuk').on('shown.bs.modal', function() {
+            getCameraStream('masuk');
         });
-        $('#siang').on('shown.bs.modal', function() {
-            getCameraStream('siang');
-        });
-        $('#sore').on('shown.bs.modal', function() {
-            getCameraStream('sore');
+        $('#pulang').on('shown.bs.modal', function() {
+            getCameraStream('pulang');
         });
 
         // Panggil fungsi resetImage saat modal ditutup
-        $('#pagi').on('hidden.bs.modal', function() {
-            resetImage('pagi');
+        $('#masuk').on('hidden.bs.modal', function() {
+            resetImage('masuk');
         });
-        $('#siang').on('hidden.bs.modal', function() {
-            resetImage('siang');
-        });
-        $('#sore').on('hidden.bs.modal', function() {
-            resetImage('sore');
+        $('#pulang').on('hidden.bs.modal', function() {
+            resetImage('pulang');
         });
 
         // mengrim data ke server untuk di simpan
@@ -435,26 +349,43 @@
             formData.append('longitude', longitude);
 
             formData.append('waktu', waktu); // Ganti dengan waktu yang sesuai
+            console.log(waktu);
 
             // Kirim data ke server
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '{{ route('karyawan.absensi.store') }}', true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        console.log('Absensi saved successfully');
-                        // Tambahkan logika yang sesuai setelah absensi berhasil disimpan
-                        location.reload();
-                    } else if (xhr.status === 400) {
-                        console.log('Error: ' + xhr.status);
-                        // Tambahkan logika untuk menangani pesan kesalahan
-                        var response = JSON.parse(xhr.responseText);
-                        console.log(response.message);
-                        location.reload();
-                    }
-                }
-            };
-            xhr.send(formData);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', '{{ route('karyawan.absensi.store') }}', true);
+            // xhr.onreadystatechange = function() {
+            //     if (xhr.readyState === 4) {
+            //         if (xhr.status === 200) {
+            //             console.log('Absensi saved successfully');
+            //             // Tambahkan logika yang sesuai setelah absensi berhasil disimpan
+            //             location.reload();
+            //         } else if (xhr.status === 400) {
+            //             console.log('Error: ' + xhr.status);
+            //             // Tambahkan logika untuk menangani pesan kesalahan
+            //             var response = JSON.parse(xhr.responseText);
+            //             console.log(response.message);
+            //             location.reload();
+            //         }
+            //     }
+            // };
+            // xhr.send(formData);
+
+            $.ajax({
+                url: '{{ route('karyawan.absensi.store') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+            }).done(function(response) {
+                console.log(response);
+                location.reload();
+            }).fail(function(response) {
+                console.log(response);
+                location.reload();
+            });
+
             // Reset form
             resetImage(waktu);
         }

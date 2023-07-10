@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DestinasiSeeder::class,
             TugasSeeder::class,
+            LokasiKantorSeeder::class,
         ]);
     }
 }

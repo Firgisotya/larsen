@@ -15,7 +15,7 @@ class AbsensiController extends Controller
     {
         $waktu = $request->input('waktu');
 
-        if ($waktu == 'pagi') {
+        if ($waktu == 'masuk') {
             $dateTime = Carbon::now();
             $karyawanId = auth()->user()->karyawan_id;
             $tanggal = now()->toDateString();
@@ -45,12 +45,19 @@ class AbsensiController extends Controller
                 return response()->json(['message' => 'Foto absensi tidak ditemukan'], 400);
             }
 
+            // konversi telat
+            $jam = floor($telat / 60); // Menghitung jumlah jam
+            $menit = $telat % 60; // Menghitung jumlah menit
+            $detik = 0; // Jumlah detik diabaikan dalam contoh ini
+
+            $hasilTelat = $jam . ' jam ' . $menit . ' menit ' . $detik . ' detik';
+
 
 
             // validasi lokasi absensi
 
-            $allowedLatitude = -6.7633152;  // Ganti dengan latitude lokasi yang diizinkan
-            $allowedLongitude = 106.7843584; // Ganti dengan longitude lokasi yang diizinkan
+            $allowedLatitude = -7.7365248;  // Ganti dengan latitude lokasi yang diizinkan
+            $allowedLongitude = 112.7022592; // Ganti dengan longitude lokasi yang diizinkan
 
             // Menghitung jarak menggunakan formula Haversine
             $earthRadius = 6371; // Radius bumi dalam kilometer
@@ -62,7 +69,6 @@ class AbsensiController extends Controller
 
             // Menentukan radius yang diizinkan (misalnya, 1 kilometer)
             $allowedRadius = 0.1; // Ganti dengan radius yang diizinkan dalam kilometer
-
 
             if ($distance <= $allowedRadius) {
 
@@ -70,71 +76,19 @@ class AbsensiController extends Controller
                 $absensi = new Absensi;
                 $absensi->karyawan_id = $karyawanId;
                 $absensi->tanggal = $tanggal;
-                $absensi->jam_pagi = $jam;
-                $absensi->lokasi_pagi = $latitude . ',' . $longitude;
-                $absensi->foto_pagi = $fileName;
-                $absensi->telat = $telat;
+                $absensi->jam_masuk = $jam;
+                $absensi->lokasi_masuk = $latitude . ',' . $longitude;
+                $absensi->foto_masuk = $fileName;
+                $absensi->telat = $hasilTelat;
                 $absensi->save();
 
-                Alert::success('Absensi pagi berhasil disimpan', 'Selamat bekerja');
+                Alert::success('Absensi masuk berhasil disimpan', 'Selamat bekerja');
                 return response()->json(['message' => 'Absensi saved successfully'], 200);
             } else {
                 Alert::error('Lokasi tidak valid untuk absen', 'Anda tidak berada di kantor');
                 return response()->json(['message' => 'Lokasi tidak valid untuk absen'], 400);
             }
-        } else if ($waktu == 'siang') {
-            $dateTime = Carbon::now();
-            $karyawanId = auth()->user()->karyawan_id;
-            $tanggal = now()->toDateString();
-            $jam = $dateTime->format('H:i:s');
-            $latitude = $request->input('latitude');
-            $longitude = $request->input('longitude');
-
-           
-            // simpan foto ke direktori
-            $foto = $request->input('captured_image');
-            $image_parts = explode(";base64,", $foto);
-            $image_type_aux = explode("image/", $image_parts[0]);
-            $image_type = $image_type_aux[1];
-            $image_base64 = base64_decode($image_parts[1]);
-            $fileName = 'absensi_' . $karyawanId . '_' . time() . '.png';
-            $file = $fileName;
-
-            Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
-
-            // Lokasi yang diizinkan (misalnya, koordinat kantor)
-            // $allowedLatitude = -7.8713039;  // Ganti dengan latitude lokasi yang diizinkan
-            // $allowedLongitude = 112.5245536; // Ganti dengan longitude lokasi yang diizinkan
-
-            $allowedLatitude = -6.7633152;  // Ganti dengan latitude lokasi yang diizinkan
-            $allowedLongitude = 106.7843584; // Ganti dengan longitude lokasi yang diizinkan
-
-            // Menghitung jarak menggunakan formula Haversine
-            $earthRadius = 6371; // Radius bumi dalam kilometer
-            $latDiff = deg2rad($allowedLatitude - $latitude);
-            $lonDiff = deg2rad($allowedLongitude - $longitude);
-            $a = sin($latDiff / 2) * sin($latDiff / 2) + cos(deg2rad($latitude)) * cos(deg2rad($allowedLatitude)) * sin($lonDiff / 2) * sin($lonDiff / 2);
-            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-            $distance = $earthRadius * $c;
-
-            // Menentukan radius yang diizinkan (misalnya, 1 kilometer)
-            $allowedRadius = 0.1; // Ganti dengan radius yang diizinkan dalam kilometer
-
-            if ($distance <= $allowedRadius) {
-                // update data absensi berdasarkan karyawan_id dan tanggal
-                $absensi = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', $tanggal)->first();
-                $absensi->jam_siang = $jam;
-                $absensi->lokasi_siang = $latitude . ',' . $longitude;
-                $absensi->foto_siang = $fileName;
-                $absensi->save();
-
-                Alert::success('Absensi siang berhasil disimpan', 'Selamat bekerja');
-                return response()->json(['message' => 'Absensi saved successfully'], 200);
-            } else {
-                Alert::error('Lokasi tidak valid untuk absen', 'Anda tidak berada di kantor');
-                return response()->json(['message' => 'Lokasi tidak valid untuk absen'], 400);
-            }
-        } else if ($waktu == 'sore') {
+        } else if ($waktu == 'pulang') {
             $dateTime = Carbon::now();
             $karyawanId = auth()->user()->karyawan_id;
             $tanggal = now()->toDateString();
@@ -174,12 +128,12 @@ class AbsensiController extends Controller
             if ($distance <= $allowedRadius) {
                 // update data absensi berdasarkan karyawan_id dan tanggal
                 $absensi = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', $tanggal)->first();
-                $absensi->jam_sore = $jam;
-                $absensi->lokasi_sore = $latitude . ',' . $longitude;
-                $absensi->foto_sore = $fileName;
+                $absensi->jam_pulang = $jam;
+                $absensi->lokasi_pulang = $latitude . ',' . $longitude;
+                $absensi->foto_pulang = $fileName;
                 $absensi->save();
 
-                Alert::success('Absensi sore berhasil disimpan', 'Selamat pulang');
+                Alert::success('Absensi pulang berhasil disimpan', 'Selamat pulang');
                 return response()->json(['message' => 'Absensi saved successfully'], 200);
             } else {
                 Alert::error('Lokasi tidak valid untuk absen', 'Anda tidak berada di kantor');
@@ -192,21 +146,16 @@ class AbsensiController extends Controller
     {
         $user = auth()->user();
         $karyawanId = $user->karyawan_id;
-        
+
         $attendance = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', now()->toDateString())->first();
         if ($attendance->foto_pagi != null and $attendance->lokasi_pagi != null) {
             dd('Anda sudah absen pagi');
-        } else if($attendance->foto_siang != null and $attendance->lokasi_siang != null) {
+        } else if ($attendance->foto_siang != null and $attendance->lokasi_siang != null) {
             dd('Anda sudah absen siang');
-        } else if($attendance->foto_sore != null and $attendance->lokasi_sore != null) {
+        } else if ($attendance->foto_sore != null and $attendance->lokasi_sore != null) {
             dd('Anda sudah absen sore');
         } else {
             dd('Anda belum absen');
         }
-
-        
-
     }
-
-
 }
