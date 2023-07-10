@@ -31,7 +31,18 @@ class HomeController extends Controller
         // $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         // $checkLocation = geoip()->getLocation('103.169.130.170');
 
-        return view('karyawan.homeKaryawan');
+        $time = now()->format('H:i:s');
+        $karyawanId = auth()->user()->karyawan_id;
+
+        return view('karyawan.homeKaryawan', 
+        [
+            'time' => $time,
+            'karyawanId' => $karyawanId,
+
+            // 'checkLocation' => $checkLocation
+        ]
+        
+    );
     }
 
     public function tesFoto(Request $request)

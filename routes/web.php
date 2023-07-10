@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Admin\DestinasiController;
 use App\Http\Controllers\Admin\DivisiController;
@@ -46,7 +47,7 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeKaryawan'])->name('karyawan.dashboard');
     Route::post('/tesFoto', [HomeController::class, 'tesFoto'])->name('karyawan.tesFoto');
     Route::get('/activity', [ActivityController::class, 'index'])->name('karyawan.activity.index');
-    Route::post('/teslok', [HomeController::class, 'teslok']);
+    Route::post('/absensi', [AbsensiController::class, 'store'])->name('karyawan.absensi.store');
 });
 
 

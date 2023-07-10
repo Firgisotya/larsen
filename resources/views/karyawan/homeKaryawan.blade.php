@@ -99,23 +99,24 @@
 
 
                         <div class="modal-body">
-                            {{-- mendapatkan lokasi user dan mendapatkan latitude dan longtitude --}}
-                            <div id="lokasi" class="d-flex justify-content-center">
+                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
+                                <h3 class="text-center">Lokasi Anda</h3>
+                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
+                                    Anda</button>
+                                <div class="d-flex justify-content-center gap-2">
+                                    Latitude: <span id="latitude" name="latitude"></span>
+                                    Longitude: <span id="longitude" name="longitude"></span>
+                                </div>
                             </div>
-                            <h3 class="text-center">Lokasi Anda</h3>
-                            <p class="text-center"></p>
-                            <input type="hidden" name="latitude" id="latitude" value="">
-                            <input type="hidden" name="longtitude" id="longtitude" value="">
-
 
                             <div id="webcam-pagi" class="d-flex justify-content-center">
                                 <video id="video-pagi" width="100%" height="100%" autoplay playsinline></video>
                                 <div class="row">
-                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreviewPagi">
+                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-pagi">
                                     <div class="custom-file">
-                                        <input type="file" accept="image/*" capture="camera" id="uploadInputPagi"
+                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-pagi"
                                             class="custom-file-input" onchange="previewImage()">
-                                        <label class="custom-file-label" for="uploadInputPagi"></label>
+                                        <label class="custom-file-label" for="uploadInput-pagi"></label>
                                     </div>
                                 </div>
                             </div>
@@ -133,9 +134,11 @@
                                     onclick="resetImage('pagi')">Reset</button>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success">Absen</button>
+                            <button type="button" class="btn btn-success" onclick="submitAbsen('pagi')"
+                                data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -164,25 +167,49 @@
                             <h5 class="modal-title" id="exampleModalLabel">Absen Siang</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
+
                         <div class="modal-body">
-                            <div id="webcam-siang" class="d-flex justify-content-center"></div>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button type="button" class="btn btn-info" onclick="captureImage('siang')">Ambil
-                                    Foto</button>
-                                <button type="button" class="btn btn-info" onclick="captureImage('siang')">Ambil
-                                    Foto</button>
+                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
+                                <h3 class="text-center">Lokasi Anda</h3>
+                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
+                                    Anda</button>
+                                <div class="d-flex justify-content-center gap-2">
+                                    Latitude: <span id="latitude" name="latitude"></span>
+                                    Longitude: <span id="longitude" name="longitude"></span>
+                                </div>
                             </div>
-                            <img id="captured-image-siang" src="" alt="Captured Image">
+
+                            <div id="webcam-siang" class="d-flex justify-content-center">
+                                <video id="video-siang" width="100%" height="100%" autoplay playsinline></video>
+                                <div class="row">
+                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-siang">
+                                    <div class="custom-file">
+                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-siang"
+                                            class="custom-file-input" onchange="previewImage()">
+                                        <label class="custom-file-label" for="uploadInput-siang"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="captured-image-siang-container" style="display: none;">
+                                <img id="captured-image-siang" width="100%" height="100%" src=""
+                                    alt="Captured Image">
+                            </div>
                             <input id="captured-image-input-siang" type="hidden" name="webcam-siang" value="">
                             <input type="hidden" name="waktu-siang" value="siang">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button class="btn btn-success">Submit</button>
+                                <button id="capture-siang" class="btn btn-primary" onclick="captureImage('siang')">Ambil
+                                    Foto</button>
+                                <button id="reset-siang" class="btn btn-danger" style="display: none;"
+                                    onclick="resetImage('siang')">Reset</button>
                             </div>
                         </div>
+
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onclick="submitAbsen('siang')"
+                                data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -209,23 +236,51 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Absen Sore</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
+
                         <div class="modal-body">
-                            <div id="webcam-sore" class="d-flex justify-content-center"></div>
-                            <button type="button" onclick="captureImage('sore')">Ambil Foto</button>
-                            <img id="captured-image-sore" src="" alt="Captured Image">
+                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
+                                <h3 class="text-center">Lokasi Anda</h3>
+                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
+                                    Anda</button>
+                                <div class="d-flex justify-content-center gap-2">
+                                    Latitude: <span id="latitude" name="latitude"></span>
+                                    Longitude: <span id="longitude" name="longitude"></span>
+                                </div>
+                            </div>
+
+                            <div id="webcam-sore" class="d-flex justify-content-center">
+                                <video id="video-sore" width="100%" height="100%" autoplay playsinline></video>
+                                <div class="row">
+                                    <img class="img-fluid mb-3 col-sm-5" id="imagePreview-sore">
+                                    <div class="custom-file">
+                                        <input type="file" accept="image/*" capture="camera" id="uploadInput-sore"
+                                            class="custom-file-input" onchange="previewImage()">
+                                        <label class="custom-file-label" for="uploadInput-sore"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="captured-image-sore-container" style="display: none;">
+                                <img id="captured-image-sore" width="100%" height="100%" src=""
+                                    alt="Captured Image">
+                            </div>
                             <input id="captured-image-input-sore" type="hidden" name="webcam-sore" value="">
                             <input type="hidden" name="waktu-sore" value="sore">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button class="btn btn-success">Submit</button>
+                                <button id="capture-sore" class="btn btn-primary" onclick="captureImage('sore')">Ambil
+                                    Foto</button>
+                                <button id="reset-sore" class="btn btn-danger" style="display: none;"
+                                    onclick="resetImage('sore')">Reset</button>
                             </div>
                         </div>
+
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onclick="submitAbsen('sore')"
+                                data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -236,13 +291,60 @@
     </div>
 
     {{-- map --}}
-    {{-- <input type="hidden" name="latitude" id="latitude" value="{{ $lat }}"> --}}
-    {{-- <input type="hidden" name="longtitude" id="longtitude" value="{{ $lon }}"> --}}
-    <div id="map"></div>
+    <div class="card">
+        <h5 class="card-header">Lokasi Kantor</h5>
+        <div class="card-body">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    @include('sweetalert::alert')
 @endsection
 
 @section('script')
     <script>
+        // Mendapatkan elemen modal body
+        var modalBodyPagi = document.querySelector("#pagi .modal-body");
+        var modalBodysiang = document.querySelector("#siang .modal-body");
+        var modalBodysore = document.querySelector("#sore .modal-body");
+
+        // Mendapatkan elemen video dan tombol ambil foto
+        var videoPagi = document.getElementById("video-pagi");
+        var captureButtonPagi = document.getElementById("capture-pagi");
+        var videoSiang = document.getElementById("video-siang");
+        var captureButtonSiang = document.getElementById("capture-siang");
+        var videoSore = document.getElementById("video-sore");
+        var captureButtonSore = document.getElementById("capture-sore");
+
+        // Mendapatkan waktu saat ini
+        var currentTime = new Date();
+        var currentHour = currentTime.getHours();
+
+        // Memeriksa jika waktu lebih dari jam 10
+        if (currentHour >= 14) {
+            // Mengubah isi modal body menjadi teks waktu absen pagi habis
+            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
+
+            // Menonaktifkan video dan tombol ambil foto
+            videoPagi.style.display = "none";
+            captureButtonPagi.disabled = true;
+        } else if (currentHour >= 14) {
+            // Mengubah isi modal body menjadi teks waktu absen pagi habis
+            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
+
+            // Menonaktifkan video dan tombol ambil foto
+            videoSiang.style.display = "none";
+            captureButtonSiang.disabled = true;
+        } else if (currentHour >= 18) {
+            // Mengubah isi modal body menjadi teks waktu absen pagi habis
+            modalBodySore.innerHTML = "<h4>Waktu absen sore sudah habis.</h4>";
+
+            // Menonaktifkan video dan tombol ambil foto
+            videoSore.style.display = "none";
+            captureButtonSore.disabled = true;
+        }
+
+
         // Fungsi untuk mengambil akses ke kamera
         function getCameraStream(waktu) {
             navigator.mediaDevices.getUserMedia({
@@ -269,20 +371,20 @@
 
             var dataURL = canvasElement.toDataURL('image/jpeg');
 
-            document.getElementById('video-pagi').style.display = 'none';
-            document.getElementById('captured-image-pagi').src = dataURL;
+            document.getElementById('video-' + waktu).style.display = 'none';
+            document.getElementById('captured-image-' + waktu).src = dataURL;
             document.getElementById('captured-image-input-' + waktu).value = dataURL;
-            document.getElementById('captured-image-pagi-container').style.display = 'block';
-            document.getElementById('capture-pagi').style.display = 'none';
-            document.getElementById('reset-pagi').style.display = 'inline-block';
+            document.getElementById('captured-image-'+ waktu +'-container').style.display = 'block';
+            document.getElementById('capture-' + waktu).style.display = 'none';
+            document.getElementById('reset-' + waktu).style.display = 'inline-block';
         }
 
         // Fungsi untuk mereset foto
         function resetImage(waktu) {
-            document.getElementById('video-pagi').style.display = 'block';
-            document.getElementById('captured-image-pagi-container').style.display = 'none';
-            document.getElementById('capture-pagi').style.display = 'inline-block';
-            document.getElementById('reset-pagi').style.display = 'none';
+            document.getElementById('video-' + waktu).style.display = 'block';
+            document.getElementById('captured-image-'+ waktu +'-container').style.display = 'none';
+            document.getElementById('capture-' + waktu).style.display = 'inline-block';
+            document.getElementById('reset-' + waktu).style.display = 'none';
             document.getElementById('captured-image-input-' + waktu).value = '';
         }
 
@@ -290,17 +392,70 @@
         $('#pagi').on('shown.bs.modal', function() {
             getCameraStream('pagi');
         });
+        $('#siang').on('shown.bs.modal', function() {
+            getCameraStream('siang');
+        });
+        $('#sore').on('shown.bs.modal', function() {
+            getCameraStream('sore');
+        });
 
         // Panggil fungsi resetImage saat modal ditutup
         $('#pagi').on('hidden.bs.modal', function() {
             resetImage('pagi');
         });
+        $('#siang').on('hidden.bs.modal', function() {
+            resetImage('siang');
+        });
+        $('#sore').on('hidden.bs.modal', function() {
+            resetImage('sore');
+        });
+
+        // mengrim data ke server untuk di simpan
+        function submitAbsen(waktu) {
+
+
+            var formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+
+            var capturedImageInput = document.getElementById('captured-image-input-' + waktu);
+            formData.append('captured_image', capturedImageInput.value);
+
+            var latitude = document.getElementById('latitude').textContent;
+            var longitude = document.getElementById('longitude').textContent;
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+
+            formData.append('waktu', waktu); // Ganti dengan waktu yang sesuai
+
+            // Kirim data ke server
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{ route('karyawan.absensi.store') }}', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log('Absensi saved successfully');
+                        // Tambahkan logika yang sesuai setelah absensi berhasil disimpan
+                        location.reload();
+                    } else if (xhr.status === 400) {
+                        console.log('Error: ' + xhr.status);
+                        // Tambahkan logika untuk menangani pesan kesalahan
+                        var response = JSON.parse(xhr.responseText);
+                        console.log(response.message);
+                        location.reload();
+                    }
+                }
+            };
+            xhr.send(formData);
+            // Reset form
+            resetImage(waktu);
+        }
+
 
 
         // preview image
-        function previewImage() {
-            var fileInput = document.getElementById('uploadInputPagi');
-            var imagePreview = document.getElementById('imagePreviewPagi');
+        function previewImage(waktu) {
+            var fileInput = document.getElementById('uploadInput-' + waktu);
+            var imagePreview = document.getElementById('imagePreview-' + waktu);
 
             var file = fileInput.files[0];
             var reader = new FileReader();
@@ -345,41 +500,38 @@
         }
 
         // map
-        // setInterval(() => {
-        //     geoLocation();
-        // }, 3000);
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
 
-        // function geoLocation() {
-        //     if (navigator.geolocation) {
-        //         navigator.geolocation.getCurrentPosition(showPosition);
-        //     } else {
-        //         alert("Geolocation is not supported by this browser.");
-        //     }
-        // }
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            console.log("Latitude: " + latitude);
+            console.log("Longitude: " + longitude);
+            document.getElementById('latitude').innerHTML = latitude;
+            document.getElementById('longitude').innerHTML = longitude;
+        }
 
-
-        // function showPosition(position) {
-        //     // console.log(position.coords.latitude, position.coords.longitude);
-        //    latitude = document.getElementById('latitude').value = position.coords.latitude;
-        //    longitude = document.getElementById('longtitude').value = position.coords.longitude;
-        // }
-
-
-        var map = L.map('map').setView([latitude, longitude], 13);
+        var map = L.map('map').setView([-7.8713039, 112.5245536], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         // Tambahkan marker lokasi
-        var locationMarker = L.marker([latitude, longitude]).addTo(map);
+        var locationMarker = L.marker([-7.8713039, 112.5245536]).addTo(map);
 
         // Tambahkan radius dengan jari-jari 500 meter
-        var radius = L.circle([latitude, longitude], {
+        var radius = L.circle([-7.8713039, 112.5245536], {
             color: 'blue',
             fillColor: 'lightblue',
             fillOpacity: 0.5,
-            radius: 500
+            radius: 100
         }).addTo(map);
     </script>
 @endsection
