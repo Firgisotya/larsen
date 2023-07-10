@@ -48,6 +48,7 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::post('/tesFoto', [HomeController::class, 'tesFoto'])->name('karyawan.tesFoto');
     Route::get('/activity', [ActivityController::class, 'index'])->name('karyawan.activity.index');
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('karyawan.absensi.store');
+    Route::get('/absensi', [AbsensiController::class, 'checkAbsen'])->name('karyawan.absensi.checkAbsen');
 });
 
 

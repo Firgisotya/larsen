@@ -10,7 +10,7 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $activity = Tugas::where('karyawan_id', Auth::user()->karyawan_id)->paginate(10);
+        $activity = Tugas::where('karyawan_id', Auth::user()->karyawan_id)->where('status_tugas', '!=', 'selesai')->paginate(10);
         return view('karyawan.activity', compact('activity'));
     }
 }

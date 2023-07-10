@@ -10,32 +10,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AbsensiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $waktu = $request->input('waktu');
@@ -50,8 +25,14 @@ class AbsensiController extends Controller
 
             // simpan foto ke direktori
             $foto = $request->input('captured_image');
-            $fileName = 'absensi_' . $karyawanId . '_' . time() . '.jpg';
-            $savePath = public_path('images/absensi/') . $fileName;
+            $image_parts = explode(";base64,", $foto);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = 'absensi_' . $karyawanId . '_' . time() . '.png';
+            $file = $fileName;
+
+            Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
             // menghitung lama telat absensi
             $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
@@ -109,10 +90,17 @@ class AbsensiController extends Controller
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
 
+           
             // simpan foto ke direktori
             $foto = $request->input('captured_image');
-            $fileName = 'absensi_' . $karyawanId . '_' . time() . '.jpg';
-            $savePath = public_path('images/absensi/') . $fileName;
+            $image_parts = explode(";base64,", $foto);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = 'absensi_' . $karyawanId . '_' . time() . '.png';
+            $file = $fileName;
+
+            Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
             // Lokasi yang diizinkan (misalnya, koordinat kantor)
             // $allowedLatitude = -7.8713039;  // Ganti dengan latitude lokasi yang diizinkan
@@ -200,48 +188,25 @@ class AbsensiController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Absensi  $absensi
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Absensi $absensi)
+    public function checkAbsen(Request $request)
     {
-        //
+        $user = auth()->user();
+        $karyawanId = $user->karyawan_id;
+        
+        $attendance = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', now()->toDateString())->first();
+        if ($attendance->foto_pagi != null and $attendance->lokasi_pagi != null) {
+            dd('Anda sudah absen pagi');
+        } else if($attendance->foto_siang != null and $attendance->lokasi_siang != null) {
+            dd('Anda sudah absen siang');
+        } else if($attendance->foto_sore != null and $attendance->lokasi_sore != null) {
+            dd('Anda sudah absen sore');
+        } else {
+            dd('Anda belum absen');
+        }
+
+        
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Absensi  $absensi
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Absensi $absensi)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Absensi  $absensi
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Absensi $absensi)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Absensi  $absensi
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Absensi $absensi)
-    {
-        //
-    }
 }

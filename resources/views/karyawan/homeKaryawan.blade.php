@@ -305,8 +305,8 @@
     <script>
         // Mendapatkan elemen modal body
         var modalBodyPagi = document.querySelector("#pagi .modal-body");
-        var modalBodysiang = document.querySelector("#siang .modal-body");
-        var modalBodysore = document.querySelector("#sore .modal-body");
+        var modalBodySiang = document.querySelector("#siang .modal-body");
+        var modalBodySore = document.querySelector("#sore .modal-body");
 
         // Mendapatkan elemen video dan tombol ambil foto
         var videoPagi = document.getElementById("video-pagi");
@@ -321,27 +321,36 @@
         var currentHour = currentTime.getHours();
 
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 14) {
+        if (currentHour >= 18) {
+            // Mengubah isi modal body menjadi teks waktu absen pagi habis
+            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
+            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
+            modalBodySore.innerHTML = "<h4>Waktu absen sore sudah habis.</h4>";
+
+            // Menonaktifkan video dan tombol ambil foto
+            videoPagi.style.display = "none";
+            captureButtonPagi.disabled = true;
+            videoSiang.style.display = "none";
+            captureButtonSiang.disabled = true;
+            videoSore.style.display = "none";
+            captureButtonSore.disabled = true;
+        } else if (currentHour >= 14) {
+            // Mengubah isi modal body menjadi teks waktu absen pagi habis
+            modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
+            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
+
+            // Menonaktifkan video dan tombol ambil foto
+            videoPagi.style.display = "none";
+            captureButtonPagi.disabled = true;
+            videoSiang.style.display = "none";
+            captureButtonSiang.disabled = true;
+        } else if (currentHour >= 10) {
             // Mengubah isi modal body menjadi teks waktu absen pagi habis
             modalBodyPagi.innerHTML = "<h4>Waktu absen pagi sudah habis.</h4>";
 
             // Menonaktifkan video dan tombol ambil foto
             videoPagi.style.display = "none";
             captureButtonPagi.disabled = true;
-        } else if (currentHour >= 14) {
-            // Mengubah isi modal body menjadi teks waktu absen pagi habis
-            modalBodySiang.innerHTML = "<h4>Waktu absen siang sudah habis.</h4>";
-
-            // Menonaktifkan video dan tombol ambil foto
-            videoSiang.style.display = "none";
-            captureButtonSiang.disabled = true;
-        } else if (currentHour >= 18) {
-            // Mengubah isi modal body menjadi teks waktu absen pagi habis
-            modalBodySore.innerHTML = "<h4>Waktu absen sore sudah habis.</h4>";
-
-            // Menonaktifkan video dan tombol ambil foto
-            videoSore.style.display = "none";
-            captureButtonSore.disabled = true;
         }
 
 
