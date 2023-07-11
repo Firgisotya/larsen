@@ -15,8 +15,8 @@ class CreateAbsensisTable extends Migration
     {
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('karyawan_id');
-            $table->foreignId('izin_id')->nullable();
+            $table->foreignId("karyawan_id")->nullable()->constrained("karyawans")->onDelete("cascade");
+            $table->foreignId('izin_id')->nullable()->constrained('form_izins')->onDelete('cascade');
             $table->date('tanggal')->nullable();
             $table->time('jam_masuk')->nullable();
             $table->string('lokasi_masuk')->nullable();

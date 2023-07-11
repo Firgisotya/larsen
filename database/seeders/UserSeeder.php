@@ -17,12 +17,14 @@ class UserSeeder extends Seeder
         DB::table('users') // Add this line
             ->insert([ // Add this line
                 [
+                    'karyawan_id' => 1,
                     'username' => 'tes',
                     'email' => 'Tes@gmail.com',
                     'password' => bcrypt('password'),
                     'role' => 'karyawan',
                 ],
                 [
+                    'karyawan_id' => null,
                     'username' => 'admin',
                     'email' => 'admin@gmail.com',
                     'password' => bcrypt('password'),

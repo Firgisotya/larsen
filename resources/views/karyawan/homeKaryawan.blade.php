@@ -101,7 +101,7 @@
                         <div class="modal-body">
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
                                 <h3 class="text-center">Lokasi Anda</h3>
-                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
+                                <button type="button" class="btn btn-warning" onclick="getLocation('masuk')">Lokasi
                                     Anda</button>
                                 <div class="d-flex justify-content-center gap-2">
                                     Latitude: <span id="latitude" name="latitude"></span>
@@ -165,14 +165,15 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Absen Pulang</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
 
 
                         <div class="modal-body">
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
                                 <h3 class="text-center">Lokasi Anda</h3>
-                                <button type="button" class="btn btn-warning" onclick="getLocation()">Lokasi
+                                <button type="button" class="btn btn-warning" onclick="getLocation('pulang')">Lokasi
                                     Anda</button>
                                 <div class="d-flex justify-content-center gap-2">
                                     Latitude: <span id="latitude" name="latitude"></span>
@@ -199,7 +200,8 @@
                             <input type="hidden" name="waktu-pulang" value="pulang">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-pulang" class="btn btn-primary" onclick="captureImage('pulang')">Ambil
+                                <button id="capture-pulang" class="btn btn-primary"
+                                    onclick="captureImage('pulang')">Ambil
                                     Foto</button>
                                 <button id="reset-pulang" class="btn btn-danger" style="display: none;"
                                     onclick="resetImage('pulang')">Reset</button>
@@ -247,7 +249,7 @@
         var currentHour = currentTime.getHours();
 
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 24) {
+        if (currentHour >= 18) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
             modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
@@ -257,14 +259,7 @@
             captureButtonMasuk.disabled = true;
             videoPulang.style.display = "none";
             captureButtonPulang.disabled = true;
-        } else if (currentHour >= 24) {
-            // Mengubah isi modal body menjadi teks waktu absen masuk habis
-            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
-
-            // Menonaktifkan video dan tombol ambil foto
-            videoMasuk.style.display = "none";
-            captureButtonMasuk.disabled = true;
-        } else if (currentHour >= 24) {
+        } else if (currentHour >= 10) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
@@ -303,7 +298,7 @@
             document.getElementById('video-' + waktu).style.display = 'none';
             document.getElementById('captured-image-' + waktu).src = dataURL;
             document.getElementById('captured-image-input-' + waktu).value = dataURL;
-            document.getElementById('captured-image-'+ waktu +'-container').style.display = 'block';
+            document.getElementById('captured-image-' + waktu + '-container').style.display = 'block';
             document.getElementById('capture-' + waktu).style.display = 'none';
             document.getElementById('reset-' + waktu).style.display = 'inline-block';
         }
@@ -311,7 +306,7 @@
         // Fungsi untuk mereset foto
         function resetImage(waktu) {
             document.getElementById('video-' + waktu).style.display = 'block';
-            document.getElementById('captured-image-'+ waktu +'-container').style.display = 'none';
+            document.getElementById('captured-image-' + waktu + '-container').style.display = 'none';
             document.getElementById('capture-' + waktu).style.display = 'inline-block';
             document.getElementById('reset-' + waktu).style.display = 'none';
             document.getElementById('captured-image-input-' + waktu).value = '';
@@ -349,30 +344,10 @@
             formData.append('longitude', longitude);
 
             formData.append('waktu', waktu); // Ganti dengan waktu yang sesuai
-            console.log(waktu);
-
-            // Kirim data ke server
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', '{{ route('karyawan.absensi.store') }}', true);
-            // xhr.onreadystatechange = function() {
-            //     if (xhr.readyState === 4) {
-            //         if (xhr.status === 200) {
-            //             console.log('Absensi saved successfully');
-            //             // Tambahkan logika yang sesuai setelah absensi berhasil disimpan
-            //             location.reload();
-            //         } else if (xhr.status === 400) {
-            //             console.log('Error: ' + xhr.status);
-            //             // Tambahkan logika untuk menangani pesan kesalahan
-            //             var response = JSON.parse(xhr.responseText);
-            //             console.log(response.message);
-            //             location.reload();
-            //         }
-            //     }
-            // };
-            // xhr.send(formData);
+        
 
             $.ajax({
-                url: '{{ route('karyawan.absensi.store') }}',
+                url: '/karyawan/absensi-' + waktu,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -440,7 +415,7 @@
         }
 
         // map
-        function getLocation() {
+        function getLocation(waktu) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
             } else {
@@ -457,21 +432,35 @@
             document.getElementById('longitude').innerHTML = longitude;
         }
 
-        var map = L.map('map').setView([-7.8713039, 112.5245536], 13);
+        var map = L.map('map').setView([-7.2971498, 104.603765], 7);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: 'Map data &copy; <a href="#">OpenStreetMap</a> contributors',
+            maxZoom: 18,
         }).addTo(map);
 
-        // Tambahkan marker lokasi
-        var locationMarker = L.marker([-7.8713039, 112.5245536]).addTo(map);
 
-        // Tambahkan radius dengan jari-jari 500 meter
-        var radius = L.circle([-7.8713039, 112.5245536], {
-            color: 'blue',
-            fillColor: 'lightblue',
-            fillOpacity: 0.5,
-            radius: 100
-        }).addTo(map);
+        $.ajax({
+            url: '{{ route('karyawan.lokasiKantor') }}',
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+                $.each(data, function(i, item) {
+                    console.log(item);
+                    var marker = L.marker([item.latitude, item.longitude])
+                        .bindPopup('Nama Kantor : ' + item.nama_kantor + '<br>' 
+                        + 'Alamat Kantor :' + item.alamat_kantor).addTo(map);
+
+                    var radius = L.circle([item.latitude, item.longitude], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: 100
+                    }).addTo(map);    
+                });
+            }
+        })
+
+
     </script>
 @endsection

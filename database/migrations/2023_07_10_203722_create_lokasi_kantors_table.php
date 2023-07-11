@@ -19,6 +19,7 @@ class CreateLokasiKantorsTable extends Migration
             $table->string('alamat_kantor');
             $table->string('latitude');
             $table->string('longitude');
+            $table->integer('radius');
             $table->timestamps();
         });
     }

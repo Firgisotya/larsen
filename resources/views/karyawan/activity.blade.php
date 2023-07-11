@@ -42,11 +42,122 @@
                                 </td>
                                 <td>
                                     @if ($item->status_tugas == 'Belum Dikerjakan')
-                                        <a href="" class="btn btn-warning btn-sm">Kerjakan</a>
-                                        
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#kerjakan">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="kerjakan" tabindex="-1"
+                                            aria-labelledby="kerjakanLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            {{ $item->nama_tugas }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Deskripsi :</strong>
+                                                                    {{ $item->deskripsi_tugas }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Destinasi :</strong>
+                                                                    {{ $item->destinasi->nama_destinasi }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Tanggal :</strong> {{ $item->tanggal }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Jam :</strong> {{ $item->jam_mulai }} -
+                                                                    {{ $item->jam_selesai }}</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <button type="button"
+                                                                    class="btn btn-success">Kerjakan</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @elseif ($item->status_tugas == 'Dikerjakan')
-                                        <a href="" class="btn btn-success btn-sm">Selesai</a>
-                                        
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#selesaikan">
+                                            <i class="fa-regular fa-square-check"></i>
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="selesaikan" tabindex="-1"
+                                            aria-labelledby="selesaikanLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            {{ $item->nama_tugas }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Deskripsi :</strong>
+                                                                    {{ $item->deskripsi_tugas }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Destinasi :</strong>
+                                                                    {{ $item->destinasi->nama_destinasi }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Tanggal :</strong> {{ $item->tanggal }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Jam :</strong> {{ $item->jam_mulai }} -
+                                                                    {{ $item->jam_selesai }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <form>
+                                                            <div class="mb-3">
+                                                            <label for="file-tugas" class="form-label">File Tugas</label>
+                                                            <input type="file" class="form-control" id="file-tugas" placeholder="File Tugas">
+                                                          </div>
+                                                          <div class="mb-3">
+                                                            <label for="file-hasil-tugas" class="form-label">File Hasil Tugas</label>
+                                                            <input type="file" class="form-control" id="file-hasil-tugas" placeholder="File Hasil Tugas">
+                                                          </div>
+                                                          <div class="mb-3">
+                                                            <label for="file-laporan" class="form-label">File Laporan Tugas</label>
+                                                            <input type="file" class="form-control" id="file-laporan-tugas" placeholder="File Laporan Tugas">
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                              <button type="button" class="btn btn-danger"
+                                                              data-bs-dismiss="modal">Close</button>
+                                                              <button type="button" class="btn btn-success">Submit</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>

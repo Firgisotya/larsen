@@ -5,6 +5,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Admin\DestinasiController;
 use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\LokasiKantorController;
 use App\Http\Controllers\Admin\TugasController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -41,14 +42,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::resource('/destinasi', DestinasiController::class);
     Route::resource('/karyawan', KaryawanController::class);
     Route::resource('/tugas', TugasController::class);
+    Route::resource('/lokasiKantor', LokasiKantorController::class);
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeKaryawan'])->name('karyawan.dashboard');
-    Route::post('/tesFoto', [HomeController::class, 'tesFoto'])->name('karyawan.tesFoto');
     Route::get('/activity', [ActivityController::class, 'index'])->name('karyawan.activity.index');
-    Route::post('/absensi', [AbsensiController::class, 'store'])->name('karyawan.absensi.store');
+    Route::post('/absensi-masuk', [AbsensiController::class, 'absenMasuk'])->name('karyawan.absensi.masuk');
+    Route::post('/absensi-pulang', [AbsensiController::class, 'absenPulang'])->name('karyawan.absensi.pulang');
     Route::get('/absensi', [AbsensiController::class, 'checkAbsen'])->name('karyawan.absensi.checkAbsen');
+    Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('karyawan.lokasiKantor');
 });
 
 

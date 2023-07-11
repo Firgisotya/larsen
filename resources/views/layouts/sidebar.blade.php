@@ -31,6 +31,14 @@
                         <span class="hide-menu">Data</span>
                     </li>
                     <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/lokasiKantor" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-article"></i>
+                            </span>
+                            <span class="hide-menu">Lokasi Kantor</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/divisi" aria-expanded="false">
                             <span>
                                 <i class="ti ti-article"></i>

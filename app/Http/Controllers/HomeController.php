@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LokasiKantor;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -43,6 +44,12 @@ class HomeController extends Controller
         ]
         
     );
+    }
+
+    public function lokasiKantor()
+    {
+        $lokasi = LokasiKantor::all();
+        return $lokasi;
     }
 
     public function tesFoto(Request $request)
