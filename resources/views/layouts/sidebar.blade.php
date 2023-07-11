@@ -114,7 +114,7 @@
                         <span class="hide-menu">Form</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/karyawan/form" aria-expanded="false">
+                        <a class="sidebar-link" href="/karyawan/formIzin" aria-expanded="false">
                             <span>
                                 <i class="ti ti-article"></i>
                             </span>

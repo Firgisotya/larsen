@@ -85,8 +85,14 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-danger"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                <button type="button"
-                                                                    class="btn btn-success">Kerjakan</button>
+                                                                <form
+                                                                    action="{{ route('karyawan.activity.kerjakan', $item->id) }}"
+                                                                    method="POST">
+                                                                    @method('PUT')
+                                                                    @csrf
+                                                                    <button type="submit"
+                                                                        class="btn btn-success">Kerjakan</button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -112,46 +118,59 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p><strong>Deskripsi :</strong>
-                                                                    {{ $item->deskripsi_tugas }}</p>
+                                                        <form method="POST"
+                                                            action="{{ route('karyawan.activity.selesaikan', $item->id) }}">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p><strong>Deskripsi :</strong>
+                                                                        {{ $item->deskripsi_tugas }}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p><strong>Destinasi :</strong>
-                                                                    {{ $item->destinasi->nama_destinasi }}</p>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p><strong>Destinasi :</strong>
+                                                                        {{ $item->destinasi->nama_destinasi }}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p><strong>Tanggal :</strong> {{ $item->tanggal }}</p>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p><strong>Tanggal :</strong> {{ $item->tanggal }}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p><strong>Jam :</strong> {{ $item->jam_mulai }} -
-                                                                    {{ $item->jam_selesai }}</p>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p><strong>Jam :</strong> {{ $item->jam_mulai }} -
+                                                                        {{ $item->jam_selesai }}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <form>
+
                                                             <div class="mb-3">
-                                                            <label for="file-tugas" class="form-label">File Tugas</label>
-                                                            <input type="file" class="form-control" id="file-tugas" placeholder="File Tugas">
-                                                          </div>
-                                                          <div class="mb-3">
-                                                            <label for="file-hasil-tugas" class="form-label">File Hasil Tugas</label>
-                                                            <input type="file" class="form-control" id="file-hasil-tugas" placeholder="File Hasil Tugas">
-                                                          </div>
-                                                          <div class="mb-3">
-                                                            <label for="file-laporan" class="form-label">File Laporan Tugas</label>
-                                                            <input type="file" class="form-control" id="file-laporan-tugas" placeholder="File Laporan Tugas">
-                                                          </div>
-                                                          <div class="modal-footer">
-                                                              <button type="button" class="btn btn-danger"
-                                                              data-bs-dismiss="modal">Close</button>
-                                                              <button type="button" class="btn btn-success">Submit</button>
+                                                                <label for="file-tugas" class="form-label">File
+                                                                    Tugas</label>
+                                                                <input type="file" class="form-control" id="file-tugas"
+                                                                    name="file_tugas" placeholder="File Tugas">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="file-hasil-tugas" class="form-label">File Hasil
+                                                                    Tugas</label>
+                                                                <input type="file" class="form-control"
+                                                                    id="file-hasil-tugas" name="file_hasil_tugas"
+                                                                    placeholder="File Hasil Tugas">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="file-laporan" class="form-label">File Laporan
+                                                                    Tugas</label>
+                                                                <input type="file" class="form-control"
+                                                                    id="file-laporan-tugas" name="file_laporan_tugas"
+                                                                    placeholder="File Laporan Tugas">
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-success">Submit</button>
                                                             </div>
                                                         </form>
                                                     </div>

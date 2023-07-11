@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\LokasiKantorController;
 use App\Http\Controllers\Admin\TugasController;
+use App\Http\Controllers\FormIzinController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,9 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::post('/absensi-pulang', [AbsensiController::class, 'absenPulang'])->name('karyawan.absensi.pulang');
     Route::get('/absensi', [AbsensiController::class, 'checkAbsen'])->name('karyawan.absensi.checkAbsen');
     Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('karyawan.lokasiKantor');
+    Route::put('/kerjakan/{tugas}', [ActivityController::class, 'kerjakan'])->name('karyawan.activity.kerjakan');
+    Route::put('/selesaikan/{tugas}', [ActivityController::class, 'selesaikan'])->name('karyawan.activity.selesaikan');
+    Route::resource('/formIzin', FormIzinController::class);
 });
 
 

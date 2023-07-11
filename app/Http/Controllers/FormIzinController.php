@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FormIzin;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class FormIzinController extends Controller
 {
@@ -14,7 +15,8 @@ class FormIzinController extends Controller
      */
     public function index()
     {
-        //
+        $form = FormIzin::all();
+        return view('karyawan.form.index', compact('form'));
     }
 
     /**
@@ -24,7 +26,7 @@ class FormIzinController extends Controller
      */
     public function create()
     {
-        //
+        return view('karyawan.form.create');
     }
 
     /**
@@ -35,7 +37,17 @@ class FormIzinController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $form = FormIzin::create([
+            'user_id' => auth()->user()->id,
+            'jenis_izin' => $request->jenis_izin,
+            'tanggal_izin' => $request->tanggal_izin,
+            'keterangan' => $request->keterangan,
+            'status' => 'pending',
+        ]);
+
+        Alert::success('Berhasil', 'Form Izin Berhasil Diajukan');
+        return redirect()->route('formIzin.index');
+        
     }
 
     /**
