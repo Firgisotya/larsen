@@ -82,6 +82,14 @@
                             <span class="hide-menu">Presensi</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/formIzin" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-article"></i>
+                            </span>
+                            <span class="hide-menu">FormIzin</span>
+                        </a>
+                    </li>
                 @elseif (Auth::user()->role == 'karyawan')
                     {{-- sidebar item untuk karyawan --}}
 

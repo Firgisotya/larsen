@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Destinasi;
+use App\Models\Tugas;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -96,6 +97,13 @@ class DestinasiController extends Controller
      */
     public function destroy(Destinasi $destinasi)
     {
+        $destinasi = Destinasi::findOrFail($destinasi->id);
+
+        if(Tugas::where('destinasi_id', $destinasi->id)->exists()){
+            Alert::error('Gagal', 'Data Tidak Bisa Dihapus Karena Memiliki Relasi');
+            return redirect()->route('destinasi.index');
+        }
+        
         $destinasi->delete();
         Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('destinasi.index');

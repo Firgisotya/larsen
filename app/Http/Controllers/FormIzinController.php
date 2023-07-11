@@ -38,7 +38,7 @@ class FormIzinController extends Controller
     public function store(Request $request)
     {
         $form = FormIzin::create([
-            'user_id' => auth()->user()->id,
+            'karyawan_id' => auth()->user()->karyawan_id,
             'jenis_izin' => $request->jenis_izin,
             'tanggal_izin' => $request->tanggal_izin,
             'keterangan' => $request->keterangan,
@@ -47,7 +47,7 @@ class FormIzinController extends Controller
 
         Alert::success('Berhasil', 'Form Izin Berhasil Diajukan');
         return redirect()->route('formIzin.index');
-        
+
     }
 
     /**

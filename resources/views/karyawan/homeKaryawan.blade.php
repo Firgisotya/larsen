@@ -2,6 +2,13 @@
 
 @section('style')
     <style>
+        .circle {
+            height: 50px;
+            width: 50px;
+            background-color: #555;
+            border-radius: 50%;
+        }
+
         @media (max-width: 767px) {
 
             /* Ubah ukuran sesuai dengan ukuran layar mobile yang diinginkan */
@@ -137,7 +144,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="submitAbsen('masuk')"
+                            <button type="button" class="btn btn-success" id="btn-masuk" onclick="submitAbsen('masuk')"
                                 data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
@@ -210,8 +217,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="submitAbsen('pulang')"
-                                data-bs-dismiss="modal">Absen</button>
+                            <button type="button" class="btn btn-success" id="btn-pulang"
+                                onclick="submitAbsen('pulang')" data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -219,6 +226,78 @@
         </div>
 
 
+    </div>
+
+    {{-- informasi --}}
+    <div class="row g-6 mb-6">
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Absen</span>
+                            <span class="h3 font-bold mb-0"></span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="circle align-items-center text-white text-lg">
+                                <i class="fas fa-camera-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">New projects</span>
+                            <span class="h3 font-bold mb-0">215</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total hours</span>
+                            <span class="h3 font-bold mb-0">1.400</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Work load</span>
+                            <span class="h3 font-bold mb-0">95%</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-warning text-white text-lg rounded-circle">
+                                <i class="bi bi-minecart-loaded"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- map --}}
@@ -243,6 +322,8 @@
         var captureButtonMasuk = document.getElementById("capture-masuk");
         var videoPulang = document.getElementById("video-pulang");
         var captureButtonPulang = document.getElementById("capture-pulang");
+        var btnMasuk = document.getElementById("btn-masuk");
+        var btnPulang = document.getElementById("btn-pulang");
 
         // Mendapatkan waktu saat ini
         var currentTime = new Date();
@@ -259,6 +340,8 @@
             captureButtonMasuk.disabled = true;
             videoPulang.style.display = "none";
             captureButtonPulang.disabled = true;
+            btnMasuk.disabled = true;
+            btnPulang.disabled = true;
         } else if (currentHour >= 10) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
@@ -266,6 +349,7 @@
             // Menonaktifkan video dan tombol ambil foto
             videoMasuk.style.display = "none";
             captureButtonMasuk.disabled = true;
+            btnMasuk.disabled = true;
         }
 
 
@@ -344,7 +428,7 @@
             formData.append('longitude', longitude);
 
             formData.append('waktu', waktu); // Ganti dengan waktu yang sesuai
-        
+
 
             $.ajax({
                 url: '/karyawan/absensi-' + waktu,
@@ -448,19 +532,17 @@
                 $.each(data, function(i, item) {
                     console.log(item);
                     var marker = L.marker([item.latitude, item.longitude])
-                        .bindPopup('Nama Kantor : ' + item.nama_kantor + '<br>' 
-                        + 'Alamat Kantor :' + item.alamat_kantor).addTo(map);
+                        .bindPopup('Nama Kantor : ' + item.nama_kantor + '<br>' +
+                            'Alamat Kantor :' + item.alamat_kantor).addTo(map);
 
                     var radius = L.circle([item.latitude, item.longitude], {
                         color: 'red',
                         fillColor: '#f03',
                         fillOpacity: 0.5,
                         radius: 100
-                    }).addTo(map);    
+                    }).addTo(map);
                 });
             }
         })
-
-
     </script>
 @endsection

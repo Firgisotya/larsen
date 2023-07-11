@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ActivityController extends Controller
@@ -35,23 +36,37 @@ class ActivityController extends Controller
             'file_laporan_tugas' => 'required|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
         ]);
 
-        dd($validateData);
+
 
         if($request->hasFile('file_tugas')) {
-            $validateData['file_tugas'] = $request->file('file_tugas')->store('file_tugas', 'public');
+            $validateData['file_tugas'] = $request->file('file_tugas');
+            $filename = 'tugas_' . $id . '_' . time() . '.' . $validateData['file_tugas']->getClientOriginalExtension();
+            $file_tugas = $filename;
+
+            Storage::disk('public')->put('images/tugas/' . $file_tugas, $validateData['file_tugas']);
+
         }
         if($request->hasFile('file_hasil_tugas')) {
-            $validateData['file_hasil_tugas'] = $request->file('file_hasil_tugas')->store('file_hasil_tugas', 'public');
+            $validateData['file_hasil_tugas'] = $request->file('file_hasil_tugas');
+            $filename = 'hasil_tugas_' . $id . '_' . time() . '.' . $validateData['file_hasil_tugas']->getClientOriginalExtension();
+            $file_hasil_tugas = $filename;
+
+            Storage::disk('public')->put('images/hasil_tugas/' . $file_hasil_tugas, $validateData['file_hasil_tugas']);
+
         }
         if($request->hasFile('file_laporan_tugas')) {
-            $validateData['file_laporan_tugas'] = $request->file('file_laporan_tugas')->store('file_laporan_tugas', 'public');
+            $validateData['file_laporan_tugas'] = $request->file('file_laporan_tugas');
+            $filename = 'laporan_tugas_' . $id . '_' . time() . '.' . $validateData['file_laporan_tugas']->getClientOriginalExtension();
+            $file_laporan_tugas = $filename;
+
+            Storage::disk('public')->put('images/laporan_tugas/' . $file_laporan_tugas, $validateData['file_laporan_tugas']);
         }
 
         $tugas = Tugas::where('id', $id)->update([
             'status_tugas' => 'selesai',
-            'file_tugas' => $validateData['file_tugas'],
-            'file_hasil_tugas' => $validateData['file_hasil_tugas'],
-            'file_laporan_tugas' => $validateData['file_laporan_tugas'],
+            'file_tugas' => $file_tugas,
+            'file_hasil_tugas' => $file_hasil_tugas,
+            'file_laporan_tugas' => $file_laporan_tugas,
         ]);
 
         Alert::success('Berhasil', 'Tugas berhasil diselesaikan');

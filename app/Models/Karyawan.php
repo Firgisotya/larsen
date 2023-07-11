@@ -30,4 +30,9 @@ class Karyawan extends Model
     {
         return $this->hasMany(Absensi::class);
     }
+
+    public function formIzin()
+    {
+        return $this->hasMany(FormIzin::class);
+    }
 }

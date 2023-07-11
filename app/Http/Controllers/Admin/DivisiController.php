@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Divisi;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -98,14 +99,14 @@ class DivisiController extends Controller
     public function destroy(Divisi $divisi)
     {
         $divisi = Divisi::findOrFail($divisi->id);
-        try {
-            $divisi->delete();
-            alert()->success('SuccessAlert','Data Berhasil dihapus.');
-        } catch (\Throwable $th) {
-            if($th->getCode() == 23000){
-                alert()->error('ErrorAlert','Data Gagal dihapus.');
-            }
+
+        if (Karyawan::where('divisi_id', $divisi->id)->exists()) {
+            Alert::error('Gagal', 'Data Divisi Masih Digunakan');
+            return redirect()->route('divisi.index');
         }
+
+        $divisi->delete();
+        Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('divisi.index');
     }
 }

@@ -119,7 +119,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form method="POST"
-                                                            action="{{ route('karyawan.activity.selesaikan', $item->id) }}">
+                                                            action="{{ route('karyawan.activity.selesaikan', $item->id) }}" enctype="multipart/form-data">
                                                             @method('PUT')
                                                             @csrf
                                                             <div class="row">

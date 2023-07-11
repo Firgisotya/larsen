@@ -58,32 +58,31 @@
         </div>
     </div>
     @include('sweetalert::alert')
-
-@section('script')
-<script>
-    const deleteButton = document.querySelectorAll('.delete');
-      deleteButton.forEach((dBtn) => {
-          dBtn.addEventListener('click', function (event) {
-              event.preventDefault();
-
-              const destinasiId = this.dataset.id;
-              const destinasiName = this.dataset.name;
-              Swal.fire({
-                  title: 'Anda Yakin Menghapus Data Ini ?',
-                  text: "Nama Destinasi : " + destinasiName,
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Ya, Hapus!'
-                      }).then((result) => {
-                          if (result.isConfirmed) {
-                              const dataId = document.getElementById('data-' + destinasiId);
-                              dataId.submit();
-                          }
-              })
-          })
-      });
-  </script>
 @endsection
+@section('script')
+    <script>
+        const deleteButton = document.querySelectorAll('.delete');
+        deleteButton.forEach((dBtn) => {
+            dBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const destinasiId = this.dataset.id;
+                const destinasiName = this.dataset.name;
+                Swal.fire({
+                    title: 'Anda Yakin Menghapus Data Ini ?',
+                    text: "Nama Destinasi : " + destinasiName,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const dataId = document.getElementById('data-' + destinasiId);
+                        dataId.submit();
+                    }
+                })
+            })
+        });
+    </script>
 @endsection

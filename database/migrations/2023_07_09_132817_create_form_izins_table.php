@@ -15,7 +15,7 @@ class CreateFormIzinsTable extends Migration
     {
         Schema::create('form_izins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('karyawan_id')->constrained('karyawans')->onDelete('cascade');
             $table->string('jenis_izin');
             $table->date('tanggal_izin');
             $table->text('keterangan');

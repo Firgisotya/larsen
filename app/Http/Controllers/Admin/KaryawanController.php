@@ -168,14 +168,13 @@ class KaryawanController extends Controller
     public function destroy(Karyawan $karyawan)
     {
         $karyawan = Karyawan::findOrFail($karyawan->id);
-        try {
-            $karyawan->delete();
-            Alert::success('Berhasil', 'Data Berhasil Dihapus');
-        } catch (\Throwable $th) {
-            if ($th->getCode() == 23000) {
-                Alert::error('Gagal', 'Data Gagal Dihapus');
-            }
+
+        if (User::where('karyawan_id', $karyawan->id)->first()) {
+            User::where('karyawan_id', $karyawan->id)->delete();
         }
+
+        $karyawan->delete();
+        Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('karyawan.index');
     }
 }

@@ -11,9 +11,9 @@ class FormIzin extends Model
     protected $table = 'form_izins';
     protected $guarded = ['id'];
 
-    public function user()
+    public function karyawan()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Karyawan::class);
     }
 
     public function absensi()
