@@ -90,10 +90,10 @@ class KaryawanController extends Controller
      * @param  \App\Models\Karyawan  $karyawan
      * @return \Illuminate\Http\Response
      */
-    public function show(Karyawan $karyawan)
+    public function show($id)
     {
-        $karyawan = Karyawan::with(['user', 'divisi'])->findOrFail($karyawan->id);
-        return view('pages.admin.karyawan.detail', compact('karyawan'));
+        $karyawan = Karyawan::with(['user', 'divisi'])->findOrFail($id);
+        return view('admin.karyawan.show', compact('karyawan'));
     }
 
     /**
@@ -169,8 +169,9 @@ class KaryawanController extends Controller
     {
         $karyawan = Karyawan::findOrFail($karyawan->id);
 
-        if (User::where('karyawan_id', $karyawan->id)->first()) {
-            User::where('karyawan_id', $karyawan->id)->delete();
+        if (User::where('karyawan_id', $karyawan->id)->exists()) {
+            Alert::error('Gagal', 'Data Tidak Bisa Dihapus Karena Memiliki Relasi');
+            return redirect()->route('karyawan.index');
         }
 
         $karyawan->delete();

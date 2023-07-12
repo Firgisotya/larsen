@@ -52,6 +52,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Tampilkan pagination links -->
+                    <div class="d-flex justify-content-center">
+                        {{ $form->links() }}
+                    </div>
                 </div>
             </div>
         </div>

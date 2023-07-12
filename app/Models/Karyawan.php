@@ -9,7 +9,7 @@ class Karyawan extends Model
 {
     use HasFactory;
     protected $table = 'karyawans';
-    protected $guarded = [''];
+    protected $guarded = ['id'];
 
     public function divisi()
     {
@@ -18,7 +18,7 @@ class Karyawan extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'karyawan_id');
     }
 
     public function tugas()

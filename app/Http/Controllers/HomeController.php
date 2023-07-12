@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
+use App\Models\Destinasi;
+use App\Models\Divisi;
+use App\Models\Karyawan;
 use App\Models\LokasiKantor;
+use App\Models\Tugas;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,26 +30,65 @@ class HomeController extends Controller
      */
     public function HomeAdmin()
     {
-        return view('admin.homeAdmin');
+        $karyawan = Karyawan::all();
+        $divisi = Divisi::all();
+        $destinasi = Destinasi::all();
+        $tugas = Tugas::all();
+
+        $countKaryawan = $karyawan->count();
+        $countDivisi = $divisi->count();
+        $countDestinasi = $destinasi->count();
+        $countTugas = $tugas->count();
+        
+        return view('admin.homeAdmin', [
+            'countKaryawan' => $countKaryawan,
+            'countDivisi' => $countDivisi,
+            'countDestinasi' => $countDestinasi,
+            'countTugas' => $countTugas,
+        ]);
     }
 
     public function HomeKaryawan()
     {
-        // $checkLocation = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-        // $checkLocation = geoip()->getLocation('103.169.130.170');
 
         $time = now()->format('H:i:s');
         $karyawanId = auth()->user()->karyawan_id;
 
-        return view('karyawan.homeKaryawan', 
-        [
-            'time' => $time,
-            'karyawanId' => $karyawanId,
+        // count absen
+        // Mendapatkan tanggal awal dan akhir bulan saat ini
+        $startDate = Carbon::now()->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
 
-            // 'checkLocation' => $checkLocation
-        ]
-        
-    );
+        // Menghitung jumlah hari kerja dalam sebulan
+        $absensi = Absensi::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->get();
+        $countAbsen = $absensi->count();
+
+        //menghitung jumlah izin dalam sebulan
+        $izin = Absensi::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('izin_id', '!=', null)->get();
+        $countIzin = $izin->count();
+
+        //menghitung jumlah tugas dalam sebulan
+        $tugas = Tugas::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('status_tugas', '==', 'Selesai')->get();
+        $countTugas = $tugas->count();
+
+        //menghitung jumlah telat dalam sebulan
+        $telat = Absensi::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('telat', '!=', null)->get();
+        $countTelat = $telat->count();
+
+
+        return view(
+            'karyawan.homeKaryawan',
+            [
+                'time' => $time,
+                'karyawanId' => $karyawanId,
+                'countAbsen' => $countAbsen,
+                'countIzin' => $countIzin,
+                'countTugas' => $countTugas,
+                'countTelat' => $countTelat
+
+            ]
+
+        );
     }
 
     public function lokasiKantor()
@@ -64,7 +109,8 @@ class HomeController extends Controller
         return response()->json(['success' => 'Image uploaded successfully']);
     }
 
-    public function teslok (Request $request) {
+    public function teslok(Request $request)
+    {
         // Cek apakah browser mendukung geolocation
         if ($request->has('geolocation')) {
             // Mendapatkan geolocation dari request

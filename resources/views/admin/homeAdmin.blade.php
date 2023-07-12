@@ -1,6 +1,78 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div class="row">
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card shadow-lg">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media d-flex justify-content-between">
+                        <div class="media-body text-left">
+                            <h3 class="text-danger">{{ $countKaryawan }}</h3>
+                            <span>Karyawan</span>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users fa-2x text-danger float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card shadow-lg">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media d-flex justify-content-between">
+                        <div class="media-body text-left">
+                            <h3 class="text-success">{{ $countDivisi }}</h3>
+                            <span>Divisi</span>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-user fa-2x text-success float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card shadow-lg">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media d-flex justify-content-between">
+                        <div class="media-body text-left">
+                            <h3 class="text-warning">{{ $countTugas }}</h3>
+                            <span>Tugas</span>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-chart-pie fa-2x text-warning float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card shadow-lg">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media d-flex justify-content-between">
+                        <div class="media-body text-left">
+                            <h3 class="text-primary">{{ $countDestinasi }}</h3>
+                            <span>Destinasi</span>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-life-ring fa-2x text-primary float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-lg-8 d-flex align-items-strech">
         <div class="card w-100">

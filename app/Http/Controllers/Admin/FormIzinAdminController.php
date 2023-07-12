@@ -12,7 +12,7 @@ class FormIzinAdminController extends Controller
     public function index()
     {
         return view('admin.form.index', [
-            'form' => FormIzin::all()
+            'form' => FormIzin::with('karyawan')->paginate(10),
         ]);
     }
 

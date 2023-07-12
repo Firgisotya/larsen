@@ -229,18 +229,18 @@
     </div>
 
     {{-- informasi --}}
-    <div class="row g-6 mb-6">
+    <div class="row">
         <div class="col-xl-3 col-sm-6 col-12">
-            <div class="card shadow border-0">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Absen</span>
-                            <span class="h3 font-bold mb-0"></span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="circle align-items-center text-white text-lg">
-                                <i class="fas fa-camera-alt"></i>
+            <div class="card shadow-lg">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex justify-content-between">
+                            <div class="media-body text-left">
+                                <h3 class="text-danger">{{ $countAbsen }}</h3>
+                                <span>Absen</span>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-camera-alt fa-2x text-danger float-right"></i>
                             </div>
                         </div>
                     </div>
@@ -248,16 +248,16 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 col-12">
-            <div class="card shadow border-0">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">New projects</span>
-                            <span class="h3 font-bold mb-0">215</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
-                                <i class="bi bi-people"></i>
+            <div class="card shadow-lg">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex justify-content-between">
+                            <div class="media-body text-left">
+                                <h3 class="text-success">{{ $countIzin }}</h3>
+                                <span>Izin</span>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-user fa-2x text-success float-right"></i>
                             </div>
                         </div>
                     </div>
@@ -265,16 +265,16 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 col-12">
-            <div class="card shadow border-0">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total hours</span>
-                            <span class="h3 font-bold mb-0">1.400</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
-                                <i class="bi bi-clock-history"></i>
+            <div class="card shadow-lg">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex justify-content-between">
+                            <div class="media-body text-left">
+                                <h3 class="text-warning">{{ $countTugas }}</h3>
+                                <span>Tugas</span>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-chart-pie fa-2x text-warning float-right"></i>
                             </div>
                         </div>
                     </div>
@@ -282,16 +282,16 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 col-12">
-            <div class="card shadow border-0">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Work load</span>
-                            <span class="h3 font-bold mb-0">95%</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-warning text-white text-lg rounded-circle">
-                                <i class="bi bi-minecart-loaded"></i>
+            <div class="card shadow-lg">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex justify-content-between">
+                            <div class="media-body text-left">
+                                <h3 class="text-primary">{{ $countTelat }}</h3>
+                                <span>Telat</span>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-life-ring fa-2x text-primary float-right"></i>
                             </div>
                         </div>
                     </div>
@@ -299,6 +299,7 @@
             </div>
         </div>
     </div>
+
 
     {{-- map --}}
     <div class="card">

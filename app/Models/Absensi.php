@@ -18,6 +18,6 @@ class Absensi extends Model
 
     public function izin()
     {
-        return $this->belongsTo(Izin::class);
+        return $this->belongsTo(FormIzin::class, 'izin_id');
     }
 }

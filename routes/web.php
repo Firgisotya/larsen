@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\FormIzinAdminController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\LokasiKantorController;
+use App\Http\Controllers\Admin\PresensiController;
 use App\Http\Controllers\Admin\TugasController;
 use App\Http\Controllers\Auth\UpdatePasswordController;
 use App\Http\Controllers\FormIzinController;
@@ -40,6 +41,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::resource('/lokasiKantor', LokasiKantorController::class);
     Route::get('/formIzin', [FormIzinAdminController::class, 'index'])->name('admin.form.index');
     Route::put('/formIzin/{form}', [FormIzinAdminController::class, 'terima'])->name('admin.form.terima');
+    Route::get('/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
+    Route::get('/presensi/{karyawan}', [PresensiController::class, 'show'])->name('admin.presensi.show');
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {

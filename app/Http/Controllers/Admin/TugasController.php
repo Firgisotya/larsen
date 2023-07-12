@@ -67,9 +67,14 @@ class TugasController extends Controller
      * @param  \App\Models\Tugas  $tugas
      * @return \Illuminate\Http\Response
      */
-    public function show(Tugas $tugas)
+    public function show($id)
     {
-        return view('admin.tugas.show', compact('tugas'));
+
+        $tugas = Tugas::with('karyawan', 'destinasi')->findOrFail($id);
+
+        return view('admin.tugas.show', [
+            'tugas' => $tugas,
+        ]);
     }
 
     /**
@@ -123,14 +128,9 @@ class TugasController extends Controller
     public function destroy(Tugas $tugas)
     {
         $tugas = Tugas::findOrFail($tugas->id);
-        try {
-            $tugas->delete();
-            Alert::success('Berhasil', 'Data Berhasil Dihapus');
-        } catch (\Throwable $th) {
-            if ($th->getCode() == 23000) {
-                Alert::error('Gagal', 'Data Gagal Dihapus');
-            }
-        }
+
+        $tugas->delete();
+        Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('tugas.index');
     }
 }

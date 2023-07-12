@@ -64,26 +64,57 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
 
-                                                {{-- delete --}}
-                                                <a href="{{ route('tugas.destroy', $item->id) }}" class="btn btn-danger"
-                                                    onclick="confirmation(event)">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
+                                                {{-- Delete --}}
+                                                <form action="{{ route('tugas.destroy', $item->id) }}" method="POST"
+                                                    class="d-inline" id="data-{{ $item->id }}">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button class="btn btn-danger shadow btn-xs sharp me-1 delete"
+                                                        data-name="{{ $item->nama_tugas }}"
+                                                        data-id="{{ $item->id }}"><i class='fa fa-trash'></i></button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <!-- Tampilkan pagination links -->
+                        <div class="d-flex justify-content-center">
+                            {{ $tugas->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     @include('sweetalert::alert')
-
-
+@endsection
 
 @section('script')
-@endsection
+    <script>
+        const deleteButton = document.querySelectorAll('.delete');
+        deleteButton.forEach((dBtn) => {
+            dBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const tugasId = this.dataset.id;
+                const tugasName = this.dataset.name;
+                Swal.fire({
+                    title: 'Anda Yakin Menghapus Data Ini ?',
+                    text: "Nama Tugas : " + tugasName,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const dataId = document.getElementById('data-' + tugasId);
+                        dataId.submit();
+                    }
+                })
+            })
+        });
+    </script>
 @endsection
