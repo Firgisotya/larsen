@@ -331,7 +331,7 @@
         var currentHour = currentTime.getHours();
 
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 18) {
+        if (currentHour >= 24) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
             modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
@@ -343,7 +343,7 @@
             captureButtonPulang.disabled = true;
             btnMasuk.disabled = true;
             btnPulang.disabled = true;
-        } else if (currentHour >= 10) {
+        } else if (currentHour >= 24) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
@@ -526,7 +526,7 @@
 
 
         $.ajax({
-            url: '{{ route('karyawan.lokasiKantor') }}',
+            url: '{{ route('lokasiKantor') }}',
             type: 'GET',
             success: function(data) {
                 console.log(data);

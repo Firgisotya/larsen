@@ -20,4 +20,29 @@ class Absensi extends Model
     {
         return $this->belongsTo(FormIzin::class, 'izin_id');
     }
+
+    // filter tanggal
+    public function scopeFilterByTanggal($query, $tanggal)
+    {
+        if ($tanggal) {
+            $query->whereDate('tanggal', $tanggal);
+        }
+
+        return $query;
+    }
+
+    // filter karyawan
+    public function scopeFilterByKaryawan($query, $karyawanId)
+{
+    if ($karyawanId) {
+        $query->whereHas('karyawan', function ($query) use ($karyawanId) {
+            $query->where('id', $karyawanId);
+        });
+    }
+
+    return $query;
+}
+
+
+
 }

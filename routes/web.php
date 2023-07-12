@@ -32,6 +32,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
+
 Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeAdmin'])->name('admin.dashboard');;
     Route::resource('/divisi', DivisiController::class);
@@ -51,7 +53,6 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::post('/absensi-masuk', [AbsensiController::class, 'absenMasuk'])->name('karyawan.absensi.masuk');
     Route::post('/absensi-pulang', [AbsensiController::class, 'absenPulang'])->name('karyawan.absensi.pulang');
     Route::get('/absensi', [AbsensiController::class, 'checkAbsen'])->name('karyawan.absensi.checkAbsen');
-    Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('karyawan.lokasiKantor');
     Route::put('/kerjakan/{tugas}', [ActivityController::class, 'kerjakan'])->name('karyawan.activity.kerjakan');
     Route::put('/selesaikan/{tugas}', [ActivityController::class, 'selesaikan'])->name('karyawan.activity.selesaikan');
     Route::resource('/formIzin', FormIzinController::class);

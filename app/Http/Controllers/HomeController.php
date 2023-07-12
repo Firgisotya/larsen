@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Absensi;
 use App\Models\Destinasi;
 use App\Models\Divisi;
+use App\Models\FormIzin;
 use App\Models\Karyawan;
 use App\Models\LokasiKantor;
 use App\Models\Tugas;
@@ -39,7 +40,7 @@ class HomeController extends Controller
         $countDivisi = $divisi->count();
         $countDestinasi = $destinasi->count();
         $countTugas = $tugas->count();
-        
+
         return view('admin.homeAdmin', [
             'countKaryawan' => $countKaryawan,
             'countDivisi' => $countDivisi,
@@ -64,11 +65,11 @@ class HomeController extends Controller
         $countAbsen = $absensi->count();
 
         //menghitung jumlah izin dalam sebulan
-        $izin = Absensi::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('izin_id', '!=', null)->get();
+        $izin = FormIzin::where('karyawan_id', $karyawanId)->whereBetween('tanggal_izin', [$startDate, $endDate])->where('status', '=', 'disetujui')->get();
         $countIzin = $izin->count();
 
         //menghitung jumlah tugas dalam sebulan
-        $tugas = Tugas::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('status_tugas', '==', 'Selesai')->get();
+        $tugas = Tugas::where('karyawan_id', $karyawanId)->whereBetween('tanggal', [$startDate, $endDate])->where('status_tugas', '=', 'Selesai')->get();
         $countTugas = $tugas->count();
 
         //menghitung jumlah telat dalam sebulan

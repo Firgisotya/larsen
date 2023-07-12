@@ -20,7 +20,7 @@ class FormIzinAdminController extends Controller
     {
         $form = FormIzin::findOrFail($id);
         $form->update([
-            'status' => 'diterima'
+            'status' => 'disetujui'
         ]);
 
         Alert::success('Berhasil', 'Form Izin Diterima');

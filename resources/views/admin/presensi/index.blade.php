@@ -6,7 +6,32 @@
             <div class="col">
                 <h1 class="h3 mb-4 text-gray-800">Manajemen Presensi</h1>
             </div>
+            <div class="col">
+                <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
+                    Reset</a>
+            </div>
         </div>
+
+        <div class="row">
+            <form id="filterForm" class="d-flex justify-content-between gap-2">
+            <div class="col-6">
+                <label for="tanggalFilter" class="form-label">Filter Tanggal:</label>
+                <input type="date" id="tanggalFilter" name="tanggal" class="form-control" value="{{ request('tanggal') }}">
+            </div>
+            <div class="col-6">
+                <label for="namaFilter" class="form-label">Filter Nama:</label>
+                <select name="karyawan" id="namaFilter" class="form-control">
+                    <option value="">-- Pilih Nama --</option>
+                    @foreach ($karyawan as $item)
+                    <option value="{{ $item->id }}"
+                        {{ request('karyawan') == $item->id ? 'selected' : '' }}>
+                        {{ $item->nama_karyawan }}</option>
+                    @endforeach
+                </select>
+            </div>
+            </form>
+        </div>
+
         <div class="card-body">
             <div class="row">
                 <div class="col">
@@ -33,7 +58,13 @@
                                     <tr>
                                         <th scope="row">{{ $loop->index + 1 }}</th>
                                         <td>{{ $item->karyawan->nama_karyawan }}</td>
-                                        <td>{{ ($item->izin == '') ? null : 1  }}</td>
+                                        <td>
+                                            @if ($item->izin)
+                                                {{ $item->izin->jenis_izin }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td>{{ $item->tanggal }}</td>
                                         <td>{{ $item->jam_masuk }}</td>
                                         <td>{{ $item->lokasi_masuk }}</td>
@@ -69,4 +100,19 @@
         </div>
     </div>
     @include('sweetalert::alert')
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $('#filterForm input').on('change', function() {
+            $('#filterForm').submit();
+        });
+
+        $('#filterForm select').on('change', function() {
+            $('#filterForm').submit();
+        });
+    });
+</script>
+
 @endsection

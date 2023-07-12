@@ -72,6 +72,19 @@
                                 </div>
                             @enderror
                         </div>
+                        <div class="mb-3">
+                            <label for="radius" class="form-label">Radius</label>
+                            <input type="text"
+                                class="form-control @error('radius') is-invalid
+                        @enderror"
+                                id="radius" placeholder="Radius" name="radius" required autofocus
+                                value="{{ old('radius') }}">
+                            @error('radius')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </form>
                 </div>

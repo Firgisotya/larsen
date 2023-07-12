@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="card mb-3 shadow-lg">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
             Detail Absensi
+            <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary">Kembali</a>
         </div>
         <div class="card-body pt-3">
             <!-- Bordered Tabs -->
@@ -25,6 +26,7 @@
                                 <div>
                                     <h1 class="d-inline">Detail Absen Masuk</h1>
                                 </div>
+
                             </div>
                             <hr>
                             <div class="col-6">
@@ -72,19 +74,10 @@
                                                 </h5>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <h5>Lokasi Masuk</h5>
-                                            </th>
-                                            <th>:</th>
-                                            <td>
-                                                <h5>
-                                                    <input type="hidden" id="latMasuk" value="{{ $masuk_pulang['latMasuk'] }}" />
-                                                    <input type="hidden" id="longMasuk" value="{{ $masuk_pulang['longMasuk'] }}" />
-                                                    <button type="button" class="btn btn-secondary" onclick="showMapMasuk()">tes</button>
-                                                </h5>
-                                            </td>
-                                        </tr>
+
+                                        <input type="hidden" id="latMasuk" value="{{ $masuk_pulang['latMasuk'] }}" />
+                                        <input type="hidden" id="longMasuk" value="{{ $masuk_pulang['longMasuk'] }}" />
+
                                         <tr>
                                             <th scope="row">
                                                 <h5>Telat</h5>
@@ -109,7 +102,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div id="mapMasuk"></div>
+                            <h5>Lokasi Masuk :</h5>
+                            <div id="mapMasuk" style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -168,15 +162,13 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">
-                                                <h5>Lokasi Pulang</h5>
-                                            </th>
-                                            <th>:</th>
                                             <td>
                                                 <h5>
-                                                    <input type="hidden" id="latPulang" value="{{ $masuk_pulang['latPulang'] }}" />
-                                                    <input type="hidden" id="longPulang" value="{{ $masuk_pulang['longPulang'] }}" />
-                                                    
+                                                    <input type="hidden" id="latPulang"
+                                                        value="{{ $masuk_pulang['latPulang'] }}" />
+                                                    <input type="hidden" id="longPulang"
+                                                        value="{{ $masuk_pulang['longPulang'] }}" />
+
                                                 </h5>
                                             </td>
                                         </tr>
@@ -189,36 +181,91 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div id="mapPulang"></div>
+                            <h5>Lokasi Pulang :</h5>
+                            <div id="mapPulang" style="height: 400px"/div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@section('script')
-    <script>
-        
-        var mymap = L.map('mapMasuk').setView([51.505, -0.09], 13);
-        console.log(document.getElementById('mapMasuk'));
+    @section('script')
+        <script>
+            function initMap() {
+                // Retrieve the latitude and longitude values for masuk and pulang
+                var latMasuk = parseFloat(document.getElementById('latMasuk').value);
+                var longMasuk = parseFloat(document.getElementById('longMasuk').value);
+                var latPulang = parseFloat(document.getElementById('latPulang').value);
+                var longPulang = parseFloat(document.getElementById('longPulang').value);
 
-       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
+                // Create a map for masuk
+                var mapMasuk = L.map('mapMasuk').setView([latMasuk, longMasuk], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapMasuk);
+                var masukIcon = L.icon({
+                    iconUrl: '{{ asset('images/1.png') }}',
+                    iconSize: [40, 45],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [0, -41]
+                });
+                L.marker([latMasuk, longMasuk], {
+                    icon: masukIcon
+                }).addTo(mapMasuk);
 
-        function showMapMasuk() {
-            var latMasuk = document.getElementById('latMasuk').value;
-            var longMasuk = document.getElementById('longMasuk').value;
-            console.log(latMasuk, longMasuk);
 
-            var marker = L.marker([latMasuk, longMasuk]).addTo(map);
+                // Create a map for pulang
+                var mapPulang = L.map('mapPulang').setView([latPulang, longPulang], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapPulang);
+                var pulangIcon = L.icon({
+                    iconUrl: '{{ asset('images/1.png') }}',
+                    iconSize: [40, 45],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [0, -41]
+                });
+                L.marker([latPulang, longPulang], {
+                    icon: pulangIcon
+                }).addTo(mapPulang);
 
-            marker.bindPopup("<b>Lokasi Masuk</b><br />" + latMasuk + ", " + longMasuk).openPopup();
 
+                $.ajax({
+                    url: '{{ route('lokasiKantor') }}',
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(i, item) {
+                            console.log(item);
+                            var icon = L.icon({
+                                iconUrl: '{{ asset('images/2.png') }}',
+                                iconSize: [40, 45],
+                                iconAnchor: [12, 41],
+                                popupAnchor: [0, -41]
+                            });
+                            var marker = L.marker([item.latitude, item.longitude], {
+                                    icon: icon
+                                })
+                                .bindPopup('Nama Kantor : ' + item.nama_kantor + '<br>' +
+                                    'Alamat Kantor :' + item.alamat_kantor);
+                            var radius = L.circle([item.latitude, item.longitude], {
+                                color: 'red',
+                                fillColor: '#f03',
+                                fillOpacity: 0.5,
+                                radius: 100
+                            });
 
+                            if (i % 2 == 0) { // Marker masuk
+                                marker.addTo(mapMasuk);
+                                radius.addTo(mapMasuk);
+                            } else { // Marker pulang
+                                marker.addTo(mapPulang);
+                                radius.addTo(mapPulang);
+                            }
+                        });
+                    }
+                })
+            }
 
-        }
-    </script>
-@endsection
+            // Initialize the map
+            window.addEventListener('DOMContentLoaded', initMap);
+        </script>
+    @endsection

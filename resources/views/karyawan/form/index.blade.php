@@ -38,7 +38,7 @@
                                     <td>
                                         @if ($item->status == 'pending')
                                             <span class="badge bg-warning text-white">{{ $item->status }}</span>
-                                        @elseif ($item->status == 'diterima')
+                                        @elseif ($item->status == 'disetujui')
                                             <span class="badge bg-success text-white">{{ $item->status }}</span>
                                         @endif
                                     </td>
