@@ -6,9 +6,16 @@
             <div class="col">
                 <h1 class="h3 mb-4 text-gray-800">Manajemen Presensi</h1>
             </div>
-            <div class="col">
-                <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
-                    Reset</a>
+            <div class="d-flex justify-content-end mt-3 gap-2">
+                    <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
+                        Reset</a>
+
+                    <a href="{{ route('admin.presensi.exportPDF') }}" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
+                        Export PDF</a>
+
+                    <a href="{{ route('admin.presensi.exportExcel') }}" class="btn btn-primary"><i class="fas fa-file-excel"></i>
+                        Export Excel</a>
+
             </div>
         </div>
 

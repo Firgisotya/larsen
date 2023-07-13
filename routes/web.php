@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\TugasController;
 use App\Http\Controllers\Auth\UpdatePasswordController;
 use App\Http\Controllers\FormIzinController;
 use App\Http\Controllers\HomeController;
+use App\Models\Absensi;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return Auth::check() ? : view('auth.login');
+    return Auth::check() ?: view('auth.login');
 });
 
 Auth::routes();
@@ -45,6 +47,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::put('/formIzin/{form}', [FormIzinAdminController::class, 'terima'])->name('admin.form.terima');
     Route::get('/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
     Route::get('/presensi/{karyawan}', [PresensiController::class, 'show'])->name('admin.presensi.show');
+    Route::get('/presensi/export-pdf', 'PresensiController@export_pdf')->name('presensi-exportPDF');
+    Route::get('/presensi/export-excel', 'PresensiController@export_excel')->name('admin.presensi.exportExcel');
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
@@ -59,5 +63,3 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::get('/ubahPassword', [UpdatePasswordController::class, 'getUser'])->name('karyawan.ubahPassword');
     Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('karyawan.ubahPassword.update');
 });
-
-

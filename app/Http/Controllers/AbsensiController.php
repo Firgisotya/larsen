@@ -121,7 +121,7 @@ class AbsensiController extends Controller
 
         // menghitung lama telat absensi
         $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $jamBatas = Carbon::createFromFormat('H:i:s', '08:00:00');
+        $jamBatas = Carbon::createFromFormat('H:i:s', '17:00:00');
         $telat = $jamAbsen->diffInMinutes($jamBatas);
 
         // validasi foto absensi
@@ -170,5 +170,15 @@ class AbsensiController extends Controller
             Alert::error('Lokasi tidak valid untuk absen', 'Anda tidak berada di kantor');
             return response()->json(['message' => 'Lokasi tidak valid untuk absen'], 400);
         }
+    }
+
+    public function checkAbsen()
+    {
+        $karyawanId = auth()->user()->karyawan_id;
+        $tanggal = now()->toDateString();
+
+        $absensi = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', $tanggal)->first();
+
+       return $absensi;
     }
 }

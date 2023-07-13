@@ -51,6 +51,7 @@ class HomeController extends Controller
 
     public function HomeKaryawan()
     {
+        $hari_ini = now()->format('l, d F Y');
 
         $time = now()->format('H:i:s');
         $karyawanId = auth()->user()->karyawan_id;
@@ -85,7 +86,8 @@ class HomeController extends Controller
                 'countAbsen' => $countAbsen,
                 'countIzin' => $countIzin,
                 'countTugas' => $countTugas,
-                'countTelat' => $countTelat
+                'countTelat' => $countTelat,
+                'hari_ini' => $hari_ini,
 
             ]
 

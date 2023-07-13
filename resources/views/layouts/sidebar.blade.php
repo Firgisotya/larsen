@@ -21,7 +21,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('admin.dashboard') }}" aria-expanded="false">
                             <span>
-                                <i class="ti ti-layout-dashboard"></i>
+                                <i class="fas fa-home fa-lg"></i>
                             </span>
                             <span class="hide-menu">Dashboard</span>
                         </a>
@@ -33,7 +33,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/lokasiKantor" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="fas fa-building fa-lg"></i>
                             </span>
                             <span class="hide-menu">Lokasi Kantor</span>
                         </a>
@@ -41,7 +41,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/divisi" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="fas fa-users-cog fa-lg"></i>
                             </span>
                             <span class="hide-menu">Divisi</span>
                         </a>
@@ -49,7 +49,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/karyawan" aria-expanded="false">
                             <span>
-                                <i class="ti ti-alert-circle"></i>
+                                <i class="fas fa-users fa-lg"></i>
                             </span>
                             <span class="hide-menu">Karyawan</span>
                         </a>
@@ -57,7 +57,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/destinasi" aria-expanded="false">
                             <span>
-                                <i class="ti ti-cards"></i>
+                                <i class="fas fa-map-marked-alt fa-lg"></i>
                             </span>
                             <span class="hide-menu">Destinasi</span>
                         </a>
@@ -65,7 +65,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/tugas" aria-expanded="false">
                             <span>
-                                <i class="ti ti-cards"></i>
+                                <i class="fas fa-tasks fa-lg"></i>
                             </span>
                             <span class="hide-menu">Tugas</span>
                         </a>
@@ -77,7 +77,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/presensi" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="far fa-calendar-check fa-lg"></i>
                             </span>
                             <span class="hide-menu">Presensi</span>
                         </a>
@@ -85,7 +85,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/formIzin" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="far fa-list-alt fa-lg"></i>
                             </span>
                             <span class="hide-menu">FormIzin</span>
                         </a>
@@ -100,7 +100,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('karyawan.dashboard') }}" aria-expanded="false">
                             <span>
-                                <i class="ti ti-layout-dashboard"></i>
+                                <i class="fas fa-home fa-lg"></i>
                             </span>
                             <span class="hide-menu">Dashboard</span>
                         </a>
@@ -112,7 +112,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/karyawan/activity" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="fas fa-tasks fa-lg"></i>
                             </span>
                             <span class="hide-menu">Tugas</span>
                         </a>
@@ -124,7 +124,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/karyawan/formIzin" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="far fa-list-alt fa-lg"></i>
                             </span>
                             <span class="hide-menu">Form Izin</span>
                         </a>

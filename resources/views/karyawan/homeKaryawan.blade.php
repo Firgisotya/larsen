@@ -9,7 +9,7 @@
             border-radius: 50%;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 700px) {
 
             /* Ubah ukuran sesuai dengan ukuran layar mobile yang diinginkan */
             #webcam-masuk video {
@@ -19,9 +19,17 @@
             #capture-masuk {
                 display: none;
             }
+
+            #webcam-pulang video {
+                display: none;
+            }
+
+            #capture-pulang {
+                display: none;
+            }
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 700px) {
 
             /* Ubah ukuran sesuai dengan ukuran layar desktop yang diinginkan */
             #webcam-masuk input {
@@ -117,10 +125,10 @@
                             </div>
 
                             <div id="webcam-masuk" class="d-flex justify-content-center">
-                                <video id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
+                                <video class="d-sm-none" id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
                                 <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
-                                    <div class="custom-file">
+                                    <div class="custom-file ">
                                         <input type="file" accept="image/*" capture="camera" id="uploadInput-masuk"
                                             class="custom-file-input" onchange="previewImage('masuk')">
                                         <label class="custom-file-label" for="uploadInput-masuk"></label>
@@ -225,7 +233,19 @@
             </div>
         </div>
 
+    </div>
 
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Status Absen Hari ini {{ $hari_ini }}</h3>
+                </div>
+                <div class="card-body">
+                    
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- informasi --}}
@@ -330,8 +350,20 @@
         var currentTime = new Date();
         var currentHour = currentTime.getHours();
 
+        // cek absensi menggunakan ajax
+        
+            $.ajax({
+               url: '{{ route('karyawan.absensi.checkAbsen') }}',
+               type: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+       
+
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 24) {
+        if (currentHour >= 18) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
             modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
@@ -343,7 +375,7 @@
             captureButtonPulang.disabled = true;
             btnMasuk.disabled = true;
             btnPulang.disabled = true;
-        } else if (currentHour >= 24) {
+        } else if (currentHour >= 10) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
@@ -529,9 +561,7 @@
             url: '{{ route('lokasiKantor') }}',
             type: 'GET',
             success: function(data) {
-                console.log(data);
                 $.each(data, function(i, item) {
-                    console.log(item);
                     var marker = L.marker([item.latitude, item.longitude])
                         .bindPopup('Nama Kantor : ' + item.nama_kantor + '<br>' +
                             'Alamat Kantor :' + item.alamat_kantor).addTo(map);
