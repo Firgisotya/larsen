@@ -56,6 +56,10 @@ class HomeController extends Controller
         $time = now()->format('H:i:s');
         $karyawanId = auth()->user()->karyawan_id;
 
+        $cek = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', now()->format('Y-m-d'))->first();
+        // $cek = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', '2023-07-12')->first();
+        // dd($cek);
+        
         // count absen
         // Mendapatkan tanggal awal dan akhir bulan saat ini
         $startDate = Carbon::now()->startOfMonth();
@@ -88,6 +92,7 @@ class HomeController extends Controller
                 'countTugas' => $countTugas,
                 'countTelat' => $countTelat,
                 'hari_ini' => $hari_ini,
+                'cek' => $cek,
 
             ]
 

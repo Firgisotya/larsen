@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('style')
+{{-- @section('style')
     <style>
         .circle {
             height: 50px;
@@ -83,7 +83,7 @@
             height: 400px;
         }
     </style>
-@endsection
+@endsection --}}
 
 @section('content')
     {{-- absen --}}
@@ -116,8 +116,6 @@
                         <div class="modal-body">
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
                                 <h3 class="text-center">Lokasi Anda</h3>
-                                <button type="button" class="btn btn-warning" onclick="getLocation('masuk')">Lokasi
-                                    Anda</button>
                                 <div class="d-flex justify-content-center gap-2">
                                     Latitude: <span id="latitude" name="latitude"></span>
                                     Longitude: <span id="longitude" name="longitude"></span>
@@ -125,15 +123,16 @@
                             </div>
 
                             <div id="webcam-masuk" class="d-flex justify-content-center">
-                                <video class="d-sm-none" id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
-                                <div class="row">
+                                <video class="d-sm-none" id="video-masuk" width="100%" height="100%" autoplay
+                                    playsinline></video>
+                                {{-- <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
                                     <div class="custom-file ">
                                         <input type="file" accept="image/*" capture="camera" id="uploadInput-masuk"
                                             class="custom-file-input" onchange="previewImage('masuk')">
                                         <label class="custom-file-label" for="uploadInput-masuk"></label>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div id="captured-image-masuk-container" style="display: none;">
                                 <img id="captured-image-masuk" width="100%" height="100%" src=""
@@ -188,8 +187,6 @@
                         <div class="modal-body">
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
                                 <h3 class="text-center">Lokasi Anda</h3>
-                                <button type="button" class="btn btn-warning" onclick="getLocation('pulang')">Lokasi
-                                    Anda</button>
                                 <div class="d-flex justify-content-center gap-2">
                                     Latitude: <span id="latitude" name="latitude"></span>
                                     Longitude: <span id="longitude" name="longitude"></span>
@@ -198,14 +195,14 @@
 
                             <div id="webcam-pulang" class="d-flex justify-content-center">
                                 <video id="video-pulang" width="100%" height="100%" autoplay playsinline></video>
-                                <div class="row">
+                                {{-- <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-pulang">
                                     <div class="custom-file">
                                         <input type="file" accept="image/*" capture="camera" id="uploadInput-pulang"
                                             class="custom-file-input" onchange="previewImage('pulang')">
                                         <label class="custom-file-label" for="uploadInput-pulang"></label>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div id="captured-image-pulang-container" style="display: none;">
                                 <img id="captured-image-pulang" width="100%" height="100%" src=""
@@ -242,7 +239,40 @@
                     <h3>Status Absen Hari ini {{ $hari_ini }}</h3>
                 </div>
                 <div class="card-body">
-                    
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Absen Masuk</h5>
+                                    @if ($cek == null)
+                                        <span class="badge bg-danger">Belum Absen</span>
+                                    @elseif ($cek != null)
+                                        @if ($cek->lokasi_masuk == null && $cek->foto_masuk == null)
+                                            <span class="badge bg-danger">Belum Absen</span>
+                                        @elseif ($cek->lokasi_masuk != null && $cek->foto_masuk != null)
+                                            <span class="badge bg-success">Sudah Absen</span>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Absen Pulang</h5>
+                                    @if ($cek == null)
+                                        <span class="badge bg-danger">Belum Absen</span>
+                                    @elseif ($cek != null)
+                                        @if ($cek->lokasi_pulang == null && $cek->foto_pulang == null)
+                                            <span class="badge bg-danger">Belum Absen</span>
+                                        @elseif ($cek->lokasi_pulang != null && $cek->foto_pulang != null)
+                                            <span class="badge bg-success">Sudah Absen</span>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -351,16 +381,16 @@
         var currentHour = currentTime.getHours();
 
         // cek absensi menggunakan ajax
-        
-            $.ajax({
-               url: '{{ route('karyawan.absensi.checkAbsen') }}',
-               type: 'GET',
-                dataType: 'json',
-                success: function(data){
-                    console.log(data);
-                }
-            });
-       
+
+        $.ajax({
+            url: '{{ route('karyawan.absensi.checkAbsen') }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+            }
+        });
+
 
         // Memeriksa jika waktu lebih dari jam 10
         if (currentHour >= 18) {
@@ -548,6 +578,7 @@
             document.getElementById('latitude').innerHTML = latitude;
             document.getElementById('longitude').innerHTML = longitude;
         }
+        getLocation();
 
         var map = L.map('map').setView([-7.2971498, 104.603765], 7);
 
