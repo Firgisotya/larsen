@@ -14,19 +14,22 @@ class KaryawanSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('karyawans')->insert([
-            [
-                'nama_karyawan' => 'Rizky',
-                'divisi_id' => 1,
-                'nik' => '123456789',
-                'tanggal_lahir' => '2000-01-01',
-                'tempat_lahir' => 'Jakarta',
-                'jenis_kelamin' => 'Laki-laki',
-                'alamat' => 'Jakarta',
-                'no_telepon' => '08123456789',
-                'tahun_masuk' => '2021',
+        $faker = \Faker\Factory::create();
 
-            ],
-        ]);
+        for ($i = 0; $i < 100; $i++) {
+            DB::table('karyawans')->insert([
+                'divisi_id' => null,
+                'nik' => $faker->unique()->randomNumber(6),
+                'nama_karyawan' => $faker->name,
+                'tanggal_lahir' => $faker->date,
+                'tempat_lahir' => $faker->city,
+                'jenis_kelamin' => $faker->randomElement(['Laki-laki', 'Perempuan']),
+                'alamat' => $faker->address,
+                'no_telepon' => $faker->phoneNumber,
+                'tahun_masuk' => $faker->year,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

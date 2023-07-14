@@ -37,7 +37,13 @@
                                     <tr>
                                         <th scope="row">{{ $loop->index + 1 }}</th>
                                         <td>{{ $item->nama_karyawan }}</td>
-                                        <td>{{ $item->divisi->nama_divisi }}</td>
+                                        <td>
+                                            @if ($item->divisi_id == null)
+                                                -
+                                            @else
+                                            {{ $item->divisi->nama_divisi }} 
+                                            @endif
+                                        </td>
                                         <td>{{ $item->tempat_lahir }}</td>
                                         <td>{{ $item->tanggal_lahir }}</td>
                                         <td>{{ $item->alamat }}</td>
