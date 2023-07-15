@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-{{-- @section('style')
+@section('style')
     <style>
         .circle {
             height: 50px;
@@ -9,81 +9,11 @@
             border-radius: 50%;
         }
 
-        @media (max-width: 700px) {
-
-            /* Ubah ukuran sesuai dengan ukuran layar mobile yang diinginkan */
-            #webcam-masuk video {
-                display: none;
-            }
-
-            #capture-masuk {
-                display: none;
-            }
-
-            #webcam-pulang video {
-                display: none;
-            }
-
-            #capture-pulang {
-                display: none;
-            }
-        }
-
-        @media (min-width: 700px) {
-
-            /* Ubah ukuran sesuai dengan ukuran layar desktop yang diinginkan */
-            #webcam-masuk input {
-                display: none;
-            }
-
-            .custom-file-input {
-                display: none;
-            }
-
-            .custom-file-label {
-                display: none;
-            }
-
-            #imagePreviewMasuk {
-                display: none;
-            }
-
-        }
-
-
-        /* Tombol Pilih Gambar */
-        .custom-file-input {
-            display: none;
-        }
-
-        .custom-file-label {
-            background-color: #e9ecef;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-        }
-
-        /* Gaya tambahan untuk elemen label */
-        .custom-file-label::after {
-            content: "Ambil Foto";
-        }
-
-        /* Gaya tambahan saat input memiliki file yang dipilih */
-        .custom-file-input.has-file-selected~.custom-file-label::after {
-            content: attr(data-file-name);
-        }
-
-        /* Gaya tambahan saat input memiliki file yang dipilih */
-        .custom-file-input.has-file-selected~.custom-file-label {
-            border-color: #e9ecef;
-            background-color: #e9ecef;
-        }
-
         #map {
             height: 400px;
         }
     </style>
-@endsection --}}
+@endsection
 
 @section('content')
     {{-- absen --}}
@@ -92,7 +22,7 @@
         {{-- masuk --}}
         <div class="col-6">
             <!-- Button trigger modal -->
-            <div data-bs-toggle="modal" data-bs-target="#masuk">
+            <div data-bs-toggle="modal" data-bs-target="#masuk" onclick="getLocationMasuk()">
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title text-primary d-flex justify-content-center">
@@ -117,8 +47,8 @@
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
                                 <h3 class="text-center">Lokasi Anda</h3>
                                 <div class="d-flex justify-content-center gap-2">
-                                    Latitude: <span id="latitude" name="latitude"></span>
-                                    Longitude: <span id="longitude" name="longitude"></span>
+                                    Latitude: <span id="latitudeMasuk" name="latitudeMasuk"></span>
+                                    Longitude: <span id="longitudeMasuk" name="longitudeMasuk"></span>
                                 </div>
                             </div>
 
@@ -142,16 +72,16 @@
                             <input type="hidden" name="waktu-masuk" value="masuk">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-masuk" class="btn btn-primary" onclick="captureImage('masuk')">Ambil
+                                <button id="capture-masuk" class="btn btn-primary" onclick="captureMasuk()">Ambil
                                     Foto</button>
                                 <button id="reset-masuk" class="btn btn-danger" style="display: none;"
-                                    onclick="resetImage('masuk')">Reset</button>
+                                    onclick="resetMasuk()">Reset</button>
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="btn-masuk" onclick="submitAbsen('masuk')"
+                            <button type="button" class="btn btn-success" id="btn-masuk" onclick="submitAbsenMasuk()"
                                 data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
@@ -162,7 +92,7 @@
         {{-- pulang --}}
         <div class="col-6">
             <!-- Button trigger modal -->
-            <div data-bs-toggle="modal" data-bs-target="#pulang">
+            <div data-bs-toggle="modal" data-bs-target="#pulang" onclick="getLocationPulang()">
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title text-primary d-flex justify-content-center">
@@ -179,8 +109,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Absen Pulang</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
 
@@ -188,8 +117,8 @@
                             <div id="lokasi" class="d-flex flex-column justify-content-center mb-4">
                                 <h3 class="text-center">Lokasi Anda</h3>
                                 <div class="d-flex justify-content-center gap-2">
-                                    Latitude: <span id="latitude" name="latitude"></span>
-                                    Longitude: <span id="longitude" name="longitude"></span>
+                                    Latitude: <span id="latitudePulang" name="latitudePulang"></span>
+                                    Longitude: <span id="longitudePulang" name="longitudePulang"></span>
                                 </div>
                             </div>
 
@@ -212,18 +141,17 @@
                             <input type="hidden" name="waktu-pulang" value="pulang">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-pulang" class="btn btn-primary"
-                                    onclick="captureImage('pulang')">Ambil
+                                <button id="capture-pulang" class="btn btn-primary" onclick="capturePulang()">Ambil
                                     Foto</button>
                                 <button id="reset-pulang" class="btn btn-danger" style="display: none;"
-                                    onclick="resetImage('pulang')">Reset</button>
+                                    onclick="resetPulang()">Reset</button>
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="btn-pulang"
-                                onclick="submitAbsen('pulang')" data-bs-dismiss="modal">Absen</button>
+                            <button type="button" class="btn btn-success" id="btn-pulang" onclick="submitAbsenPulang()"
+                                data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -393,7 +321,7 @@
 
 
         // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 18) {
+        if (currentHour >= 24) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
             modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
@@ -405,7 +333,7 @@
             captureButtonPulang.disabled = true;
             btnMasuk.disabled = true;
             btnPulang.disabled = true;
-        } else if (currentHour >= 10) {
+        } else if (currentHour >= 24) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 
@@ -415,14 +343,22 @@
             btnMasuk.disabled = true;
         }
 
+        // cek support camera
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            console.log('MediaDevices API supported');
+        } else {
+            console.log('MediaDevices API not supported');
+        }
 
-        // Fungsi untuk mengambil akses ke kamera
-        function getCameraStream(waktu) {
+
+
+        // Fungsi untuk mengambil akses ke kamera masuk
+        function getCameraMasuk() {
             navigator.mediaDevices.getUserMedia({
                     video: true
                 })
                 .then(function(stream) {
-                    var videoElement = document.getElementById('video-' + waktu);
+                    var videoElement = document.getElementById('video-masuk');
                     videoElement.srcObject = stream;
                 })
                 .catch(function(error) {
@@ -430,9 +366,9 @@
                 });
         }
 
-        // Fungsi untuk mengambil foto
-        function captureImage(waktu) {
-            var videoElement = document.getElementById('video-' + waktu);
+        // Fungsi untuk mengambil foto masuk
+        function captureMasuk() {
+            var videoElement = document.getElementById('video-masuk');
             var canvasElement = document.createElement('canvas');
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
@@ -442,47 +378,92 @@
 
             var dataURL = canvasElement.toDataURL('image/jpeg');
 
-            document.getElementById('video-' + waktu).style.display = 'none';
-            document.getElementById('captured-image-' + waktu).src = dataURL;
-            document.getElementById('captured-image-input-' + waktu).value = dataURL;
-            document.getElementById('captured-image-' + waktu + '-container').style.display = 'block';
-            document.getElementById('capture-' + waktu).style.display = 'none';
-            document.getElementById('reset-' + waktu).style.display = 'inline-block';
+            document.getElementById('video-masuk').style.display = 'none';
+            document.getElementById('captured-image-masuk').src = dataURL;
+            document.getElementById('captured-image-input-masuk').value = dataURL;
+            document.getElementById('captured-image-masuk' + '-container').style.display = 'block';
+            document.getElementById('capture-masuk').style.display = 'none';
+            document.getElementById('reset-masuk').style.display = 'inline-block';
         }
 
-        // Fungsi untuk mereset foto
-        function resetImage(waktu) {
-            document.getElementById('video-' + waktu).style.display = 'block';
-            document.getElementById('captured-image-' + waktu + '-container').style.display = 'none';
-            document.getElementById('capture-' + waktu).style.display = 'inline-block';
-            document.getElementById('reset-' + waktu).style.display = 'none';
-            document.getElementById('captured-image-input-' + waktu).value = '';
+        // Fungsi untuk mereset foto masuk
+        function resetMasuk() {
+            document.getElementById('video-masuk').style.display = 'block';
+            document.getElementById('captured-image-masuk' + '-container').style.display = 'none';
+            document.getElementById('capture-masuk').style.display = 'inline-block';
+            document.getElementById('reset-masuk').style.display = 'none';
+            document.getElementById('captured-image-input-masuk').value = '';
         }
 
-        // Panggil fungsi getCameraStream saat modal ditampilkan
+        // Fungsi untuk mengambil akses ke kamera pulang
+        function getCameraPulang() {
+            navigator.mediaDevices.getUserMedia({
+                    video: true
+                })
+                .then(function(stream) {
+                    var videoElement = document.getElementById('video-pulang');
+                    videoElement.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.log('Error accessing camera: ', error);
+                });
+        }
+
+        // Fungsi untuk mengambil foto pulang
+        function capturePulang() {
+            var videoElement = document.getElementById('video-pulang');
+            var canvasElement = document.createElement('canvas');
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+
+            var canvasContext = canvasElement.getContext('2d');
+            canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            var dataURL = canvasElement.toDataURL('image/jpeg');
+
+            document.getElementById('video-pulang').style.display = 'none';
+            document.getElementById('captured-image-pulang').src = dataURL;
+            document.getElementById('captured-image-input-pulang').value = dataURL;
+            document.getElementById('captured-image-pulang' + '-container').style.display = 'block';
+            document.getElementById('capture-pulang').style.display = 'none';
+            document.getElementById('reset-pulang').style.display = 'inline-block';
+        }
+
+        // Fungsi untuk mereset foto pulang
+        function resetPulang() {
+            document.getElementById('video-pulang').style.display = 'block';
+            document.getElementById('captured-image-pulang' + '-container').style.display = 'none';
+            document.getElementById('capture-pulang').style.display = 'inline-block';
+            document.getElementById('reset-pulang').style.display = 'none';
+            document.getElementById('captured-image-input-pulang').value = '';
+        }
+
+        // Panggil fungsi getCameraMasuk saat modal ditampilkan
         $('#masuk').on('shown.bs.modal', function() {
-            getCameraStream('masuk');
+            getCameraMasuk();
         });
+        // Panggil fungsi getCameraPulang saat modal ditampilkan
         $('#pulang').on('shown.bs.modal', function() {
-            getCameraStream('pulang');
+            getCameraPulang();
         });
 
-        // Panggil fungsi resetImage saat modal ditutup
+        // Panggil fungsi resetMasuk saat modal ditutup
         $('#masuk').on('hidden.bs.modal', function() {
-            resetImage('masuk');
+            resetMasuk();
         });
+        // Panggil fungsi resetPulang saat modal ditutup
         $('#pulang').on('hidden.bs.modal', function() {
-            resetImage('pulang');
+            resetPulang();
         });
 
-        // mengrim data ke server untuk di simpan
-        function submitAbsen(waktu) {
+        // mengrim data ke server untuk di simpan ke database absensi masuk
+        function submitAbsenMasuk() {
 
 
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
 
-            var capturedImageInput = document.getElementById('captured-image-input-' + waktu);
+            var capturedImageInput = document.getElementById('captured-image-input-masuk');
             formData.append('captured_image', capturedImageInput.value);
 
             var latitude = document.getElementById('latitude').textContent;
@@ -490,11 +471,8 @@
             formData.append('latitude', latitude);
             formData.append('longitude', longitude);
 
-            formData.append('waktu', waktu); // Ganti dengan waktu yang sesuai
-
-
             $.ajax({
-                url: '/karyawan/absensi-' + waktu,
+                url: '/karyawan/absensi-masuk',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -509,76 +487,127 @@
             });
 
             // Reset form
-            resetImage(waktu);
+            resetMasuk();
         }
 
+        // mengrim data ke server untuk di simpan ke database absensi pulang
+        function submitAbsenPulang() {
+
+
+            var formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+
+            var capturedImageInput = document.getElementById('captured-image-input-pulang');
+            formData.append('captured_image', capturedImageInput.value);
+
+            var latitude = document.getElementById('latitude').textContent;
+            var longitude = document.getElementById('longitude').textContent;
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+
+            $.ajax({
+                url: '/karyawan/absensi-pulang',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+            }).done(function(response) {
+                console.log(response);
+                location.reload();
+            }).fail(function(response) {
+                console.log(response);
+                location.reload();
+            });
+
+            // Reset form
+            resetPulang();
+        }
 
 
         // preview image
-        function previewImage(waktu) {
-            var fileInput = document.getElementById('uploadInput-' + waktu);
-            var imagePreview = document.getElementById('imagePreview-' + waktu);
+        // function previewImage(waktu) {
+        //     var fileInput = document.getElementById('uploadInput-' + waktu);
+        //     var imagePreview = document.getElementById('imagePreview-' + waktu);
 
-            var file = fileInput.files[0];
-            var reader = new FileReader();
+        //     var file = fileInput.files[0];
+        //     var reader = new FileReader();
 
-            reader.onload = function(e) {
-                var img = new Image();
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
+        //     reader.onload = function(e) {
+        //         var img = new Image();
+        //         img.onload = function() {
+        //             var canvas = document.createElement('canvas');
+        //             var ctx = canvas.getContext('2d');
 
-                    // Mengatur ukuran canvas sesuai dengan orientasi gambar
-                    if (img.width > img.height) {
-                        canvas.width = 400;
-                        canvas.height = 300;
-                    } else {
-                        canvas.width = 300;
-                        canvas.height = 400;
-                    }
+        //             // Mengatur ukuran canvas sesuai dengan orientasi gambar
+        //             if (img.width > img.height) {
+        //                 canvas.width = 400;
+        //                 canvas.height = 300;
+        //             } else {
+        //                 canvas.width = 300;
+        //                 canvas.height = 400;
+        //             }
 
-                    // Memperbaiki orientasi gambar jika diperlukan
-                    if (window.innerWidth < window.innerHeight) {
-                        if (img.width > img.height) {
-                            ctx.translate(canvas.width / 2, canvas.height / 2);
-                            ctx.rotate(90 * Math.PI / 180);
-                            ctx.drawImage(img, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
-                        } else {
-                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        }
-                    } else {
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    }
+        //             // Memperbaiki orientasi gambar jika diperlukan
+        //             if (window.innerWidth < window.innerHeight) {
+        //                 if (img.width > img.height) {
+        //                     ctx.translate(canvas.width / 2, canvas.height / 2);
+        //                     ctx.rotate(90 * Math.PI / 180);
+        //                     ctx.drawImage(img, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
+        //                 } else {
+        //                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //                 }
+        //             } else {
+        //                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //             }
 
-                    // Mengubah gambar menjadi tautan data dan menampilkannya
-                    var dataURL = canvas.toDataURL('image/jpeg');
-                    imagePreview.src = dataURL;
-                };
+        //             // Mengubah gambar menjadi tautan data dan menampilkannya
+        //             var dataURL = canvas.toDataURL('image/jpeg');
+        //             imagePreview.src = dataURL;
+        //         };
 
-                img.src = e.target.result;
-            };
+        //         img.src = e.target.result;
+        //     };
 
-            reader.readAsDataURL(file);
-        }
+        //     reader.readAsDataURL(file);
+        // }
 
         // map
-        function getLocation(waktu) {
+        function getLocationMasuk() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.getCurrentPosition(showPositionMasuk);
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
         }
 
-        function showPosition(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            console.log("Latitude: " + latitude);
-            console.log("Longitude: " + longitude);
-            document.getElementById('latitude').innerHTML = latitude;
-            document.getElementById('longitude').innerHTML = longitude;
+        function getLocationPulang() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPositionPulang);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
         }
-        getLocation();
+
+        function showPositionMasuk(position) {
+            var latitudeMasuk = position.coords.latitude;
+            var longitudeMasuk = position.coords.longitude;
+            console.log("Latitude: " + latitudeMasuk);
+            console.log("Longitude: " + longitudeMasuk);
+            document.getElementById('latitudeMasuk').innerHTML = latitudeMasuk;
+            document.getElementById('longitudeMasuk').innerHTML = longitudeMasuk;
+        }
+
+        function showPositionPulang(position) {
+            var latitudePulang = position.coords.latitude;
+            var longitudePulang = position.coords.longitude;
+            console.log("Latitude: " + latitudePulang);
+            console.log("Longitude: " + longitudePulang);
+            document.getElementById('latitudePulang').innerHTML = latitudePulang;
+            document.getElementById('longitudePulang').innerHTML = longitudePulang;
+        }
+        getLocationMasuk();
+        getLocationPulang();
 
         var map = L.map('map').setView([-7.2971498, 104.603765], 7);
 
