@@ -10,7 +10,7 @@
                     <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
                         Reset</a>
 
-                    <a href="{{ route('admin.presensi.exportPDF') }}" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
+                    <a href="{{ route('admin.presensi.exportPdf') }}" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
                         Export PDF</a>
 
                     <a href="{{ route('admin.presensi.exportExcel') }}" class="btn btn-primary"><i class="fas fa-file-excel"></i>

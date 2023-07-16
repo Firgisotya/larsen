@@ -47,7 +47,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::put('/formIzin/{form}', [FormIzinAdminController::class, 'terima'])->name('admin.form.terima');
     Route::get('/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
     Route::get('/presensi/{karyawan}', [PresensiController::class, 'show'])->name('admin.presensi.show');
-    Route::get('/presensi/export-pdf', 'PresensiController@export_pdf')->name('presensi-exportPDF');
+    Route::get('/presensi/export-pdf', [PresensiController::class, 'exportPdf'])->name('admin.presensi.exportPdf');
     Route::get('/presensi/export-excel', 'PresensiController@export_excel')->name('admin.presensi.exportExcel');
 });
 

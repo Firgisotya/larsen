@@ -34,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($absensi as $index => $item)
+            {{-- @foreach ($absensi as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->karyawan->nama_karyawan }}</td>
@@ -46,7 +46,7 @@
                     <td>{{ $item->lokasi_pulang }}</td>
                     <td>{{ $item->telat }}</td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
 </body>

@@ -53,7 +53,7 @@
                             </div>
 
                             <div id="webcam-masuk" class="d-flex justify-content-center">
-                                <video class="d-sm-none" id="video-masuk" width="100%" height="100%" autoplay
+                                <video id="video-masuk" width="100%" height="100%" autoplay
                                     playsinline></video>
                                 {{-- <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
@@ -72,10 +72,10 @@
                             <input type="hidden" name="waktu-masuk" value="masuk">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-masuk" class="btn btn-primary" onclick="captureMasuk()">Ambil
+                                <button id="capture-masuk" class="btn btn-primary" onclick="capture('masuk')">Ambil
                                     Foto</button>
                                 <button id="reset-masuk" class="btn btn-danger" style="display: none;"
-                                    onclick="resetMasuk()">Reset</button>
+                                    onclick="resetCapture('masuk')">Reset</button>
                             </div>
                         </div>
 
@@ -141,10 +141,10 @@
                             <input type="hidden" name="waktu-pulang" value="pulang">
                             <div class="col-md-12 text-center">
                                 <br />
-                                <button id="capture-pulang" class="btn btn-primary" onclick="capturePulang()">Ambil
+                                <button id="capture-pulang" class="btn btn-primary" onclick="capture('pulang')">Ambil
                                     Foto</button>
                                 <button id="reset-pulang" class="btn btn-danger" style="display: none;"
-                                    onclick="resetPulang()">Reset</button>
+                                    onclick="resetCapture('pulang')">Reset</button>
                             </div>
                         </div>
 
@@ -351,14 +351,13 @@
         }
 
 
-
-        // Fungsi untuk mengambil akses ke kamera masuk
-        function getCameraMasuk() {
+        // Fungsi untuk mengambil akses ke kamera
+        function getCamera(waktu) {
             navigator.mediaDevices.getUserMedia({
                     video: true
                 })
                 .then(function(stream) {
-                    var videoElement = document.getElementById('video-masuk');
+                    var videoElement = document.getElementById('video-' + waktu);
                     videoElement.srcObject = stream;
                 })
                 .catch(function(error) {
@@ -366,9 +365,9 @@
                 });
         }
 
-        // Fungsi untuk mengambil foto masuk
-        function captureMasuk() {
-            var videoElement = document.getElementById('video-masuk');
+        // Fungsi untuk mengambil foto
+        function capture(waktu) {
+            var videoElement = document.getElementById('video-' + waktu);
             var canvasElement = document.createElement('canvas');
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
@@ -378,82 +377,39 @@
 
             var dataURL = canvasElement.toDataURL('image/jpeg');
 
-            document.getElementById('video-masuk').style.display = 'none';
-            document.getElementById('captured-image-masuk').src = dataURL;
-            document.getElementById('captured-image-input-masuk').value = dataURL;
-            document.getElementById('captured-image-masuk' + '-container').style.display = 'block';
-            document.getElementById('capture-masuk').style.display = 'none';
-            document.getElementById('reset-masuk').style.display = 'inline-block';
+            document.getElementById('video-' + waktu).style.display = 'none';
+            document.getElementById('captured-image-' + waktu).src = dataURL;
+            document.getElementById('captured-image-input-' + waktu).value = dataURL;
+            document.getElementById('captured-image-' + waktu + '-container').style.display = 'block';
+            document.getElementById('capture-' + waktu).style.display = 'none';
+            document.getElementById('reset-' + waktu).style.display = 'inline-block';
         }
 
-        // Fungsi untuk mereset foto masuk
-        function resetMasuk() {
-            document.getElementById('video-masuk').style.display = 'block';
-            document.getElementById('captured-image-masuk' + '-container').style.display = 'none';
-            document.getElementById('capture-masuk').style.display = 'inline-block';
-            document.getElementById('reset-masuk').style.display = 'none';
-            document.getElementById('captured-image-input-masuk').value = '';
-        }
-
-        // Fungsi untuk mengambil akses ke kamera pulang
-        function getCameraPulang() {
-            navigator.mediaDevices.getUserMedia({
-                    video: true
-                })
-                .then(function(stream) {
-                    var videoElement = document.getElementById('video-pulang');
-                    videoElement.srcObject = stream;
-                })
-                .catch(function(error) {
-                    console.log('Error accessing camera: ', error);
-                });
-        }
-
-        // Fungsi untuk mengambil foto pulang
-        function capturePulang() {
-            var videoElement = document.getElementById('video-pulang');
-            var canvasElement = document.createElement('canvas');
-            canvasElement.width = videoElement.videoWidth;
-            canvasElement.height = videoElement.videoHeight;
-
-            var canvasContext = canvasElement.getContext('2d');
-            canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-            var dataURL = canvasElement.toDataURL('image/jpeg');
-
-            document.getElementById('video-pulang').style.display = 'none';
-            document.getElementById('captured-image-pulang').src = dataURL;
-            document.getElementById('captured-image-input-pulang').value = dataURL;
-            document.getElementById('captured-image-pulang' + '-container').style.display = 'block';
-            document.getElementById('capture-pulang').style.display = 'none';
-            document.getElementById('reset-pulang').style.display = 'inline-block';
-        }
-
-        // Fungsi untuk mereset foto pulang
-        function resetPulang() {
-            document.getElementById('video-pulang').style.display = 'block';
-            document.getElementById('captured-image-pulang' + '-container').style.display = 'none';
-            document.getElementById('capture-pulang').style.display = 'inline-block';
-            document.getElementById('reset-pulang').style.display = 'none';
-            document.getElementById('captured-image-input-pulang').value = '';
+        // Fungsi untuk mereset foto
+        function resetCapture(waktu) {
+            document.getElementById('video-' + waktu).style.display = 'block';
+            document.getElementById('captured-image-' + waktu + '-container').style.display = 'none';
+            document.getElementById('capture-' + waktu).style.display = 'inline-block';
+            document.getElementById('reset-' + waktu).style.display = 'none';
+            document.getElementById('captured-image-input-' + waktu).value = '';
         }
 
         // Panggil fungsi getCameraMasuk saat modal ditampilkan
         $('#masuk').on('shown.bs.modal', function() {
-            getCameraMasuk();
+            getCamera('masuk');
         });
         // Panggil fungsi getCameraPulang saat modal ditampilkan
         $('#pulang').on('shown.bs.modal', function() {
-            getCameraPulang();
+            getCamera('pulang');
         });
 
-        // Panggil fungsi resetMasuk saat modal ditutup
+        // Panggil fungsi reseresetCapturek'masuk saat modal ditutup
         $('#masuk').on('hidden.bs.modal', function() {
-            resetMasuk();
+            resetCapture('masuk');
         });
         // Panggil fungsi resetPulang saat modal ditutup
         $('#pulang').on('hidden.bs.modal', function() {
-            resetPulang();
+            resetCapture('pulang');
         });
 
         // mengrim data ke server untuk di simpan ke database absensi masuk
@@ -466,8 +422,8 @@
             var capturedImageInput = document.getElementById('captured-image-input-masuk');
             formData.append('captured_image', capturedImageInput.value);
 
-            var latitude = document.getElementById('latitude').textContent;
-            var longitude = document.getElementById('longitude').textContent;
+            var latitude = document.getElementById('latitudeMasuk').textContent;
+            var longitude = document.getElementById('longitudeMasuk').textContent;
             formData.append('latitude', latitude);
             formData.append('longitude', longitude);
 
@@ -487,7 +443,7 @@
             });
 
             // Reset form
-            resetMasuk();
+            resetCapture('masuk');
         }
 
         // mengrim data ke server untuk di simpan ke database absensi pulang
@@ -500,8 +456,8 @@
             var capturedImageInput = document.getElementById('captured-image-input-pulang');
             formData.append('captured_image', capturedImageInput.value);
 
-            var latitude = document.getElementById('latitude').textContent;
-            var longitude = document.getElementById('longitude').textContent;
+            var latitude = document.getElementById('latitudePulang').textContent;
+            var longitude = document.getElementById('longitudePulang').textContent;
             formData.append('latitude', latitude);
             formData.append('longitude', longitude);
 
@@ -521,7 +477,7 @@
             });
 
             // Reset form
-            resetPulang();
+            resetCapture('pulang');
         }
 
 

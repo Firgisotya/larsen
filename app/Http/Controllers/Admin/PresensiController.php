@@ -64,17 +64,18 @@ class PresensiController extends Controller
         ]);
     }
 
-    public function export_pdf()
+
+    public function exportPdf()
     {
         // $key = Absensi::with(['karyawan', 'izin'])->get();
         // var_dump($key);
-        // $pdf = PDF::loadview('admin.presensi.export-pdf', [
+        // $pdf = PDF::loadview('admin.presensi.export_pdf', [
         //     'absensi' => $key,
         //     // 'title' => 'Export PDF',
         // ])->setPaper('a4', 'portrait');
         // return $pdf->download('presensi.pdf');
-        return view('home');
-        
+        return view('admin.presensi.export_pdf');
+
     }
 
     public function export_excel()
