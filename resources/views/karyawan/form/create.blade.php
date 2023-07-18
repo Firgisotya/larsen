@@ -27,6 +27,7 @@
                                 <option value="">Pilih Jenis Izin</option>
                                 <option value="Sakit">Sakit</option>
                                 <option value="Tugas Luar">Tugas Luar</option>
+                                <option value="Cuti">Cuti</option>
                             </select>
                         @error('jenis_izin')
                                       <div class="invalid-feedback">

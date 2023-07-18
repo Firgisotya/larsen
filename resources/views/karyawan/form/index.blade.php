@@ -40,6 +40,8 @@
                                             <span class="badge bg-warning text-white">{{ $item->status }}</span>
                                         @elseif ($item->status == 'disetujui')
                                             <span class="badge bg-success text-white">{{ $item->status }}</span>
+                                        @elseif ($item->status == 'ditolak')
+                                            <span class="badge bg-danger text-white">{{ $item->status }}</span>
                                         @endif
                                     </td>
                                     <td>

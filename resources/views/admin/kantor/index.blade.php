@@ -26,6 +26,7 @@
                                     <th scope="col">Alamat Kantor</th>
                                     <th scope="col">Latitude</th>
                                     <th scope="col">Longitude</th>
+                                    <th scope="col">Radius</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -37,6 +38,7 @@
                                         <td>{{ $item->alamat_kantor }}</td>
                                         <td>{{ $item->latitude }}</td>
                                         <td>{{ $item->longitude }}</td>
+                                        <td>{{ $item->radius }} Meter</td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 {{-- edit --}}

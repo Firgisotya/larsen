@@ -60,6 +60,7 @@ class LokasiKantorController extends Controller
             'alamat_kantor' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
+            'radius' => 'required'
         ]);
 
         $kantor = LokasiKantor::find($id);

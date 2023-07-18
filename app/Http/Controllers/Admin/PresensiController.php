@@ -7,6 +7,10 @@ use App\Models\Absensi;
 use App\Models\Karyawan;
 use PDF;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class PresensiController extends Controller
 {
@@ -61,7 +65,7 @@ class PresensiController extends Controller
 
     public function exportPdf()
     {
-       
+
         $absensi = Absensi::with(['karyawan', 'izin'])->get();
         $pdf = PDF::loadView('admin.presensi.export_pdf', [
             'absensi' => $absensi,
@@ -70,5 +74,77 @@ class PresensiController extends Controller
         return $pdf->download('laporan-presensi.pdf');
     }
 
+    public function exportExcel()
+    {
+        // Mendapatkan data absensi bersamaan dengan relasi 'karyawan' dan 'izin'
+        $absensi = Absensi::with(['karyawan', 'izin'])->get();
 
+        // Pemformatan warna
+        $colorYellow = 'FFFF00';
+        $colorRed = 'FF0000';
+
+        // Membuat objek spreadsheet dan lembar kerja
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Pemformatan judul
+        $sheet->setCellValue('A1', 'Data Absensi');
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+        $sheet->getStyle('A1')->getFont()->setSize(16);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorYellow);
+        $sheet->mergeCells('A1:H1');
+
+        // Menambahkan header kolom
+        $sheet->fromArray(
+            ['Nama', 'Izin', 'Tanggal', 'Jam Masuk', 'Jam Pulang', 'Lokasi Masuk', 'Lokasi Pulang', 'Telat'],
+            null,
+            'A2'
+        );
+
+        // Pemformatan header kolom
+        $sheet->getStyle('A2:H2')->getFont()->setBold(true);
+        $sheet->getStyle('A2:H2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorYellow);
+
+        // Proses data ke dalam bentuk array yang sesuai untuk diekspor
+        $exportData = [];
+
+        foreach ($absensi as $item) {
+            $exportData[] = [
+                $item->karyawan->nama_karyawan, // Ambil atribut 'nama' dari relasi 'karyawan'
+                $item->izin ? $item->izin->jenis_izin : 'Tidak Ada Izin', // Ambil alasan izin jika ada
+                $item->tanggal,
+                $item->jam_masuk,
+                $item->jam_pulang,
+                $item->lokasi_masuk,
+                $item->lokasi_pulang,
+                $item->telat,
+            ];
+        }
+
+        // Menambahkan data ke lembar kerja
+        $sheet->fromArray($exportData, null, 'A3');
+
+        // Pemformatan data
+        $sheet->getStyle('A3:H' . (count($exportData) + 2))->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('D3:E' . (count($exportData) + 2))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('H3:H' . (count($exportData) + 2))->getFont()->getColor()->setARGB($colorRed);
+
+        // Menyesuaikan lebar kolom
+        foreach (range('A', 'H') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        // Membuat objek writer untuk menulis spreadsheet ke dalam file Excel
+        $writer = new Xlsx($spreadsheet);
+
+        // Set header HTTP untuk men-download file Excel
+        $fileName = 'export_data.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+
+        // Menulis data spreadsheet ke dalam output HTTP
+        $writer->save('php://output');
+    }
 }

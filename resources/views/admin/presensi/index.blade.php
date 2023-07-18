@@ -10,10 +10,10 @@
                     <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
                         Reset</a>
 
-                    <a href="/tes" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
+                    <a href="/presensi/export-pdf" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
                         Export PDF</a>
 
-                    <a href="" class="btn btn-primary"><i class="fas fa-file-excel"></i>
+                    <a href="/presensi/export-excel" class="btn btn-primary"><i class="fas fa-file-excel"></i>
                         Export Excel</a>
 
             </div>

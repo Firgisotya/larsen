@@ -18,6 +18,15 @@
 @section('content')
     {{-- absen --}}
     <div class="row">
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         {{-- masuk --}}
         <div class="col-6">
@@ -53,8 +62,7 @@
                             </div>
 
                             <div id="webcam-masuk" class="d-flex justify-content-center">
-                                <video id="video-masuk" width="100%" height="100%" autoplay
-                                    playsinline></video>
+                                <video id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
                                 {{-- <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
                                     <div class="custom-file ">
