@@ -16,10 +16,10 @@ class KaryawanMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->role == 'karyawan') {
+        if (auth()->check() && auth()->user()->role_id == 2) {
             return $next($request);
         }
-    
+
         return redirect('/login');
     }
 }

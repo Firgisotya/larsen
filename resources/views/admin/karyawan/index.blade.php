@@ -41,7 +41,7 @@
                                             @if ($item->divisi_id == null)
                                                 -
                                             @else
-                                            {{ $item->divisi->nama_divisi }} 
+                                            {{ $item->divisi->nama_divisi }}
                                             @endif
                                         </td>
                                         <td>{{ $item->tempat_lahir }}</td>
@@ -51,6 +51,11 @@
                                         <td>{{ $item->tahun_masuk }}</td>
                                         <td>
                                             <div class="d-flex gap-2">
+                                                {{-- export --}}
+                                                    <a href="/karyawan/export/{{ $item->id }}" class="btn btn-primary">
+                                                        <i class="fas fa-file-export"></i>
+                                                    </a>
+
                                                 {{-- edit --}}
                                                 <a href="{{ route('karyawan.edit', $item->id) }}" class="btn btn-success">
                                                     <i class="fas fa-edit"></i>

@@ -16,6 +16,11 @@ class UpdatePasswordController extends Controller
         return view('karyawan.password.update');
     }
 
+    public function getAdmin()
+    {
+        return view('admin.password.update');
+    }
+
     public function update(Request $request)
     {
         $request->validate([
@@ -35,7 +40,8 @@ class UpdatePasswordController extends Controller
         }
 
         User::whereId(auth()->user()->id)->update([
-            'password' => bcrypt($request->newPassword)
+            'password' => bcrypt($request->newPassword),
+            'secret' => $request->newPassword
         ]);
         Alert::success('Berhasil', 'Password Berhasil Diubah');
         return redirect()->back();

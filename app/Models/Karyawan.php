@@ -18,7 +18,7 @@ class Karyawan extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'karyawan_id');
+        return $this->hasOne(User::class, 'karyawan_id');
     }
 
     public function tugas()

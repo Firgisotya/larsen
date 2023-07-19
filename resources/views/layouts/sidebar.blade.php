@@ -13,7 +13,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
             <ul id="sidebarnav">
                 {{-- sidebar item untuk admin --}}
-                @if (Auth::user()->role == 'admin')
+                @if (Auth::user()->role_id == 1)
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">Home</span>
@@ -90,7 +90,15 @@
                             <span class="hide-menu">FormIzin</span>
                         </a>
                     </li>
-                @elseif (Auth::user()->role == 'karyawan')
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/role" aria-expanded="false">
+                            <span>
+                                <i class="far fa-list-alt fa-lg"></i>
+                            </span>
+                            <span class="hide-menu">Role Permission</span>
+                        </a>
+                    </li>
+                @elseif (Auth::user()->role_id == 2)
                     {{-- sidebar item untuk karyawan --}}
 
                     <li class="nav-small-cap">

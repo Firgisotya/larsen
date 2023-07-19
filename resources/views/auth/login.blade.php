@@ -37,12 +37,11 @@
                                             </span>
                                         @enderror
                                     </div>
-
+                                    <div class="mb-4">
+                                        <a class="text-primary fw-bold" href="{{ route('lupaPassword.index') }}">Lupa Password ?</a>
+                                      </div>
                                     <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign
                                         In</button>
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <p class="fs-4 mb-0 fw-bold">New to Modernize?</p>
-                                    </div>
                                 </form>
                             </div>
                         </div>

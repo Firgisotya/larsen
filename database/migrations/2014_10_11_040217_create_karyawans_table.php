@@ -24,6 +24,7 @@ class CreateKaryawansTable extends Migration
             $table->string('alamat');
             $table->string('no_telepon');
             $table->string('tahun_masuk');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

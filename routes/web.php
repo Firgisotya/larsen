@@ -8,7 +8,10 @@ use App\Http\Controllers\Admin\FormIzinAdminController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\LokasiKantorController;
 use App\Http\Controllers\Admin\PresensiController;
+use App\Http\Controllers\Admin\ProfileAdminController;
+use App\Http\Controllers\Admin\RoleManajemenController;
 use App\Http\Controllers\Admin\TugasController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\UpdatePasswordController;
 use App\Http\Controllers\FormIzinController;
 use App\Http\Controllers\HomeController;
@@ -32,8 +35,15 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+// lupa password
+Route::get('/lupa-password', [ForgotPasswordController::class, 'index'])->name('lupaPassword.index');
+Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('lupaPassword.submit');
+
+// export
 Route::get('/presensi/export-pdf', [PresensiController::class, 'exportPdf'])->middleware('admin');
 Route::get('/presensi/export-excel', [PresensiController::class, 'exportExcel'])->middleware('admin');
+Route::get('/karyawan/export/{id}', [KaryawanController::class, 'exportKaryawan'])->middleware('admin');
 
 Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
 Route::middleware(['admin'])->prefix('admin')->group(function () {
@@ -43,10 +53,15 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::resource('/karyawan', KaryawanController::class);
     Route::resource('/tugas', TugasController::class);
     Route::resource('/lokasiKantor', LokasiKantorController::class);
+    Route::resource('/role', RoleManajemenController::class);
     Route::get('/formIzin', [FormIzinAdminController::class, 'index'])->name('admin.form.index');
     Route::put('/formIzin/{form}', [FormIzinAdminController::class, 'terima'])->name('admin.form.terima');
     Route::get('/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
     Route::get('/presensi/{karyawan}', [PresensiController::class, 'show'])->name('admin.presensi.show');
+    Route::get('/ubahPassword', [UpdatePasswordController::class, 'getAdmin'])->name('admin.ubahPassword');
+    Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('admin.ubahPassword.update');
+    Route::get('/profile', [ProfileAdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/profile', [ProfileAdminController::class, 'updateProfile'])->name('admin.profile.update');
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {

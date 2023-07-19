@@ -152,20 +152,6 @@
                                                                 <input type="file" class="form-control" id="file-tugas"
                                                                     name="file_tugas" placeholder="File Tugas">
                                                             </div>
-                                                            <div class="mb-3">
-                                                                <label for="file-hasil-tugas" class="form-label">File Hasil
-                                                                    Tugas</label>
-                                                                <input type="file" class="form-control"
-                                                                    id="file-hasil-tugas" name="file_hasil_tugas"
-                                                                    placeholder="File Hasil Tugas">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="file-laporan" class="form-label">File Laporan
-                                                                    Tugas</label>
-                                                                <input type="file" class="form-control"
-                                                                    id="file-laporan-tugas" name="file_laporan_tugas"
-                                                                    placeholder="File Laporan Tugas">
-                                                            </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-danger"
                                                                     data-bs-dismiss="modal">Close</button>

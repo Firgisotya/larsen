@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
@@ -21,14 +22,16 @@ class UserSeeder extends Seeder
                     'username' => 'tes',
                     'email' => 'Tes@gmail.com',
                     'password' => bcrypt('password'),
-                    'role' => 'karyawan',
+                    'role_id' => 2,
+                    'secret' => 'password'
                 ],
                 [
                     'karyawan_id' => null,
                     'username' => 'admin',
                     'email' => 'admin@gmail.com',
                     'password' => bcrypt('password'),
-                    'role' => 'admin',
+                    'role_id' => 1,
+                    'secret' => 'password'
                 ]
             ]);
     }

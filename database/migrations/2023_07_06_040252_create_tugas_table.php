@@ -23,8 +23,6 @@ class CreateTugasTable extends Migration
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->string('file_tugas')->nullable();
-            $table->string('file_hasil_tugas')->nullable();
-            $table->string('file_laporan_tugas')->nullable();
             $table->enum('status_tugas', ['Belum Dikerjakan', 'Dikerjakan', 'Ditolak', 'Selesai'])->default('Belum Dikerjakan');
             $table->timestamps();
         });

@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Divisi;
 use App\Models\Karyawan;
+use App\Models\RoleManajemen;
 use App\Models\User;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Svg\Gradient\Stop;
+use PDF;
 
 class KaryawanController extends Controller
 {
@@ -32,6 +37,7 @@ class KaryawanController extends Controller
     {
         return view('admin.karyawan.create', [
             'divisi' => Divisi::all(),
+            'role' => RoleManajemen::all(),
         ]);
     }
 
@@ -45,20 +51,28 @@ class KaryawanController extends Controller
     {
 
         $validatedData = $request->validate([
-        'divisi_id' => 'required',
-        'nik' => 'required|unique:karyawans',
-        'nama_karyawan' => 'required',
-        'tanggal_lahir' => 'required',
-        'tempat_lahir' => 'required',
-        'jenis_kelamin' => 'required',
-        'alamat' => 'required',
-        'no_telepon' => 'required',
-        'tahun_masuk' => 'required',
-        'username' => 'required|unique:users',
-        'email' => 'required|unique:users',
-        'password' => 'required',
-        'role' => 'required'
+            'divisi_id' => 'required',
+            'nik' => 'required|unique:karyawans',
+            'nama_karyawan' => 'required',
+            'tanggal_lahir' => 'required',
+            'tempat_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'alamat' => 'required',
+            'no_telepon' => 'required',
+            'tahun_masuk' => 'required',
+            'username' => 'required|unique:users',
+            'email' => 'required|unique:users',
+            'password' => 'required',
+            'role' => 'required',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            Storage::disk('public')->put('images/karyawan/' . $filename, file_get_contents($file));
+            $validatedData['foto'] = $filename;
+        }
 
         $karyawan = Karyawan::create([
             'divisi_id' => $validatedData['divisi_id'],
@@ -70,6 +84,7 @@ class KaryawanController extends Controller
             'alamat' => $validatedData['alamat'],
             'no_telepon' => $validatedData['no_telepon'],
             'tahun_masuk' => $validatedData['tahun_masuk'],
+            'foto' => $validatedData['foto'],
         ]);
 
         User::create([
@@ -78,6 +93,7 @@ class KaryawanController extends Controller
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
             'role' => $validatedData['role'],
+            'secret' => $validatedData['password'],
         ]);
 
         Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
@@ -93,7 +109,12 @@ class KaryawanController extends Controller
     public function show($id)
     {
         $karyawan = Karyawan::with(['user', 'divisi'])->findOrFail($id);
-        return view('admin.karyawan.show', compact('karyawan'));
+        $user = User::where('karyawan_id', $karyawan->id)->first();
+        return view('admin.karyawan.show', [
+            'karyawan' => $karyawan,
+            'user' => $user,
+            'role' => RoleManajemen::all(),
+        ]);
     }
 
     /**
@@ -104,10 +125,11 @@ class KaryawanController extends Controller
      */
     public function edit(Karyawan $karyawan)
     {
-        return view('pages.admin.karyawan.edit', [
+        return view('admin.karyawan.edit', [
             'karyawan' => $karyawan,
             'divisi' => Divisi::all(),
             'user' => User::where('karyawan_id', $karyawan->id)->first(),
+            'role' => RoleManajemen::all(),
         ]);
     }
 
@@ -122,7 +144,7 @@ class KaryawanController extends Controller
     {
         $validatedData = $request->validate([
             'divisi_id' => 'required',
-            'nik' => 'required|unique:karyawans',
+            'nik' => 'required',
             'nama_karyawan' => 'required',
             'tanggal_lahir' => 'required',
             'tempat_lahir' => 'required',
@@ -130,33 +152,43 @@ class KaryawanController extends Controller
             'alamat' => 'required',
             'no_telepon' => 'required',
             'tahun_masuk' => 'required',
-            'username' => 'required|unique:users',
-            'email' => 'required|unique:users',
-            'password' => 'required',
-            'role' => 'required'
-            ]);
+            'role' => 'required',
+            'foto' => 'required|max:2048',
 
-            $karyawan->update([
-                'divisi_id' => $validatedData['divisi_id'],
-                'nik' => $validatedData['nik'],
-                'nama_karyawan' => $validatedData['nama_karyawan'],
-                'tanggal_lahir' => $validatedData['tanggal_lahir'],
-                'tempat_lahir' => $validatedData['tempat_lahir'],
-                'jenis_kelamin' => $validatedData['jenis_kelamin'],
-                'alamat' => $validatedData['alamat'],
-                'no_telepon' => $validatedData['no_telepon'],
-                'tahun_masuk' => $validatedData['tahun_masuk'],
-            ]);
+        ]);
 
-            User::where('karyawan_id', $karyawan->id)->update([
-                'username' => $validatedData['username'],
-                'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password']),
-                'role' => $validatedData['role'],
-            ]);
+        if ($request->hasFile('foto')) {
+            if ($request->oldImage) {
+                Storage::disk('public')->delete('images/karyawan/' . $request->oldImage);
+            }
+            $file = $request->file('foto');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '_' . uniqid() . '.' . $extension;
+            Storage::disk('public')->put('images/karyawan/' . $filename, file_get_contents($file));
+            // $validtaedData['foto'] = $request->file('foto')->store('/images/karyawan', 'public');
+            $validatedData['foto'] = $filename;
+        }
 
-            Alert::success('Berhasil', 'Data Berhasil Diubah');
-            return redirect()->route('karyawan.index');
+
+        $karyawan->update([
+            'divisi_id' => $validatedData['divisi_id'],
+            'nik' => $validatedData['nik'],
+            'nama_karyawan' => $validatedData['nama_karyawan'],
+            'tanggal_lahir' => $validatedData['tanggal_lahir'],
+            'tempat_lahir' => $validatedData['tempat_lahir'],
+            'jenis_kelamin' => $validatedData['jenis_kelamin'],
+            'alamat' => $validatedData['alamat'],
+            'no_telepon' => $validatedData['no_telepon'],
+            'tahun_masuk' => $validatedData['tahun_masuk'],
+            'foto' => $validatedData['foto'],
+        ]);
+
+        User::where('karyawan_id', $karyawan->id)->update([
+            'role_id' => $validatedData['role'],
+        ]);
+
+        Alert::success('Berhasil', 'Data Berhasil Diubah');
+        return redirect()->route('karyawan.index');
     }
 
     /**
@@ -178,4 +210,16 @@ class KaryawanController extends Controller
         Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('karyawan.index');
     }
+
+    // export pdf
+    public function exportKaryawan($id)
+{
+    $user = User::where('karyawan_id', $id)->with('karyawan')->first();
+
+    $pdf = PDF::loadView('admin.karyawan.export-karyawan', compact('user'));
+    $filename = $user->karyawan->nama_karyawan . '.pdf';
+
+    return $pdf->download($filename);
+}
+
 }

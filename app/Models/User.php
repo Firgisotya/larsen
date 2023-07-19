@@ -32,7 +32,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -47,12 +46,17 @@ class User extends Authenticatable
 
     public function karyawan()
     {
-        return $this->hasOne(Karyawan::class, 'karyawan_id');
+        return $this->belongsTo(Karyawan::class, 'karyawan_id');
     }
 
     public function formIzin()
     {
         return $this->hasMany(FormIzin::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(RoleManajemen::class, 'role_id');
     }
 
 

@@ -17,16 +17,16 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                @if (count($errors) > 0)
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                    <form action="{{ route('karyawan.store') }}" method="POST">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('karyawan.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="nik" class="form-label">NIK</label>
@@ -110,7 +110,8 @@
                             <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                             <select class="form-select @error('jenis_kelamin') is-invalid
                         @enderror"
-                                id="jenis_kelamin" name="jenis_kelamin" required autofocus value="{{ old('jenis_kelamin') }}">
+                                id="jenis_kelamin" name="jenis_kelamin" required autofocus
+                                value="{{ old('jenis_kelamin') }}">
                                 <option value="">Pilih Jenis Kelamin</option>
                                 <option value="Laki-Laki">Laki-Laki</option>
                                 <option value="Perempuan">Perempuan</option>
@@ -206,10 +207,23 @@
                         @enderror"
                                 id="role" name="role" required autofocus value="{{ old('role') }}">
                                 <option value="">Pilih Role</option>
-                                <option value="admin">Admin</option>
-                                <option value="karyawan">Karyawan</option>
+                                @foreach ($role as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_role }}</option>
+                                @endforeach
                             </select>
                             @error('role')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Foto Karyawan</label>
+                            <img class="img-preview img-fluid mb-3 col-sm-5">
+                            <input class="form-control  @error('foto') is-invalid
+                            @enderror"
+                                type="file" id="foto" name="foto" onchange="previewImage()">
+                            @error('foto')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -221,4 +235,22 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        function previewImage() {
+            const foto = document.querySelector('#foto');
+            const imgPreview = document.querySelector('.img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(foto.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+    </script>
 @endsection
