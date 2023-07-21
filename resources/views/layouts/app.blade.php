@@ -35,7 +35,7 @@
             <!--  Header Start -->
             @include('layouts.navbar')
             <!--  Header End -->
-            <div class="container-fluid">
+            <div class="container-fluid" style="background-color: #F8F8F8">
                 {{-- render konten --}}
                 @yield('content')
                 {{-- end render konten --}}

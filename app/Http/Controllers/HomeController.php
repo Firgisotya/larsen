@@ -35,6 +35,7 @@ class HomeController extends Controller
         $divisi = Divisi::all();
         $destinasi = Destinasi::all();
         $tugas = Tugas::all();
+        $absensi = Absensi::latest('id')->paginate(20);
 
         $countKaryawan = $karyawan->count();
         $countDivisi = $divisi->count();
@@ -46,6 +47,7 @@ class HomeController extends Controller
             'countDivisi' => $countDivisi,
             'countDestinasi' => $countDestinasi,
             'countTugas' => $countTugas,
+            'absensi' => $absensi,
         ]);
     }
 

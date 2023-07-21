@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ForgotPasswordController extends Controller
 {
@@ -30,12 +33,24 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $user = User::where('email', $request->email)->first();
+        $validateData = $request->validate(['email' => 'required|email']);
+        $userCheck = User::where('email', $validateData['email'])->first();
 
-        $status = Password::sendResetLink($request->only('email'));
+        if($userCheck != null){
+            User::where('email', $validateData['email'])->update([
+                'password' => bcrypt($user->username),
+                'secret' => $user->username
+            ]);
+            Alert::success('Berhasil', 'Password berhasil direset');
+            return redirect()->route('login');
+        }
+        else{
+            Alert::error('Gagal', 'Email tidak terdaftar');
+            return redirect()->back();
+        }
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+
+        
     }
 }

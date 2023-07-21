@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\UpdatePasswordController;
 use App\Http\Controllers\FormIzinController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileKaryawanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -75,4 +76,6 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::resource('/formIzin', FormIzinController::class);
     Route::get('/ubahPassword', [UpdatePasswordController::class, 'getUser'])->name('karyawan.ubahPassword');
     Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('karyawan.ubahPassword.update');
+    Route::get('/profile', [ProfileKaryawanController::class, 'profile'])->name('karyawan.profile');
+    Route::post('/profile', [ProfileKaryawanController::class, 'updateProfile'])->name('karyawan.profile.update');
 });

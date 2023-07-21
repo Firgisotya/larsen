@@ -29,7 +29,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
                                     </span>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Kirim Email</button>
+                            <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Reset Password</button>
                         </form>
                     </div>
                 </div>
@@ -38,4 +38,5 @@ data-sidebar-position="fixed" data-header-position="fixed">
     </div>
 </div>
 </div>
+
 @endsection

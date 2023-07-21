@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('style')
+    <style>
+        .circle {
+            width: 250px;
+            height: 200px;
+            border-radius: 50%;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col shadow-lg">
@@ -25,7 +35,7 @@
                                 {{ asset('storage/images/karyawan/'.$karyawan->foto) }}
                                 @else
                                 {{ asset('images/profile/user-1.png') }}
-                            @endif" alt="" width="250px" class="rounded-circle img-thumbnail mb-3 img-fluid">
+                            @endif" alt="" class="img-thumbnail mb-3 img-fluid circle">
 
                         </div>
                         <div class="col-lg-9 col-sm-12">

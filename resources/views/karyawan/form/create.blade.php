@@ -36,7 +36,7 @@
                                     @enderror
                       </div>
                       <div class="mb-3">
-                        <label for="tanggal_izin" class="form-label">Tanggal Lahir</label>
+                        <label for="tanggal_izin" class="form-label">Tanggal Izin</label>
                             <input type="date"
                                 class="form-control @error('tanggal_izin') is-invalid
                         @enderror"

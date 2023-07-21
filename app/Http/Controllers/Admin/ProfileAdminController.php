@@ -36,9 +36,7 @@ class ProfileAdminController extends Controller
             'jenis_kelamin' => 'required',
             'alamat' => 'required',
             'no_telepon' => 'required',
-            'tahun_masuk' => 'required',
-            'role' => 'required',
-            'foto' => 'required|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'username' => 'required',
             'email' => 'required|unique:users,email,' . $user->id,
 

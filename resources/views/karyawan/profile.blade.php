@@ -34,7 +34,7 @@
                                 @else
                                 {{ asset('images/profile/user-1.png') }} @endif"
                         alt="" class="mb-3 img-fluid circle">
-                    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('karyawan.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3 text-start d-none" id="update">
                             <label for="formFile" class="form-label">Update Foto</label>

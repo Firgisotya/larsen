@@ -58,8 +58,14 @@ class AbsensiController extends Controller
         Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
         // menghitung lama telat absensi
+        $dueDate = LokasiKantor::all();
         $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $jamBatas = Carbon::createFromFormat('H:i:s', '08:00:00');
+
+        $jamBatas = '00:00:00';
+        foreach ($dueDate as $date) {
+            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_masuk);
+        }
+        
         $telat = $jamAbsen->diffInMinutes($jamBatas);
 
         // validasi foto absensi
@@ -132,8 +138,12 @@ class AbsensiController extends Controller
         Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
         // menghitung lama telat absensi
+        $dueDate = LokasiKantor::all();
         $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $jamBatas = Carbon::createFromFormat('H:i:s', '17:00:00');
+        $jamBatas = '00:00:00';
+        foreach ($dueDate as $date) {
+            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_pulang);
+        }
         $telat = $jamAbsen->diffInMinutes($jamBatas);
 
         // validasi foto absensi
