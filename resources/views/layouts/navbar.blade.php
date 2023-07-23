@@ -28,29 +28,27 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="
-                            @if (Auth::user()->karyawan->foto)
-                                {{ asset('storage/images/karyawan/'.Auth::user()->karyawan->foto) }}
-                            @else
-                            {{ asset('images/profile/user-1.jpg') }}
-                            @endif
-                        " alt="" width="35" height="35"
-                            class="rounded-circle">
+                        
+                        <img src="{{ Auth::user()->karyawan->foto ? asset('storage/images/karyawan/' . Auth::user()->karyawan->foto) : asset('images/profile/user-1.jpg') }}"
+                            alt="" width="35" height="35" class="rounded-circle">
                         <span class="">{{ Auth::user()->username }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                         <div class="message-body">
                             @if (Auth::user()->role_id == 1)
-                                <a href="{{ route('admin.profile') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <a href="{{ route('admin.profile') }}"
+                                    class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
                                     <p class="mb-0 fs-3">My Profile</p>
                                 </a>
-                                <a href="{{route('admin.ubahPassword')}}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <a href="{{ route('admin.ubahPassword') }}"
+                                    class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="fas fa-key"></i>
                                     <p class="mb-0 fs-3">Ubah Password</p>
                                 </a>
                             @elseif (Auth::user()->role_id == 2)
-                                <a href="{{ route('karyawan.profile') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <a href="{{ route('karyawan.profile') }}"
+                                    class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
                                     <p class="mb-0 fs-3">My Profile</p>
                                 </a>

@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
                     'secret' => 'password'
                 ],
                 [
-                    'karyawan_id' => null,
+                    'karyawan_id' => 2,
                     'username' => 'admin',
                     'email' => 'admin@gmail.com',
                     'password' => bcrypt('password'),

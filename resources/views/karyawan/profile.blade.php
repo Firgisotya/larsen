@@ -32,13 +32,15 @@
                 <div class="col-lg-3 col-sm-12 text-center pt-3">
                     <img src="@if ($user->karyawan->foto) {{ asset('storage/images/karyawan/' . $user->karyawan->foto) }}
                                 @else
-                                {{ asset('images/profile/user-1.png') }} @endif"
+                                {{ asset('images/profile/user-1.jpg') }} @endif"
                         alt="" class="mb-3 img-fluid circle">
                     <form action="{{ route('karyawan.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3 text-start d-none" id="update">
                             <label for="formFile" class="form-label">Update Foto</label>
-                            <img src="@if ($user->karyawan->foto == null) {{ asset('images/karyawan/' . $user->karyawan->foto) }} @endif"
+                            <img src="@if ($user->karyawan->foto) {{ asset('storage/images/karyawan/' . $user->karyawan->foto) }}
+                            @else
+                            {{ asset('images/profile/user-1.jpg') }} @endif"
                                 class="img-preview mb-3 img-thumbnail circle"
                                 alt="{{ $user->karyawan->nama_karyawan }}" height="200px" height="250px">
                             <input class="form-control" type="file" id="foto" name="foto"
