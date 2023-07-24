@@ -170,9 +170,9 @@
                         </div>
                         <div class="mb-3">
                             <label for="foto" class="form-label d-block">Foto Karyawan</label>
-                            <img src="@if ($karyawan -> foto == null)
-                                                {{ asset('images/karyawan/'.$karyawan -> foto) }}
-                                                @endif" class="img-preview mb-3 " alt="{{ $karyawan -> nama_karyawan }}" height="200px"
+                            <img src="@if ($karyawan -> foto)
+                            {{ asset('storage/images/karyawan/'.$karyawan->foto) }}
+                        @endif" class="img-preview mb-3 " alt="{{ $karyawan -> nama_karyawan }}" height="200px"
                               height="250px">
                             <input class="form-control  @error('foto') is-invalid
                                                 @enderror" type="file" id="foto" name="foto" onchange="previewImage()">

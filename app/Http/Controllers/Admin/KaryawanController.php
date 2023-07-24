@@ -92,7 +92,7 @@ class KaryawanController extends Controller
             'username' => $validatedData['username'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
-            'role' => $validatedData['role'],
+            'role_id' => $validatedData['role'],
             'secret' => $validatedData['password'],
         ]);
 
