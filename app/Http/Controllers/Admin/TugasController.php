@@ -20,7 +20,7 @@ class TugasController extends Controller
     {
         $tugas = Tugas::with('karyawan', 'destinasi')->paginate(10);
         return view('admin.tugas.index', compact('tugas'));
-        
+
     }
 
     /**
@@ -83,10 +83,10 @@ class TugasController extends Controller
      * @param  \App\Models\Tugas  $tugas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tugas $tugas)
+    public function edit($id)
     {
         return view('admin.tugas.edit', [
-            'tugas' => $tugas,
+            'tugas' => Tugas::findOrFail($id),
             'destinasi' => Destinasi::get(),
             'karyawan' => Karyawan::get(),
         ]);
@@ -100,7 +100,7 @@ class TugasController extends Controller
      * @param  \App\Models\Tugas  $tugas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tugas $tugas)
+    public function update(Request $request, $id)
     {
         $validateData = $request->validate(
             [
@@ -111,10 +111,11 @@ class TugasController extends Controller
             'jam_selesai' => 'required',
             'karyawan_id' => 'required',
             'destinasi_id' => 'required',
+            'status_tugas' => 'required',
             ]
         );
 
-        $tugas->update($validateData);
+        Tugas::where('id', $id)->update($validateData);
         Alert::success('Berhasil', 'Data Berhasil Diubah');
         return redirect()->route('tugas.index');
     }
@@ -125,9 +126,9 @@ class TugasController extends Controller
      * @param  \App\Models\Tugas  $tugas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tugas $tugas)
+    public function destroy(Tugas $tugas, $id)
     {
-        $tugas = Tugas::findOrFail($tugas->id);
+        $tugas = Tugas::findOrFail($id);
 
         $tugas->delete();
         Alert::success('Berhasil', 'Data Berhasil Dihapus');
