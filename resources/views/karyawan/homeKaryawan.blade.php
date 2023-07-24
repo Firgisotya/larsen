@@ -16,6 +16,11 @@
 @endsection
 
 @section('content')
+
+    {{-- alert status login --}}
+    @include('sweetalert::alert')
+
+
     {{-- absen --}}
     <div class="row">
         @if (count($errors) > 0)

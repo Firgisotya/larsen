@@ -18,6 +18,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileKaryawanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,14 +33,37 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return Auth::check() ?: view('auth.login');
+    if (Auth::check()) {
+        $user = Auth::user();
+        $roleId = $user->role_id;
+
+        if ($roleId === 1) {
+            Alert::success('Selamat Datang', 'Anda sudah login sebagai admin!');
+            return redirect()->route('admin.dashboard');
+        } elseif ($roleId === 2) {
+            Alert::success('Selamat Datang', 'Anda sudah login sebagai karyawan!');
+            return redirect()->route('karyawan.dashboard');
+        }
+    }
+
+    return view('auth.login');
 });
 
-Auth::routes();
+Route::post('/logout-user', function() {
+    Auth::logout();
+    Alert::success('Berhasil', 'Anda berhasil logout!');
+    return redirect('/');
+})->name('logout.user');
 
-// lupa password
-Route::get('/lupa-password', [ForgotPasswordController::class, 'index'])->name('lupaPassword.index');
-Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('lupaPassword.submit');
+Route::group(['middleware' => 'guest'], function () {
+
+    Auth::routes();
+
+    // lupa password
+    Route::get('/lupa-password', [ForgotPasswordController::class, 'index'])->name('lupaPassword.index');
+    Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('lupaPassword.submit');
+});
+
 
 // export
 Route::get('/presensi/export-pdf', [PresensiController::class, 'exportPdf'])->middleware('admin');

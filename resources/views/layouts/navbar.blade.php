@@ -28,7 +28,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        
+
                         <img src="{{ Auth::user()->karyawan->foto ? asset('storage/images/karyawan/' . Auth::user()->karyawan->foto) : asset('images/profile/user-1.jpg') }}"
                             alt="" width="35" height="35" class="rounded-circle">
                         <span class="">{{ Auth::user()->username }}</span>
@@ -57,7 +57,7 @@
                                     <p class="mb-0 fs-3">Ubah Password</p>
                                 </a>
                             @endif
-                            <form action="{{ route('logout') }}" method="POST">
+                            <form action="{{ route('logout.user') }}" method="POST">
                                 @csrf
 
                                 <button class="btn btn-outline-primary mx-3 mt-2 d-block" type="submit">Logout</button>
