@@ -57,7 +57,7 @@
                                     <p class="mb-0 fs-3">Ubah Password</p>
                                 </a>
                             @endif
-                            <form action="/logout" method="POST">
+                            <form action="{{ route('logout.user') }}" method="POST">
                                 @csrf
 
                                 <button class="btn btn-outline-primary mx-3 mt-2 d-block" type="submit">Logout</button>
