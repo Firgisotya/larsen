@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -33,9 +34,11 @@ class LoginController extends Controller
         $role = Auth::user()->role_id;
         switch ($role) {
             case 1:
+                Alert::success('Selamat Datang', 'Anda login sebagai admin!');
                 return '/admin/dashboard';
                 break;
             case 2:
+                Alert::success('Selamat Datang', 'Anda login sebagai karyawan!');
                 return '/karyawan/dashboard';
                 break;
             default:
