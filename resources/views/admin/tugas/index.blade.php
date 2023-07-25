@@ -28,6 +28,7 @@
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Jam Mulai</th>
                                     <th scope="col">Jam Selesai</th>
+                                    <th scope="col">File</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -42,6 +43,16 @@
                                         <td>{{ $item->tanggal }}</td>
                                         <td>{{ $item->jam_mulai }}</td>
                                         <td>{{ $item->jam_selesai }}</td>
+                                        <td>
+                                            @if ($item->file_tugas)
+                                                <a href="{{ asset('storage/' . $item->file_path) }}" class="btn btn-info" target="_blank"
+                                                    rel="noopener noreferrer">
+                                                    <i class="fas fa-file-download"></i>
+                                                </a>
+                                            @else
+                                                <span class="badge bg-danger text-white">Tidak Ada File</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @if ($item->status_tugas == 'Belum Dikerjakan')
                                                 <span class="badge bg-dark text-white">{{ $item->status_tugas }}</span>

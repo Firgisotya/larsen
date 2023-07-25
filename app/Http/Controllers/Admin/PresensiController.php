@@ -50,10 +50,10 @@ class PresensiController extends Controller
         $latPulang = explode(',', $absensi->lokasi_pulang);
 
         $masuk_pulang = [
-            'latMasuk' => $latMasuk[0],
-            'longMasuk' => $latMasuk[1],
-            'latPulang' => $latPulang[0],
-            'longPulang' => $latPulang[1],
+            'latMasuk' => $latMasuk[0] ?? null,
+            'longMasuk' => $latMasuk[1] ?? null,
+            'latPulang' => $latPulang[0] ?? null,
+            'longPulang' => $latPulang[1] ?? null,
         ];
 
 
