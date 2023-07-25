@@ -62,6 +62,10 @@ Route::group(['middleware' => 'guest'], function () {
     // lupa password
     Route::get('/lupa-password', [ForgotPasswordController::class, 'index'])->name('lupaPassword.index');
     Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('lupaPassword.submit');
+
+    // Reset password
+    Route::get('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('resetPassword.index');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'submitReset'])->name('resetPassword.submit');
 });
 
 

@@ -14,22 +14,39 @@ data-sidebar-position="fixed" data-header-position="fixed">
                             <img src="{{ asset('images/logos/dark-logo.svg') }}" width="180" alt="">
                         </a>
                         <p class="text-center">Your Social Campaigns</p>
-                        <form method="POST" action="{{ route('lupaPassword.submit') }}">
+                        <form method="POST" action="{{ route('resetPassword.submit') }}">
                             @csrf
 
-                            {{-- <input type="hidden" name="token" value="{{ $token }}"> --}}
+                            <input type="hidden" name="token" value="{{ $encryptedUserId }}">
 
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" value="{{ old('email') }}">
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <label for="password" class="form-label">Password Baru</label>
+                                <input type="password"
+                                    class="form-control @error('password') is-invalid
+                            @enderror"
+                                    id="password" placeholder="Masukkan Password Baru" name="password" required autofocus
+                                    value="{{ old('password') }}">
+                                @error('password')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Reset Password</button>
+                            <div class="mb-3">
+                                <label for="newPasswordConfirmation" class="form-label">Konfirmasi Password Baru</label>
+                                <input type="password"
+                                    class="form-control @error('newPasswordConfirmation') is-invalid
+                            @enderror"
+                                    id="newPasswordConfirmation" placeholder="Masukkan Konfirmasi Password Baru" name="newPasswordConfirmation" required autofocus
+                                    value="{{ old('newPasswordConfirmation') }}">
+                                @error('newPasswordConfirmation')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Confirm Password</button>
                         </form>
                     </div>
                 </div>
