@@ -12,6 +12,11 @@
     {{-- sweetalert --}}
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert/sweetalert.css') }}">
 
+    {{-- pdf --}}
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.5.141/build/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.5.141/web/pdf_viewer.min.css">
+
+
     {{-- jquery and webcam --}}
     @yield('style')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

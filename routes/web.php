@@ -73,6 +73,7 @@ Route::group(['middleware' => 'guest'], function () {
 Route::get('/presensi/export-pdf', [PresensiController::class, 'exportPdf'])->middleware('admin');
 Route::get('/presensi/export-excel', [PresensiController::class, 'exportExcel'])->middleware('admin');
 Route::get('/karyawan/export/{id}', [KaryawanController::class, 'exportKaryawan'])->middleware('admin');
+Route::get('/download-file/{id}', [TugasController::class, 'downloadFile'])->middleware('admin');
 
 Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
 Route::middleware(['admin'])->prefix('admin')->group(function () {
@@ -91,6 +92,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('admin.ubahPassword.update');
     Route::get('/profile', [ProfileAdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile', [ProfileAdminController::class, 'updateProfile'])->name('admin.profile.update');
+    
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {

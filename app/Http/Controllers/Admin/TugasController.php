@@ -71,9 +71,11 @@ class TugasController extends Controller
     {
 
         $tugas = Tugas::with('karyawan', 'destinasi')->findOrFail($id);
+        $file_path = 'storage/images/tugas/' . $tugas->file_tugas;
 
         return view('admin.tugas.show', [
             'tugas' => $tugas,
+            'file_path' => $file_path,
         ]);
     }
 
@@ -133,5 +135,32 @@ class TugasController extends Controller
         $tugas->delete();
         Alert::success('Berhasil', 'Data Berhasil Dihapus');
         return redirect()->route('tugas.index');
+    }
+
+    public function downloadFile($id)
+    {
+        $tugas = Tugas::findOrFail($id);
+        $file_path = 'storage/images/tugas/' . $tugas->file_tugas;
+
+        // Get the file extension
+        $extension = pathinfo($file_path, PATHINFO_EXTENSION);
+
+        if (strtolower($extension) === 'pdf') {
+            return $this->downloadPdf($file_path);
+        } elseif (in_array(strtolower($extension), ['jpg', 'png', 'jpeg', 'PNG'])) {
+            return $this->downloadImage($file_path);
+        } else {
+            abort(404, 'File not found.');
+        }
+    }
+
+    public function downloadPdf($file_path)
+    {
+        return response()->download($file_path);
+    }
+
+    public function downloadImage($file_path)
+    {
+        return response()->download($file_path);
     }
 }

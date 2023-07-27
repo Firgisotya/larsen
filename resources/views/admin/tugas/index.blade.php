@@ -45,10 +45,9 @@
                                         <td>{{ $item->jam_selesai }}</td>
                                         <td>
                                             @if ($item->file_tugas)
-                                                <a href="{{ asset('storage/' . $item->file_path) }}" class="btn btn-info" target="_blank"
-                                                    rel="noopener noreferrer">
-                                                    <i class="fas fa-file-download"></i>
-                                                </a>
+                                            <a href="/download-file/{{ $item->id }}" class="btn btn-info">
+                                                <i class="fas fa-file-download"></i>
+                                            </a>
                                             @else
                                                 <span class="badge bg-danger text-white">Tidak Ada File</span>
                                             @endif

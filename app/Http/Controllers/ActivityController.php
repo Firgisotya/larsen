@@ -31,7 +31,7 @@ class ActivityController extends Controller
         // dd($request->all());
 
         $validateData = $request->validate([
-            'file_tugas' => 'required|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx|max:2048',
+            'file_tugas' => 'required|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
         ]);
 
         $file_path = null;
