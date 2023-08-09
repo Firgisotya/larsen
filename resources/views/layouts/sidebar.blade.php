@@ -137,6 +137,45 @@
                             <span class="hide-menu">Form Izin</span>
                         </a>
                     </li>
+                @elseif (Auth::user()->role_id == 3)
+                    {{-- sidebar item untuk pengelola --}}
+
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Home</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('pengelola.dashboard') }}" aria-expanded="false">
+                            <span>
+                                <i class="fas fa-home fa-lg"></i>
+                            </span>
+                            <span class="hide-menu">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Data</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/pengelola/karyawan" aria-expanded="false">
+                            <span>
+                                <i class="fas fa-users fa-lg"></i>
+                            </span>
+                            <span class="hide-menu">Karyawan</span>
+                        </a>
+                    </li>
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Manajemen</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/pengelola/presensi" aria-expanded="false">
+                            <span>
+                                <i class="far fa-calendar-check fa-lg"></i>
+                            </span>
+                            <span class="hide-menu">Presensi</span>
+                        </a>
+                    </li>
                 @endif
 
             </ul>

@@ -21,6 +21,11 @@ class UpdatePasswordController extends Controller
         return view('admin.password.update');
     }
 
+    public function getPengelola()
+    {
+        return view('pengelola.password.update');
+    }
+
     public function update(Request $request)
     {
         $request->validate([

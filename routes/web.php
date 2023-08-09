@@ -6,9 +6,12 @@ use App\Http\Controllers\Admin\DestinasiController;
 use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\FormIzinAdminController;
 use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Pengelola\KaryawanController as PengelolaKaryawanController;
 use App\Http\Controllers\Admin\LokasiKantorController;
 use App\Http\Controllers\Admin\PresensiController;
+use App\Http\Controllers\Pengelola\PresensiController as PengelolaPresensiController;
 use App\Http\Controllers\Admin\ProfileAdminController;
+use App\Http\Controllers\Pengelola\ProfilePengelolaController;
 use App\Http\Controllers\Admin\RoleManajemenController;
 use App\Http\Controllers\Admin\TugasController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -43,6 +46,9 @@ Route::get('/', function () {
         } elseif ($roleId === 2) {
             Alert::success('Selamat Datang', 'Anda sudah login sebagai karyawan!');
             return redirect()->route('karyawan.dashboard');
+        } elseif ($roleId === 3) {
+            Alert::success('Selamat Datang', 'Anda sudah login sebagai pengelola!');
+            return redirect()->route('pengelola.dashboard');
         }
     }
 
@@ -69,13 +75,34 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 
-// export
+// export admin
 Route::get('/presensi/export-pdf', [PresensiController::class, 'exportPdf'])->middleware('admin');
 Route::get('/presensi/export-excel', [PresensiController::class, 'exportExcel'])->middleware('admin');
 Route::get('/karyawan/export/{id}', [KaryawanController::class, 'exportKaryawan'])->middleware('admin');
 Route::get('/download-file/{id}', [TugasController::class, 'downloadFile'])->middleware('admin');
 
+//export pengelola
+Route::get('/pengelola/presensi/export-pdf', [PengelolaPresensiController::class, 'exportPdf'])->middleware('pengelola');
+Route::get('/pengelola/presensi/export-excel', [PengelolaPresensiController::class, 'exportExcel'])->middleware('pengelola');
+Route::get('/pengelola/karyawan/export/{id}', [PengelolaKaryawanController::class, 'exportKaryawan'])->middleware('pengelola');
+
+
+//get lokai kantor
 Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
+
+// middleware pengelola
+Route::middleware(['pengelola'])->prefix('pengelola')->group(function (){
+    Route::get('/dashboard', [HomeController::class, 'HomePengelola'])->name('pengelola.dashboard');
+    Route::resource('/karyawan', PengelolaKaryawanController::class);
+    Route::get('/presensi', [PengelolaPresensiController::class, 'index'])->name('pengelola.presensi.index');
+    Route::get('/presensi/{karyawan}', [PengelolaPresensiController::class, 'show'])->name('pengelola.presensi.show');
+    Route::get('/ubahPassword', [UpdatePasswordController::class, 'getPengelola'])->name('pengelola.ubahPassword');
+    Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('pengelola.ubahPassword.update');
+    Route::get('/profile', [ProfilePengelolaController::class, 'profile'])->name('pengelola.profile');
+    Route::post('/profile', [ProfilePengelolaController::class, 'updateProfile'])->name('pengelola.profile.update');
+});
+
+// middleware admin
 Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'HomeAdmin'])->name('admin.dashboard');;
     Route::resource('/divisi', DivisiController::class);
@@ -92,7 +119,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('admin.ubahPassword.update');
     Route::get('/profile', [ProfileAdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile', [ProfileAdminController::class, 'updateProfile'])->name('admin.profile.update');
-    
+
 });
 
 Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {

@@ -41,6 +41,10 @@ class LoginController extends Controller
                 Alert::success('Selamat Datang', 'Anda login sebagai karyawan!');
                 return '/karyawan/dashboard';
                 break;
+            case 3:
+                Alert::success('Selamat Datang', 'Anda login sebagai pengelola!');
+                return '/pengelola/dashboard';
+                break;
             default:
                 return '/login';
                 break;

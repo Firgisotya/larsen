@@ -61,7 +61,7 @@ class HomeController extends Controller
         $cek = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', now()->format('Y-m-d'))->first();
         // $cek = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', '2023-07-12')->first();
         // dd($cek);
-        
+
         // count absen
         // Mendapatkan tanggal awal dan akhir bulan saat ini
         $startDate = Carbon::now()->startOfMonth();
@@ -99,6 +99,28 @@ class HomeController extends Controller
             ]
 
         );
+    }
+
+    public function HomePengelola()
+    {
+        $karyawan = Karyawan::all();
+        $divisi = Divisi::all();
+        $destinasi = Destinasi::all();
+        $tugas = Tugas::all();
+        $absensi = Absensi::latest('id')->paginate(20);
+
+        $countKaryawan = $karyawan->count();
+        $countDivisi = $divisi->count();
+        $countDestinasi = $destinasi->count();
+        $countTugas = $tugas->count();
+
+        return view('pengelola.homePengelola', [
+            'countKaryawan' => $countKaryawan,
+            'countDivisi' => $countDivisi,
+            'countDestinasi' => $countDestinasi,
+            'countTugas' => $countTugas,
+            'absensi' => $absensi,
+        ]);
     }
 
     public function lokasiKantor()

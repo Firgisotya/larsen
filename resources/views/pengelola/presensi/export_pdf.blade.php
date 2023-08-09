@@ -31,8 +31,6 @@
                 <th>Jam Pulang</th>
                 <th>Lokasi Pulang</th>
                 <th>Telat</th>
-                <th>Total Tugas</th>
-                <th>Tugas Selesai</th>
             </tr>
         </thead>
         <tbody>
