@@ -7,13 +7,13 @@
                 <h1 class="h3 mb-4 text-gray-800">Manajemen Presensi</h1>
             </div>
             <div class="d-flex justify-content-end mt-3 gap-2">
-                    <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
+                    <a href="{{ route('pengelola.presensi.index') }}" class="btn btn-primary"><i class="fas fa-sync"></i>
                         Reset</a>
 
-                    <a href="/presensi/export-pdf" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
+                    <a href="/pengelola/presensi/export-pdf" class="btn btn-primary"><i class="fas fa-file-pdf"></i>
                         Export PDF</a>
 
-                    <a href="/presensi/export-excel" class="btn btn-primary"><i class="fas fa-file-excel"></i>
+                    <a href="/pengelola/presensi/export-excel" class="btn btn-primary"><i class="fas fa-file-excel"></i>
                         Export Excel</a>
 
             </div>

@@ -21,6 +21,9 @@ class RoleManajemenSeeder extends Seeder
             [
                 "nama_role" => "Karyawan",
             ],
+            [
+                "nama_role" => "Pengelola",
+            ]
         ]);
     }
 }

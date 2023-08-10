@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('karyawan.index') }}" class="btn btn-primary">
+                        <a href="/pengelola/karyawan" class="btn btn-primary">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                     </div>

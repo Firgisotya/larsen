@@ -10,7 +10,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    <form action="{{ route('admin.ubahPassword.update') }}" method="POST">
+                    <form action="{{ route('pengelola.ubahPassword.update') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="oldPassword" class="form-label">Password Lama</label>

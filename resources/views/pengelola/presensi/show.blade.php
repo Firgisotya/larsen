@@ -4,7 +4,7 @@
     <div class="card mb-3 shadow-lg">
         <div class="card-header d-flex justify-content-between">
             Detail Absensi
-            <a href="{{ route('admin.presensi.index') }}" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('pengelola.presensi.index') }}" class="btn btn-primary">Kembali</a>
         </div>
         <div class="card-body pt-3">
             <!-- Bordered Tabs -->

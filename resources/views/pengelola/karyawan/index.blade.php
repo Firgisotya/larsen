@@ -8,7 +8,7 @@
             </div>
             <div class="col">
                 <div class="text-end">
-                    <a href="/pengelola/karyawan" class="btn btn-primary">
+                    <a href="/pengelola/karyawan/create" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Karyawan
                     </a>
                 </div>
@@ -57,17 +57,17 @@
                                                     </a>
 
                                                 {{-- edit --}}
-                                                <a href="/pengelola/karyawan/" class="btn btn-success">
+                                                <a href="/pengelola/karyawan/{{ $item->id }}/edit" class="btn btn-success">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
                                                 {{-- detail --}}
-                                                <a href="{{ route('karyawan.show', $item->id) }}" class="btn btn-warning">
+                                                <a href="/pengelola/karyawan/{{ $item->id }}" class="btn btn-warning">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
 
                                                 {{-- Delete --}}
-                                                <form action="{{ route('karyawan.destroy', $item->id) }}" method="POST"
+                                                <form action="/pengelola/karyawan/{{ $item->id }}" method="POST"
                                                     class="d-inline" id="data-{{ $item->id }}">
                                                     @method('DELETE')
                                                     @csrf

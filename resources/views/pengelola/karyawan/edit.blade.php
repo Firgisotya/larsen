@@ -8,7 +8,7 @@
             </div>
             <div class="col">
                 <div class="text-end">
-                    <a href="{{ route('karyawan.index') }}" class="btn btn-primary">
+                    <a href="/pengelola/karyawan" class="btn btn-primary">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                 </div>
@@ -26,7 +26,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="/pengelola/karyawan/{{ $karyawan->id }}" method="POST" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="mb-3">

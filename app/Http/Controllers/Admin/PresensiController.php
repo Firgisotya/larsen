@@ -7,6 +7,7 @@ use App\Models\Absensi;
 use App\Models\Karyawan;
 use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -66,7 +67,22 @@ class PresensiController extends Controller
     public function exportPdf()
     {
 
-        $absensi = Absensi::with(['karyawan', 'izin'])->get();
+        $query = "
+        SELECT b.nama_karyawan,c.jenis_izin,a.tanggal,a.jam_masuk,
+        a.lokasi_masuk,a.jam_pulang,a.lokasi_pulang,a.telat,
+        COUNT(d.id) AS total_tugas,
+        SUM(CASE WHEN d.status_tugas = 'Selesai' THEN 1 ELSE 0 END) AS total_tugas_selesai	
+        FROM absensis a
+        JOIN karyawans b ON a.karyawan_id = b.id
+        LEFT JOIN form_izins c ON a.izin_id = c.id
+        LEFT JOIN tugas d ON a.karyawan_id = d.karyawan_id 
+        GROUP BY b.nama_karyawan, c.jenis_izin, a.tanggal, a.jam_masuk,
+        a.lokasi_masuk, a.jam_pulang, a.lokasi_pulang, a.telat
+        ";
+
+        $absensi = DB::select(DB::raw($query));
+
+        // $absensi = Absensi::with(['karyawan', 'izin'])->get();
         $pdf = PDF::loadView('admin.presensi.export_pdf', [
             'absensi' => $absensi,
         ]);

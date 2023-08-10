@@ -97,7 +97,7 @@ Route::middleware(['pengelola'])->prefix('pengelola')->group(function (){
     Route::get('/presensi', [PengelolaPresensiController::class, 'index'])->name('pengelola.presensi.index');
     Route::get('/presensi/{karyawan}', [PengelolaPresensiController::class, 'show'])->name('pengelola.presensi.show');
     Route::get('/ubahPassword', [UpdatePasswordController::class, 'getPengelola'])->name('pengelola.ubahPassword');
-    Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('pengelola.ubahPassword.update');
+    Route::post('/ubahPassword', [UpdatePasswordController::class, 'update'])->name('pengelola.ubahPassword.update');
     Route::get('/profile', [ProfilePengelolaController::class, 'profile'])->name('pengelola.profile');
     Route::post('/profile', [ProfilePengelolaController::class, 'updateProfile'])->name('pengelola.profile.update');
 });
