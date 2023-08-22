@@ -137,7 +137,7 @@
                                             <td>
 
                                                 {{-- detail --}}
-                                                <a href="{{ route('admin.presensi.show', $item->id) }}"
+                                                <a href="{{ route('pengelola.presensi.show', $item->id) }}"
                                                     class="btn btn-warning">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
