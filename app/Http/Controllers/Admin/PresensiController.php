@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
+use App\Models\Tugas;
 use App\Models\Karyawan;
 use PDF;
 use Illuminate\Http\Request;
@@ -66,25 +67,31 @@ class PresensiController extends Controller
 
     public function exportPdf()
     {
+        $absensi = Absensi::with(['karyawan', 'izin'])->get();
+        $tugas = Tugas::all();
 
-        $query = "
-        SELECT b.nama_karyawan,c.jenis_izin,a.tanggal,a.jam_masuk,
-        a.lokasi_masuk,a.jam_pulang,a.lokasi_pulang,a.telat,
-        COUNT(d.id) AS total_tugas,
-        SUM(CASE WHEN d.status_tugas = 'Selesai' THEN 1 ELSE 0 END) AS total_tugas_selesai	
-        FROM absensis a
-        JOIN karyawans b ON a.karyawan_id = b.id
-        LEFT JOIN form_izins c ON a.izin_id = c.id
-        LEFT JOIN tugas d ON a.karyawan_id = d.karyawan_id 
-        GROUP BY b.nama_karyawan, c.jenis_izin, a.tanggal, a.jam_masuk,
-        a.lokasi_masuk, a.jam_pulang, a.lokasi_pulang, a.telat
-        ";
+        $totalTugas = [];
+        $totalTugasSelesai = [];
 
-        $absensi = DB::select(DB::raw($query));
+        foreach ($absensi as $absen) {
+            $tanggalAbsen = $absen->tanggal;
+            $karyawanId = $absen->karyawan->id;
 
-        // $absensi = Absensi::with(['karyawan', 'izin'])->get();
+            // hitung total tugas
+            $totalTugas[$tanggalAbsen][$karyawanId] = $tugas->where('tanggal', $tanggalAbsen)
+                ->where('karyawan_id', $karyawanId)
+                ->count();
+
+            $totalTugasSelesai[$tanggalAbsen][$karyawanId] = $tugas->where('tanggal', $tanggalAbsen)
+                ->where('karyawan_id', $karyawanId)
+                ->where('status_tugas', 'Selesai')
+                ->count();
+        }
+
         $pdf = PDF::loadView('admin.presensi.export_pdf', [
             'absensi' => $absensi,
+            'totalTugas' => $totalTugas,
+            'totalTugasSelesai' => $totalTugasSelesai,
         ]);
         $pdf->setPaper('A4', 'landscape');
         return $pdf->download('laporan-presensi.pdf');
@@ -94,6 +101,25 @@ class PresensiController extends Controller
     {
         // Mendapatkan data absensi bersamaan dengan relasi 'karyawan' dan 'izin'
         $absensi = Absensi::with(['karyawan', 'izin'])->get();
+        $tugas = Tugas::all();
+
+        $totalTugas = [];
+        $totalTugasSelesai = [];
+
+        foreach ($absensi as $absen) {
+            $tanggalAbsen = $absen->tanggal;
+            $karyawanId = $absen->karyawan->id;
+
+            // hitung total tugas
+            $totalTugas[$tanggalAbsen][$karyawanId] = $tugas->where('tanggal', $tanggalAbsen)
+                ->where('karyawan_id', $karyawanId)
+                ->count();
+
+            $totalTugasSelesai[$tanggalAbsen][$karyawanId] = $tugas->where('tanggal', $tanggalAbsen)
+                ->where('karyawan_id', $karyawanId)
+                ->where('status_tugas', 'Selesai')
+                ->count();
+        }
 
         // Pemformatan warna
         $colorYellow = 'FFFF00';
@@ -109,18 +135,18 @@ class PresensiController extends Controller
         $sheet->getStyle('A1')->getFont()->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorYellow);
-        $sheet->mergeCells('A1:H1');
+        $sheet->mergeCells('A1:J1');
 
         // Menambahkan header kolom
         $sheet->fromArray(
-            ['Nama', 'Izin', 'Tanggal', 'Jam Masuk', 'Jam Pulang', 'Lokasi Masuk', 'Lokasi Pulang', 'Telat'],
+            ['Nama', 'Izin', 'Tanggal', 'Jam Masuk', 'Jam Pulang', 'Lokasi Masuk', 'Lokasi Pulang', 'Telat', 'Total Tugas', 'Tugas Selesai'],
             null,
             'A2'
         );
 
         // Pemformatan header kolom
-        $sheet->getStyle('A2:H2')->getFont()->setBold(true);
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorYellow);
+        $sheet->getStyle('A2:J2')->getFont()->setBold(true);
+        $sheet->getStyle('A2:J2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorYellow);
 
         // Proses data ke dalam bentuk array yang sesuai untuk diekspor
         $exportData = [];
@@ -135,6 +161,8 @@ class PresensiController extends Controller
                 $item->lokasi_masuk,
                 $item->lokasi_pulang,
                 $item->telat,
+                $totalTugas[$item->tanggal][$item->karyawan->id] ?? 0, // Total tugas
+                $totalTugasSelesai[$item->tanggal][$item->karyawan->id] ?? 0, // Total tugas selesai
             ];
         }
 
@@ -142,12 +170,12 @@ class PresensiController extends Controller
         $sheet->fromArray($exportData, null, 'A3');
 
         // Pemformatan data
-        $sheet->getStyle('A3:H' . (count($exportData) + 2))->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A3:J' . (count($exportData) + 2))->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         $sheet->getStyle('D3:E' . (count($exportData) + 2))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('H3:H' . (count($exportData) + 2))->getFont()->getColor()->setARGB($colorRed);
+        $sheet->getStyle('H3:J' . (count($exportData) + 2))->getFont()->getColor()->setARGB($colorRed);
 
         // Menyesuaikan lebar kolom
-        foreach (range('A', 'H') as $column) {
+        foreach (range('A', 'J') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 

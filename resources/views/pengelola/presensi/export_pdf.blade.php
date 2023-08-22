@@ -40,15 +40,27 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->nama_karyawan }}</td>
-                    <td>{{ $item->jenis_izin ? $item->jenis_izin : '-' }}</td>
+                    <td>{{ $item->izin_id ? $item->izin->jenis_izin : '-' }}</td>
                     <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->jam_masuk }}</td>
                     <td>{{ $item->lokasi_masuk }}</td>
                     <td>{{ $item->jam_pulang }}</td>
                     <td>{{ $item->lokasi_pulang }}</td>
                     <td>{{ $item->telat }}</td>
-                    <td>{{ $item->total_tugas }}</td>
-                    <td>{{ $item->total_tugas_selesai }}</td>
+                    <td>
+                        @if (isset($totalTugas[$item->tanggal][$item->karyawan->id]))
+                            {{ $totalTugas[$item->tanggal][$item->karyawan->id] }}
+                        @else
+                            0
+                        @endif
+                    </td>
+                    <td>
+                        @if (isset($totalTugasSelesai[$item->tanggal][$item->karyawan->id]))
+                            {{ $totalTugasSelesai[$item->tanggal][$item->karyawan->id] }}
+                        @else
+                            0
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

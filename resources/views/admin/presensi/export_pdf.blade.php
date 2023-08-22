@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         /* CSS styling for PDF */
@@ -7,16 +8,20 @@
             border-collapse: collapse;
             width: 100%;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
     </style>
 </head>
+
 <body>
     <h1>Data Presensi</h1>
     <table>
@@ -40,18 +45,31 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->nama_karyawan }}</td>
-                    <td>{{ $item->jenis_izin ? $item->jenis_izin : '-' }}</td>
+                    <td>{{ $item->izin_id ? $item->izin->jenis_izin : '-' }}</td>
                     <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->jam_masuk }}</td>
                     <td>{{ $item->lokasi_masuk }}</td>
                     <td>{{ $item->jam_pulang }}</td>
                     <td>{{ $item->lokasi_pulang }}</td>
                     <td>{{ $item->telat }}</td>
-                    <td>{{ $item->total_tugas }}</td>
-                    <td>{{ $item->total_tugas_selesai }}</td>
+                    <td>
+                        @if (isset($totalTugas[$item->tanggal][$item->karyawan->id]))
+                            {{ $totalTugas[$item->tanggal][$item->karyawan->id] }}
+                        @else
+                            0
+                        @endif
+                    </td>
+                    <td>
+                        @if (isset($totalTugasSelesai[$item->tanggal][$item->karyawan->id]))
+                            {{ $totalTugasSelesai[$item->tanggal][$item->karyawan->id] }}
+                        @else
+                            0
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </body>
+
 </html>
