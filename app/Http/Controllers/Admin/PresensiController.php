@@ -20,8 +20,6 @@ class PresensiController extends Controller
     {
         $absensi = Absensi::with(['karyawan', 'izin']);
 
-
-
         if ($request->has('tanggal')) {
             $absensi->filterByTanggal($request->input('tanggal'));
         }

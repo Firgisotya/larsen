@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\UpdatePasswordController;
 use App\Http\Controllers\FormIzinController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileKaryawanController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -89,6 +90,11 @@ Route::get('/pengelola/karyawan/export/{id}', [PengelolaKaryawanController::clas
 
 //get lokai kantor
 Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
+
+//search route
+Route::get('/search-divisi', [SearchController::class, 'divisiCreate'])->name('divisi.search');
+Route::get('/search-karyawan', [SearchController::class, 'karyawanSearch'])->name('karyawan.search');
+
 
 // middleware pengelola
 Route::middleware(['pengelola'])->prefix('pengelola')->group(function (){
