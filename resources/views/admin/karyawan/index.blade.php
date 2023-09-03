@@ -164,17 +164,17 @@
                                                 </a>
 
                                                 {{-- edit --}}
-                                                <a href="{{ route('karyawan.edit', item.id) }}" class="btn btn-success">
+                                                <a href="/admin/karyawan/${item.id}/edit" class="btn btn-success">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
                                                 {{-- detail --}}
-                                                <a href="{{ route('karyawan.show', item.id) }}" class="btn btn-warning">
+                                                <a href="/admin/karyawan/${item.id}" class="btn btn-warning">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
 
                                                 {{-- Delete --}}
-                                                <form action="{{ route('karyawan.destroy', item.id) }}" method="POST"
+                                                <form action="/admin/karyawan/${item.id}" method="POST"
                                                     class="d-inline" id="data-${item.id}">
                                                     @method('DELETE')
                                                     @csrf

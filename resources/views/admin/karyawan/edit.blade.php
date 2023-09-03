@@ -159,7 +159,7 @@
                                 id="role" name="role" required autofocus value="{{ old('role') }}">
                                 <option value="">Pilih Role</option>
                                 @foreach ($role as $item)
-                                    <option value="{{ $item->id }}" {{ $user->role_id == $item->id ? 'selected' : '' }}>{{ $item->nama_role }}</option>
+                                    <option value="{{ $item->id }}" {{ ($user != null) ? ($user->role_id == $item->id) ? 'selected' : '' : '' }}>{{ $item->nama_role }}</option>
                                 @endforeach
                             </select>
                             @error('role')
