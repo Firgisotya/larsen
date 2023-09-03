@@ -121,12 +121,12 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             {{-- edit --}}
-                                            <a href="{{ route('divisi.edit', item.id) }}" class="btn btn-success">
+                                            <a href="/admin/divisi/${item.id}/edit" class="btn btn-success">
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
                                             {{-- Delete --}}
-                                            <form action="{{ route('divisi.destroy', item.id) }}" method="POST"
+                                            <form action="admin/divisi/${item.id}" method="POST"
                                                 class="d-inline" id="data-${item.id}">
                                                 @method('DELETE')
                                                 @csrf
