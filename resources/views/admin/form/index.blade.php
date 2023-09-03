@@ -111,6 +111,13 @@
                         // Update tabel dengan hasil pencarian
                         updateTable(data);
                     });
+            } else {
+                // kirim semua data
+                fetch(`/admin/formIzin`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateTable(data)
+                    })
             }
         });
 
@@ -121,34 +128,27 @@
             data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-        <th scope="row">${index + 1}</th>
-        <th scope="row">{{ $loop->index + 1 }}</th>
-                                    <td>{{ $item->karyawan->nama_karyawan }}</td>
-                                    <td>{{ $item->jenis_izin }}</td>
-                                    <td>{{ $item->tanggal_izin }}</td>
-                                    <td>{{ $item->keterangan }}</td>
+                <th scope="row">${index + 1}</th>
+                                <td>${item.karyawan.nama_karyawan}}</td>
+                                    <td>${item.jenis_izin}</td>
+                                    <td>${item.tanggal_izin}</td>
+                                    <td>${item.keteragan}</td>
                                     <td>
-                                        @if ($item->status == 'pending')
-                                            <span class="badge bg-warning text-white">{{ $item->status }}</span>
-                                        @elseif ($item->status == 'diterima')
-                                            <span class="badge bg-success text-white">{{ $item->status }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($item->status == 'pending')
-                                            <form action="{{ route('admin.form.terima', $item->id) }}" method="POST">
-                                                @method('PUT')
-                                                @csrf
-                                                <button type="submit" class="btn btn-success btn-sm"><i
-                                                        class="fa-regular fa-square-check"></i></button>
-                                            </form>
-                                        @endif
-
-                                    </td>
+            ${item.status === 'pending' ? '<span class="badge bg-warning text-white">pending</span>' :
+                (item.status === 'diterima' ? '<span class="badge bg-success text-white">diterima</span>' : '')}
+        </td>
+        <td>
+            ${item.status === 'pending' ?
+                `<form action="/admin/formIzin/${item.id}" method="POST">
+                        @method('PUT')
+                        @csrf
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fa-regular fa-square-check"></i></button>
+                    </form>` :
+                ''}
+        </td>
     `;
                 tbody.appendChild(row);
             });
         }
-
     </script>
 @endsection

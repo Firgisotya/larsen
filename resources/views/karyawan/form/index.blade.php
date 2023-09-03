@@ -7,9 +7,15 @@
                 <h1 class="h3 mb-4 text-gray-800">Form Izin</h1>
             </div>
             <div class="col">
-                <div class="text-end">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <!-- Kotak Pencarian -->
+                    <div class="input-group mb-3">
+                        <input id="search" type="text" class="form-control" placeholder="Cari izin"
+                            aria-label="Cari izin" aria-describedby="basic-addon2">
+                    </div>
+
                     <a href="{{ route('formIzin.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Ajukan Form Izin
+                        <i class="fas fa-plus"></i> Ajukan Izin
                     </a>
                 </div>
             </div>
@@ -52,7 +58,7 @@
                                                 @method('DELETE')
                                                 @csrf
                                                 <button class="btn btn-danger shadow btn-xs sharp me-1 delete"
-                                                    data-name="{{ $item->nama_destinasi }}"
+                                                    data-name="{{ $item->jenis_izin }}"
                                                     data-id="{{ $item->id }}"><i class='fa fa-trash'></i></button>
                                             </form>
                                         @endif
@@ -76,11 +82,11 @@
             dBtn.addEventListener('click', function(event) {
                 event.preventDefault();
 
-                const destinasiId = this.dataset.id;
-                const destinasiName = this.dataset.name;
+                const izinId = this.dataset.id;
+                const izinName = this.dataset.name;
                 Swal.fire({
                     title: 'Anda Yakin Menghapus Data Ini ?',
-                    text: "Nama Destinasi : " + destinasiName,
+                    text: "Nama Jenis Izin : " + izinName,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -88,11 +94,85 @@
                     confirmButtonText: 'Ya, Hapus!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        const dataId = document.getElementById('data-' + destinasiId);
+                        const dataId = document.getElementById('data-' + izinId);
                         dataId.submit();
                     }
                 })
             })
         });
+
+        // search
+        const searchInput = document.getElementById('search');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.trim();
+
+            if (query !== '') {
+                // Kirim permintaan AJAX
+                fetch(`/search-izinKaryawan?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update tabel dengan hasil pencarian
+                        updateTable(data);
+                    });
+            } else {
+                // kirim semua data
+                fetch(`/karyawan/formIzin`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateTable(data)
+                    })
+            }
+        });
+
+        function updateTable(data) {
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <th scope="row">${index + 1}</th>
+                                    <td>${item.jenis_izin}</td>
+                                    <td>${item.tanggal_izin}</td>
+                                    <td>${item.keterangan}</td>
+                                    <td>
+                                        ${getStatusBadge(item.status)}
+                                    </td>
+                                    <td>
+                                        ${getActioButton(item)}
+                                    </td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        //fungsi status badge
+        function getStatusBadge(status) {
+            if (status === 'pending') {
+                return '<span class="badge bg-warning text-white">' + status + '</span>';
+            } else if (status === 'disetujui') {
+                return '<span class="badge bg-success text-white">' + status + '</span>';
+            } else if (status === 'ditolak') {
+                return '<span class="badge bg-danger text-white">' + status + '</span>';
+            } else {
+                return ''; // Kondisi default jika tidak ada yang cocok
+            }
+        }
+
+        //delete from search
+        function getActioButton(item){
+            if (item.status == 'pending'){
+                return `
+                <form action="/karyawan/formIzin/${item.id}" method="POST"
+                                                class="d-inline" id="data-${item.id}">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="btn btn-danger shadow btn-xs sharp me-1 delete"
+                                                    data-name="${item.jenis_izin}"
+                                                    data-id="${item.id}"><i class='fa fa-trash'></i></button>
+                                            </form>`
+            }
+        }
+
     </script>
 @endsection

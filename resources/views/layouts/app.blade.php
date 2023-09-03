@@ -40,14 +40,16 @@
             <!--  Header Start -->
             @include('layouts.navbar')
             <!--  Header End -->
-            <div class="container-fluid" style="background-color: #F8F8F8">
+            <div class="container-fluid" style="background-color: #F8F8F8; height: 100vh">
                 {{-- render konten --}}
                 @yield('content')
                 {{-- end render konten --}}
+            </div>
+            <footer style="background-color: #F8F8F8; position: fixed; bottom: 0; width: 100%; margin-top: 20px;">
                 {{-- footer --}}
                 @include('layouts.footer')
                 {{-- end footer --}}
-            </div>
+            </footer>
         </div>
     </div>
     <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>

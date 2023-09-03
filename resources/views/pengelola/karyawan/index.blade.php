@@ -7,7 +7,13 @@
                 <h1 class="h3 mb-4 text-gray-800">Karyawan</h1>
             </div>
             <div class="col">
-                <div class="text-end">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <!-- Kotak Pencarian -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="search" placeholder="Cari Karyawan"
+                            aria-label="Cari Karyawan" aria-describedby="basic-addon2">
+                    </div>
+
                     <a href="/pengelola/karyawan/create" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Karyawan
                     </a>
@@ -41,7 +47,7 @@
                                             @if ($item->divisi_id == null)
                                                 -
                                             @else
-                                            {{ $item->divisi->nama_divisi }}
+                                                {{ $item->divisi->nama_divisi }}
                                             @endif
                                         </td>
                                         <td>{{ $item->tempat_lahir }}</td>
@@ -52,9 +58,9 @@
                                         <td>
                                             <div class="d-flex gap-2">
                                                 {{-- export --}}
-                                                    <a href="/pengelola/karyawan/export/{{ $item->id }}" class="btn btn-primary">
-                                                        <i class="fas fa-file-export"></i>
-                                                    </a>
+                                                <a href="pengelola/karyawan/export/{{ $item->id }}" class="btn btn-primary">
+                                                    <i class="fas fa-file-export"></i>
+                                                </a>
 
                                                 {{-- edit --}}
                                                 <a href="/pengelola/karyawan/{{ $item->id }}/edit" class="btn btn-success">
@@ -117,5 +123,77 @@
                 })
             })
         });
+
+        // search
+        const searchInput = document.getElementById('search');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.trim();
+
+            if (query !== '') {
+                // Kirim permintaan AJAX
+                fetch(`/search-karyawan?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update tabel dengan hasil pencarian
+                        updateTable(data);
+                    });
+            } else {
+                // kirim semua data
+                fetch(`/pengelola/karyawan`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateTable(data)
+                    })
+            }
+        });
+
+        function updateTable(data) {
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <th scope="row">${index + 1}</th>
+                <td>${item.nama_karyawan}</td>
+                <td>${item.divisi ? item.divisi.nama_divisi : '-'}</td>
+                <td>${item.tempat_lahir}</td>
+                <td>${item.tanggal_lahir}</td>
+                <td>${item.alamat}</td>
+                <td>${item.no_telepon}</td>
+                <td>${item.tahun_masuk}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                                                {{-- export --}}
+                                                <a href="pengelola/karyawan/export/${item.id}" class="btn btn-primary">
+                                                    <i class="fas fa-file-export"></i>
+                                                </a>
+
+                                                {{-- edit --}}
+                                                <a href="/pengelola/karyawan/${item.id}/edit" class="btn btn-success">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                {{-- detail --}}
+                                                <a href="/pengelola/karyawan/${item.id}" class="btn btn-warning">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+
+                                                {{-- Delete --}}
+                                                <form action="/pengelola/karyawan/${item.id}" method="POST"
+                                                    class="d-inline" id="data-${item.id}">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button class="btn btn-danger shadow btn-xs sharp me-1 delete"
+                                                        data-name="${item.nama_karyawan}"
+                                                        data-id="${item.id}"><i class='fa fa-trash'></i></button>
+                                                </form>
+                                            </div>
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+        }
     </script>
 @endsection

@@ -92,12 +92,16 @@ Route::get('/pengelola/karyawan/export/{id}', [PengelolaKaryawanController::clas
 Route::get('/lokasi', [HomeController::class, 'lokasiKantor'])->name('lokasiKantor');
 
 //search route
-Route::get('/search-divisi', [SearchController::class, 'divisiSearch'])->name('divisi.search');
+Route::middleware(['auth'])->group(function() {
+    Route::get('/search-divisi', [SearchController::class, 'divisiSearch'])->name('divisi.search');
 Route::get('/search-karyawan', [SearchController::class, 'karyawanSearch'])->name('karyawan.search');
 Route::get('/search-kantor', [SearchController::class, 'kantorSearch'])->name('kantor.search');
 Route::get('/search-destinasi', [SearchController::class, 'destinasiSearch'])->name('destinasi.search');
 Route::get('/search-tugas', [SearchController::class, 'tugasSearch'])->name('tugas.search');
 Route::get('/search-izin', [SearchController::class, 'izinSearch'])->name('izin.search');
+Route::get('/search-activity', [SearchController::class, 'activitySearch'])->name('activity.search');
+Route::get('/search-izinKaryawan', [SearchController::class, 'izinKaryawanSearch'])->name('izinKaryawan.search');
+});
 
 
 // middleware pengelola

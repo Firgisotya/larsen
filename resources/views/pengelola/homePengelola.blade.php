@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div class="row mb-2">
+    {{-- <div class="row mb-2">
         <div class="col">
             <nav class="navbar navbar-light bg-white shadow-lg rounded">
                 <div class="container-fluid d-flex justify-content-center align-items-center">
@@ -83,9 +83,9 @@
                 </div>
             </nav>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col">
             <div class="card shadow-lg">
                 <div class="card-content">
@@ -136,7 +136,7 @@
                                             <td>{{ $item->telat }}</td>
                                             <td>
 
-                                                {{-- detail --}}
+                                               
                                                 <a href="{{ route('pengelola.presensi.show', $item->id) }}"
                                                     class="btn btn-warning">
                                                     <i class="fas fa-eye"></i>
@@ -155,5 +155,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection

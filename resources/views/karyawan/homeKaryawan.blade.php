@@ -346,7 +346,7 @@
             captureButtonPulang.disabled = true;
             btnMasuk.disabled = true;
             btnPulang.disabled = true;
-        } else if (currentHour >= 24) {
+        } else if (currentHour >= 10) {
             // Mengubah isi modal body menjadi teks waktu absen masuk habis
             modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
 

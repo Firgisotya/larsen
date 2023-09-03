@@ -106,6 +106,13 @@
                         // Update tabel dengan hasil pencarian
                         updateTable(data);
                     });
+            } else {
+                // kirim semua data
+                fetch(`/admin/divisi`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateTable(data)
+                    })
             }
         });
 

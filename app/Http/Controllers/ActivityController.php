@@ -28,7 +28,7 @@ class ActivityController extends Controller
 
     public function selesaikan(Request $request, $id)
     {
-        // dd($request->all());
+        dd($id);
 
         $validateData = $request->validate([
             'file_tugas' => 'required|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
