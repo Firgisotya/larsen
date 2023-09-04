@@ -317,10 +317,6 @@
         var btnMasuk = document.getElementById("btn-masuk");
         var btnPulang = document.getElementById("btn-pulang");
 
-        // Mendapatkan waktu saat ini
-        var currentTime = new Date();
-        var currentHour = currentTime.getHours();
-
         // cek absensi menggunakan ajax
 
         $.ajax({
@@ -332,29 +328,53 @@
             }
         });
 
-
-        // Memeriksa jika waktu lebih dari jam 10
-        if (currentHour >= 24) {
-            // Mengubah isi modal body menjadi teks waktu absen masuk habis
-            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
-            modalBodyPulang.innerHTML = "<h4>Waktu absen pulang sudah habis.</h4>";
-
-            // Menonaktifkan video dan tombol ambil foto
-            videoMasuk.style.display = "none";
-            captureButtonMasuk.disabled = true;
-            videoPulang.style.display = "none";
-            captureButtonPulang.disabled = true;
-            btnMasuk.disabled = true;
-            btnPulang.disabled = true;
-        } else if (currentHour >= 10) {
-            // Mengubah isi modal body menjadi teks waktu absen masuk habis
-            modalBodyMasuk.innerHTML = "<h4>Waktu absen masuk sudah habis.</h4>";
-
-            // Menonaktifkan video dan tombol ambil foto
-            videoMasuk.style.display = "none";
-            captureButtonMasuk.disabled = true;
-            btnMasuk.disabled = true;
+        // Fungsi untuk mendapatkan waktu saat ini dalam format jam dan menit
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            return hours * 60 + minutes; // Menghitung waktu dalam menit
         }
+
+        // Fungsi untuk memeriksa waktu dan mengaktifkan/menonaktifkan tombol absen
+        function checkAbsenAvailability() {
+            const currentTime = getCurrentTime();
+
+            // Waktu yang diizinkan untuk absen masuk (dalam menit)
+            const masukStartTime = 10 * 60; // 10:00 AM
+            const masukEndTime = 11 * 60 + 15; // 11:15 AM
+
+            // Waktu yang diizinkan untuk absen pulang (dalam menit)
+            const pulangStartTime = 17 * 60; // 5:00 PM
+            const pulangEndTime = 18 * 60 + 15; // 6:15 PM
+
+            console.log("Current Time:", currentTime);
+            console.log("Masuk Start Time:", masukStartTime);
+            console.log("Masuk End Time:", masukEndTime);
+
+            // Mendapatkan tombol absen masuk dan pulang
+            const btnMasuk = document.getElementById("btn-masuk");
+            const btnPulang = document.getElementById("btn-pulang");
+
+            if (btnMasuk && btnPulang) {
+                // Memeriksa apakah waktu saat ini diizinkan untuk absen masuk
+                if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
+                    btnMasuk.removeAttribute("disabled"); // Mengaktifkan tombol absen masuk
+                } else {
+                    btnMasuk.setAttribute("disabled", "true"); // Menonaktifkan tombol absen masuk
+                }
+
+                // Memeriksa apakah waktu saat ini diizinkan untuk absen pulang
+                if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
+                    btnPulang.removeAttribute("disabled"); // Mengaktifkan tombol absen pulang
+                } else {
+                    btnPulang.setAttribute("disabled", "true"); // Menonaktifkan tombol absen pulang
+                }
+            }
+        }
+
+        // Memanggil fungsi checkAbsenAvailability saat halaman dimuat
+        setInterval(checkAbsenAvailability, 60000);
 
         // cek support camera
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -428,118 +448,102 @@
         // mengrim data ke server untuk di simpan ke database absensi masuk
         function submitAbsenMasuk() {
 
+            const currentTime = getCurrentTime();
+            const masukStartTime = 10 * 60; // 10:00 AM
+            const masukEndTime = 11 * 60 + 15; // 11:15 AM
 
-            var formData = new FormData();
-            formData.append('_token', '{{ csrf_token() }}');
+            if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
 
-            var capturedImageInput = document.getElementById('captured-image-input-masuk');
-            formData.append('captured_image', capturedImageInput.value);
+                var formData = new FormData();
+                formData.append('_token', '{{ csrf_token() }}');
 
-            var latitude = document.getElementById('latitudeMasuk').textContent;
-            var longitude = document.getElementById('longitudeMasuk').textContent;
-            formData.append('latitude', latitude);
-            formData.append('longitude', longitude);
+                var capturedImageInput = document.getElementById('captured-image-input-masuk');
+                formData.append('captured_image', capturedImageInput.value);
 
-            $.ajax({
-                url: '/karyawan/absensi-masuk',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                var latitude = document.getElementById('latitudeMasuk').textContent;
+                var longitude = document.getElementById('longitudeMasuk').textContent;
+                formData.append('latitude', latitude);
+                formData.append('longitude', longitude);
 
-            }).done(function(response) {
-                console.log(response);
-                location.reload();
-            }).fail(function(response) {
-                console.log(response);
-                location.reload();
-            });
+                $.ajax({
+                    url: '/karyawan/absensi-masuk',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
 
-            // Reset form
-            resetCapture('masuk');
+                }).done(function(response) {
+                    console.log(response);
+                    location.reload();
+                }).fail(function(response) {
+                    console.log(response);
+                    location.reload();
+                });
+
+                // Reset form
+                resetCapture('masuk');
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Absen masuk hanya dapat dilakukan antara jam 10:00 dan 11:15.',
+                });
+            }
+
+
         }
 
         // mengrim data ke server untuk di simpan ke database absensi pulang
         function submitAbsenPulang() {
 
+            const currentTime = getCurrentTime();
+            const pulangStartTime = 17 * 60; // 5:00 PM
+            const pulangEndTime = 18 * 60 + 15; // 6:15 PM
 
-            var formData = new FormData();
-            formData.append('_token', '{{ csrf_token() }}');
+            if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
 
-            var capturedImageInput = document.getElementById('captured-image-input-pulang');
-            formData.append('captured_image', capturedImageInput.value);
+                var formData = new FormData();
+                formData.append('_token', '{{ csrf_token() }}');
 
-            var latitude = document.getElementById('latitudePulang').textContent;
-            var longitude = document.getElementById('longitudePulang').textContent;
-            formData.append('latitude', latitude);
-            formData.append('longitude', longitude);
+                var capturedImageInput = document.getElementById('captured-image-input-pulang');
+                formData.append('captured_image', capturedImageInput.value);
 
-            $.ajax({
-                url: '/karyawan/absensi-pulang',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                var latitude = document.getElementById('latitudePulang').textContent;
+                var longitude = document.getElementById('longitudePulang').textContent;
+                formData.append('latitude', latitude);
+                formData.append('longitude', longitude);
 
-            }).done(function(response) {
-                console.log(response);
-                location.reload();
-            }).fail(function(response) {
-                console.log(response);
-                location.reload();
-            });
+                $.ajax({
+                    url: '/karyawan/absensi-pulang',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
 
-            // Reset form
-            resetCapture('pulang');
+                }).done(function(response) {
+                    console.log(response);
+                    location.reload();
+                }).fail(function(response) {
+                    console.log(response);
+                    location.reload();
+                });
+
+                // Reset form
+                resetCapture('pulang');
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Absen pulang hanya dapat dilakukan antara jam 17:00 dan 18:15.',
+                });
+            }
+
+
+
         }
 
-
-        // preview image
-        // function previewImage(waktu) {
-        //     var fileInput = document.getElementById('uploadInput-' + waktu);
-        //     var imagePreview = document.getElementById('imagePreview-' + waktu);
-
-        //     var file = fileInput.files[0];
-        //     var reader = new FileReader();
-
-        //     reader.onload = function(e) {
-        //         var img = new Image();
-        //         img.onload = function() {
-        //             var canvas = document.createElement('canvas');
-        //             var ctx = canvas.getContext('2d');
-
-        //             // Mengatur ukuran canvas sesuai dengan orientasi gambar
-        //             if (img.width > img.height) {
-        //                 canvas.width = 400;
-        //                 canvas.height = 300;
-        //             } else {
-        //                 canvas.width = 300;
-        //                 canvas.height = 400;
-        //             }
-
-        //             // Memperbaiki orientasi gambar jika diperlukan
-        //             if (window.innerWidth < window.innerHeight) {
-        //                 if (img.width > img.height) {
-        //                     ctx.translate(canvas.width / 2, canvas.height / 2);
-        //                     ctx.rotate(90 * Math.PI / 180);
-        //                     ctx.drawImage(img, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
-        //                 } else {
-        //                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        //                 }
-        //             } else {
-        //                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        //             }
-
-        //             // Mengubah gambar menjadi tautan data dan menampilkannya
-        //             var dataURL = canvas.toDataURL('image/jpeg');
-        //             imagePreview.src = dataURL;
-        //         };
-
-        //         img.src = e.target.result;
-        //     };
-
-        //     reader.readAsDataURL(file);
-        // }
 
         // map
         function getLocationMasuk() {
