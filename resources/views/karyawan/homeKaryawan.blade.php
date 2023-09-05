@@ -338,21 +338,23 @@
 
         // Fungsi untuk memeriksa waktu dan mengaktifkan/menonaktifkan tombol absen
         function checkAbsenAvailability() {
-            const currentTime = getCurrentTime();
-
+            const currentDate = new Date();
+            const currentTime = (currentDate.getHours() < 10 ? "0" : "") + currentDate.getHours() +
+                ":" + (currentDate.getMinutes() < 10 ? "0" : "") + currentDate.getMinutes();
 
             // Lakukan permintaan AJAX untuk mengambil waktu masuk dan pulang dari server
             fetch('/lokasi') // Ganti dengan URL yang sesuai di server Anda
                 .then(response => response.json())
                 .then(data => {
 
-                    console.log("data : ", data);
+                    // console.log("data : ", data);
                     const masukStartTime = data.map(item => item
                         .jam_masuk); // Ganti dengan nama kolom yang sesuai di respons JSON
                     const masukEndTime = masukStartTime.map(startTime => {
                         const jamMasuk = new Date(
-                        `01/01/2023 ${startTime}`); // Menggunakan tanggal sembarang, karena hanya peduli dengan jam
-                        jamMasuk.setMinutes(jamMasuk.getMinutes() + 60);
+                            `01/01/2023 ${startTime}`
+                        ); // Menggunakan tanggal sembarang, karena hanya peduli dengan jam
+                        jamMasuk.setMinutes(jamMasuk.getMinutes() + 60); //09:00
 
                         // Mengubah format jam ke format yang sama dengan masukStartTime
                         const formattedEndTime = (jamMasuk.getHours() < 10 ? "0" : "") + jamMasuk.getHours() +
@@ -360,7 +362,8 @@
 
                         return formattedEndTime;
                     });
-                    const pulangStartTime = data.map(item => item.jam_pulang); // Ganti dengan nama kolom yang sesuai di respons JSON
+                    const pulangStartTime = data.map(item => item
+                        .jam_pulang); // Ganti dengan nama kolom yang sesuai di respons JSON
                     const pulangEndTime = pulangStartTime.map(startTime => {
                         const jamPulang = new Date(`01/01/2023 ${startTime}`);
                         jamPulang.setMinutes(jamPulang.getMinutes() + 60);
@@ -371,11 +374,11 @@
                         return formattedEndTime;
                     })
 
-                    console.log("Current Time:", currentTime);
-                    console.log("Masuk Start Time:", masukStartTime);
-                    console.log("Masuk End Time:", masukEndTime);
-                    console.log("Pulang Start Time:", pulangStartTime);
-                    console.log("Pulang End Time:", pulangEndTime);
+                    // console.log("Current Time:", currentTime);
+                    // console.log("Masuk Start Time:", masukStartTime);
+                    // console.log("Masuk End Time:", masukEndTime);
+                    // console.log("Pulang Start Time:", pulangStartTime);
+                    // console.log("Pulang End Time:", pulangEndTime);
 
                     // Memeriksa apakah waktu saat ini diizinkan untuk absen masuk
                     if (masukStartTime.some(jamMasuk => currentTime >= jamMasuk)) {
@@ -503,48 +506,78 @@
         // mengrim data ke server untuk di simpan ke database absensi masuk
         function submitAbsenMasuk() {
 
-            const currentTime = getCurrentTime();
-            const masukStartTime = 10 * 60; // 10:00 AM
-            const masukEndTime = 11 * 60 + 15; // 11:15 AM
+            const currentDate = new Date();
+            const currentTime = (currentDate.getHours() < 10 ? "0" : "") + currentDate.getHours() +
+                ":" + (currentDate.getMinutes() < 10 ? "0" : "") + currentDate.getMinutes();
 
-            if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
 
-                var formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
+            $.ajax({
+                url: '/lokasi',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('data: ', data);
+                    const masukStartTime = data.map(item => item
+                        .jam_masuk); // Ganti dengan nama kolom yang sesuai di respons JSON
+                    const masukEndTime = masukStartTime.map(startTime => {
+                        const jamMasuk = new Date(
+                            `01/01/2023 ${startTime}`
+                        ); // Menggunakan tanggal sembarang, karena hanya peduli dengan jam
+                        jamMasuk.setMinutes(jamMasuk.getMinutes() + 60); //09:00
 
-                var capturedImageInput = document.getElementById('captured-image-input-masuk');
-                formData.append('captured_image', capturedImageInput.value);
+                        // Mengubah format jam ke format yang sama dengan masukStartTime
+                        const formattedEndTime = (jamMasuk.getHours() < 10 ? "0" : "") + jamMasuk
+                            .getHours() +
+                            ":" + (jamMasuk.getMinutes() < 10 ? "0" : "") + jamMasuk.getMinutes();
 
-                var latitude = document.getElementById('latitudeMasuk').textContent;
-                var longitude = document.getElementById('longitudeMasuk').textContent;
-                formData.append('latitude', latitude);
-                formData.append('longitude', longitude);
+                        return formattedEndTime;
+                    });
 
-                $.ajax({
-                    url: '/karyawan/absensi-masuk',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    console.log("Current Time:", currentTime);
+                    console.log("Masuk Start Time:", masukStartTime);
 
-                }).done(function(response) {
-                    console.log(response);
-                    // location.reload();
-                }).fail(function(response) {
-                    console.log(response);
-                    // location.reload();
-                });
+                    if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
 
-                // Reset form
-                resetCapture('masuk');
+                        var formData = new FormData();
+                        formData.append('_token', '{{ csrf_token() }}');
 
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: 'Absen masuk hanya dapat dilakukan antara jam 10:00 dan 11:15.',
-                });
-            }
+                        var capturedImageInput = document.getElementById('captured-image-input-masuk');
+                        formData.append('captured_image', capturedImageInput.value);
+
+                        var latitude = document.getElementById('latitudeMasuk').textContent;
+                        var longitude = document.getElementById('longitudeMasuk').textContent;
+                        formData.append('latitude', latitude);
+                        formData.append('longitude', longitude);
+
+                        $.ajax({
+                            url: '{{ route('karyawan.absensi.masuk') }}',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+
+                        }).done(function(response) {
+                            console.log(response);
+                            // location.reload();
+                        }).fail(function(response) {
+                            console.log(response);
+                            // location.reload();
+                        });
+
+                        // Reset form
+                        resetCapture('masuk');
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: `Absen masuk hanya dapat dilakukan antara jam ${masukStartTime} dan ${masukEndTime}.`,
+                        });
+                    }
+                }
+            });
+
+
 
 
         }

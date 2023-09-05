@@ -33,11 +33,13 @@ class AbsensiController extends Controller
 
     public function absenMasuk(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'captured_image' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
         ]);
+
 
         $dateTime = Carbon::now();
         $karyawanId = auth()->user()->karyawan_id;
