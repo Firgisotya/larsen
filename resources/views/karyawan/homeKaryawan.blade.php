@@ -340,41 +340,96 @@
         function checkAbsenAvailability() {
             const currentTime = getCurrentTime();
 
+
+            // Lakukan permintaan AJAX untuk mengambil waktu masuk dan pulang dari server
+            fetch('/lokasi') // Ganti dengan URL yang sesuai di server Anda
+                .then(response => response.json())
+                .then(data => {
+
+                    console.log("data : ", data);
+                    const masukStartTime = data.map(item => item
+                        .jam_masuk); // Ganti dengan nama kolom yang sesuai di respons JSON
+                    const masukEndTime = masukStartTime.map(startTime => {
+                        const jamMasuk = new Date(
+                        `01/01/2023 ${startTime}`); // Menggunakan tanggal sembarang, karena hanya peduli dengan jam
+                        jamMasuk.setMinutes(jamMasuk.getMinutes() + 60);
+
+                        // Mengubah format jam ke format yang sama dengan masukStartTime
+                        const formattedEndTime = (jamMasuk.getHours() < 10 ? "0" : "") + jamMasuk.getHours() +
+                            ":" + (jamMasuk.getMinutes() < 10 ? "0" : "") + jamMasuk.getMinutes();
+
+                        return formattedEndTime;
+                    });
+                    const pulangStartTime = data.map(item => item.jam_pulang); // Ganti dengan nama kolom yang sesuai di respons JSON
+                    const pulangEndTime = pulangStartTime.map(startTime => {
+                        const jamPulang = new Date(`01/01/2023 ${startTime}`);
+                        jamPulang.setMinutes(jamPulang.getMinutes() + 60);
+
+                        const formattedEndTime = (jamPulang.getHours() < 10 ? "0" : "") + jamPulang.getHours() +
+                            ":" + (jamPulang.getMinutes() < 10 ? "0" : "") + jamPulang.getMinutes();
+
+                        return formattedEndTime;
+                    })
+
+                    console.log("Current Time:", currentTime);
+                    console.log("Masuk Start Time:", masukStartTime);
+                    console.log("Masuk End Time:", masukEndTime);
+                    console.log("Pulang Start Time:", pulangStartTime);
+                    console.log("Pulang End Time:", pulangEndTime);
+
+                    // Memeriksa apakah waktu saat ini diizinkan untuk absen masuk
+                    if (masukStartTime.some(jamMasuk => currentTime >= jamMasuk)) {
+                        btnMasuk.removeAttribute("disabled"); // Mengaktifkan tombol absen masuk
+                    } else {
+                        btnMasuk.setAttribute("disabled", "true"); // Menonaktifkan tombol absen masuk
+                    }
+
+                    // Memeriksa apakah waktu saat ini diizinkan untuk absen pulang
+                    if (pulangStartTime.some(jamPulang => currentTime >= jamPulang)) {
+                        btnPulang.removeAttribute("disabled"); // Mengaktifkan tombol absen pulang
+                    } else {
+                        btnPulang.setAttribute("disabled", "true"); // Menonaktifkan tombol absen pulang
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+
             // Waktu yang diizinkan untuk absen masuk (dalam menit)
-            const masukStartTime = 10 * 60; // 10:00 AM
-            const masukEndTime = 11 * 60 + 15; // 11:15 AM
+            // const masukStartTime = 10 * 60; // 10:00 AM
+            // const masukEndTime = 11 * 60; // 11:15 AM
 
-            // Waktu yang diizinkan untuk absen pulang (dalam menit)
-            const pulangStartTime = 17 * 60; // 5:00 PM
-            const pulangEndTime = 18 * 60 + 15; // 6:15 PM
+            // // Waktu yang diizinkan untuk absen pulang (dalam menit)
+            // const pulangStartTime = 17 * 60; // 5:00 PM
+            // const pulangEndTime = 18 * 60; // 6:15 PM
 
-            console.log("Current Time:", currentTime);
-            console.log("Masuk Start Time:", masukStartTime);
-            console.log("Masuk End Time:", masukEndTime);
+            // console.log("Current Time:", currentTime);
+            // console.log("Masuk Start Time:", masukStartTime);
+            // console.log("Masuk End Time:", masukEndTime);
 
-            // Mendapatkan tombol absen masuk dan pulang
-            const btnMasuk = document.getElementById("btn-masuk");
-            const btnPulang = document.getElementById("btn-pulang");
+            // // Mendapatkan tombol absen masuk dan pulang
+            // const btnMasuk = document.getElementById("btn-masuk");
+            // const btnPulang = document.getElementById("btn-pulang");
 
-            if (btnMasuk && btnPulang) {
-                // Memeriksa apakah waktu saat ini diizinkan untuk absen masuk
-                if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
-                    btnMasuk.removeAttribute("disabled"); // Mengaktifkan tombol absen masuk
-                } else {
-                    btnMasuk.setAttribute("disabled", "true"); // Menonaktifkan tombol absen masuk
-                }
+            // if (btnMasuk && btnPulang) {
+            //     // Memeriksa apakah waktu saat ini diizinkan untuk absen masuk
+            //     if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
+            //         btnMasuk.removeAttribute("disabled"); // Mengaktifkan tombol absen masuk
+            //     } else {
+            //         btnMasuk.setAttribute("disabled", "true"); // Menonaktifkan tombol absen masuk
+            //     }
 
-                // Memeriksa apakah waktu saat ini diizinkan untuk absen pulang
-                if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
-                    btnPulang.removeAttribute("disabled"); // Mengaktifkan tombol absen pulang
-                } else {
-                    btnPulang.setAttribute("disabled", "true"); // Menonaktifkan tombol absen pulang
-                }
-            }
+            //     // Memeriksa apakah waktu saat ini diizinkan untuk absen pulang
+            //     if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
+            //         btnPulang.removeAttribute("disabled"); // Mengaktifkan tombol absen pulang
+            //     } else {
+            //         btnPulang.setAttribute("disabled", "true"); // Menonaktifkan tombol absen pulang
+            //     }
+            // }
         }
 
         // Memanggil fungsi checkAbsenAvailability saat halaman dimuat
-        setInterval(checkAbsenAvailability, 60000);
+        setInterval(checkAbsenAvailability, 2000);
 
         // cek support camera
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -474,10 +529,10 @@
 
                 }).done(function(response) {
                     console.log(response);
-                    location.reload();
+                    // location.reload();
                 }).fail(function(response) {
                     console.log(response);
-                    location.reload();
+                    // location.reload();
                 });
 
                 // Reset form

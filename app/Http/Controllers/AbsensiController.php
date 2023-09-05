@@ -57,29 +57,35 @@ class AbsensiController extends Controller
 
         Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
-        // menghitung lama telat absensi
-        $dueDate = LokasiKantor::all();
-        $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-
-        $jamBatas = '11:15:00';
-        foreach ($dueDate as $date) {
-            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_masuk);
-        }
-
-        $telat = $jamAbsen->diffInMinutes($jamBatas);
-
         // validasi foto absensi
         if (empty($foto)) {
             Alert::error('Foto absensi tidak ditemukan', 'Silahkan ambil foto terlebih dahulu');
             return response()->json(['message' => 'Foto absensi tidak ditemukan'], 400);
         }
 
-        // konversi telat
-        $jamval = floor($telat / 60); // Menghitung jumlah jam
-        $menitval = $telat % 60; // Menghitung jumlah menit
-        $detikval = 0; // Jumlah detik diabaikan dalam contoh ini
+        // menghitung lama telat absensi
+        $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
+        $dueDate = LokasiKantor::all();
 
-        $hasilTelat = $jamval . ' jam ' . $menitval . ' menit ' . $detikval . ' detik';
+        $telat = null; // Menyimpan lama telat awal sebagai null
+
+        foreach ($dueDate as $date) {
+            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_masuk);
+
+            // Hitung selisih antara waktu masuk dan batas waktu masuk
+            $telatTemp = $jamAbsen->diffInMinutes($jamBatas);
+
+            // Jika $telat masih null atau lebih kecil dari $telatTemp, maka update $telat
+            if ($telat === null || $telatTemp < $telat) {
+                $telat = $telatTemp;
+            }
+        }
+
+        // Validasi apakah lama telat lebih dari 30 menit
+        if ($telat > 30) {
+            Alert::error('Telat lebih dari 30 menit', 'Anda terlalu telat untuk absen');
+            return response()->json(['message' => 'Anda terlalu telat untuk absen'], 400);
+        }
 
         $allowLocation = LokasiKantor::all();
 
@@ -100,7 +106,7 @@ class AbsensiController extends Controller
             $absensi->jam_masuk = $jam;
             $absensi->lokasi_masuk = $latitude . ',' . $longitude;
             $absensi->foto_masuk = $fileName;
-            $absensi->telat = $hasilTelat;
+            $absensi->telat = $telat;
             $absensi->save();
 
             Alert::success('Absensi masuk berhasil disimpan', 'Selamat bekerja');
@@ -137,27 +143,36 @@ class AbsensiController extends Controller
 
         Storage::disk('public')->put('images/absensi/' . $file, $image_base64);
 
-        // menghitung lama telat absensi
-        $dueDate = LokasiKantor::all();
-        $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $jamBatas = '18:15:00';
-        foreach ($dueDate as $date) {
-            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_pulang);
-        }
-        $telat = $jamAbsen->diffInMinutes($jamBatas);
-
         // validasi foto absensi
         if (empty($foto)) {
             Alert::error('Foto absensi tidak ditemukan', 'Silahkan ambil foto terlebih dahulu');
             return response()->json(['message' => 'Foto absensi tidak ditemukan'], 400);
         }
 
-        // konversi telat
-        $jamval = floor($telat / 60); // Menghitung jumlah jam
-        $menitval = $telat % 60; // Menghitung jumlah menit
-        $detikval = 0; // Jumlah detik diabaikan dalam contoh ini
+        // menghitung lama telat absensi
+        $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
+        $dueDate = LokasiKantor::all();
 
-        $hasilTelat = $jamval . ' jam ' . $menitval . ' menit ' . $detikval . ' detik';
+        $telat = null; // Menyimpan lama telat awal sebagai null
+
+        foreach ($dueDate as $date) {
+            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_pulang);
+
+            // Hitung selisih antara waktu masuk dan batas waktu masuk
+            $telatTemp = $jamAbsen->diffInMinutes($jamBatas);
+
+            // Jika $telat masih null atau lebih kecil dari $telatTemp, maka update $telat
+            if ($telat === null || $telatTemp < $telat) {
+                $telat = $telatTemp;
+            }
+        }
+
+        // Validasi apakah lama telat lebih dari 30 menit
+        if ($telat > 30) {
+            Alert::error('Telat lebih dari 30 menit', 'Anda terlalu telat untuk absen');
+            return response()->json(['message' => 'Anda terlalu telat untuk absen'], 400);
+        }
+
 
         $allowLocation = LokasiKantor::all();
 
@@ -201,6 +216,6 @@ class AbsensiController extends Controller
 
         $absensi = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', $tanggal)->first();
 
-       return $absensi;
+        return $absensi;
     }
 }
