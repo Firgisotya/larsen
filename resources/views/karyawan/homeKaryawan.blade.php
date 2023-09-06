@@ -20,7 +20,6 @@
     {{-- alert status login --}}
     @include('sweetalert::alert')
 
-
     {{-- absen --}}
     <div class="row">
         @if (count($errors) > 0)
@@ -432,7 +431,7 @@
         }
 
         // Memanggil fungsi checkAbsenAvailability saat halaman dimuat
-        setInterval(checkAbsenAvailability, 2000);
+        setInterval(checkAbsenAvailability, 5000);
 
         // cek support camera
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -539,6 +538,7 @@
                     if (currentTime >= masukStartTime && currentTime <= masukEndTime) {
 
                         var formData = new FormData();
+                        // var csrfToken = $("meta[name='csrf-token']").attr("content");
                         formData.append('_token', '{{ csrf_token() }}');
 
                         var capturedImageInput = document.getElementById('captured-image-input-masuk');
@@ -550,19 +550,21 @@
                         formData.append('longitude', longitude);
 
                         $.ajax({
-                            url: '{{ route('karyawan.absensi.masuk') }}',
+                            url: '/karyawan/absensi-masuk',
                             type: 'POST',
                             data: formData,
                             processData: false,
                             contentType: false,
+                            success:function(response){
+                                console.log(response);
+                                location.reload();
+                            },
+                            error:function(xhr, status, error){
+                                console.log(xhr.responseText);
+                                location.reload();
+                            }
 
-                        }).done(function(response) {
-                            console.log(response);
-                            // location.reload();
-                        }).fail(function(response) {
-                            console.log(response);
-                            // location.reload();
-                        });
+                        })
 
                         // Reset form
                         resetCapture('masuk');
@@ -571,7 +573,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal!',
-                            text: `Absen masuk hanya dapat dilakukan antara jam ${masukStartTime} dan ${masukEndTime}.`,
+                            text: `Absen masuk hanya dapat dilakukan pada jam yang sudah di tentukan.`,
                         });
                     }
                 }
@@ -585,48 +587,79 @@
         // mengrim data ke server untuk di simpan ke database absensi pulang
         function submitAbsenPulang() {
 
-            const currentTime = getCurrentTime();
-            const pulangStartTime = 17 * 60; // 5:00 PM
-            const pulangEndTime = 18 * 60 + 15; // 6:15 PM
+            const currentDate = new Date();
+            const currentTime = (currentDate.getHours() < 10 ? "0" : "") + currentDate.getHours() +
+                ":" + (currentDate.getMinutes() < 10 ? "0" : "") + currentDate.getMinutes();
 
-            if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
 
-                var formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
+            $.ajax({
+                url: '/lokasi',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('data: ', data);
+                    const pulangStartTime = data.map(item => item
+                        .jam_pulang); // Ganti dengan nama kolom yang sesuai di respons JSON
+                    const pulangEndTime = pulangStartTime.map(startTime => {
+                        const jamPulang = new Date(
+                            `01/01/2023 ${startTime}`
+                        ); // Menggunakan tanggal sembarang, karena hanya peduli dengan jam
+                        jamPulang.setMinutes(jamPulang.getMinutes() + 60); //09:00
 
-                var capturedImageInput = document.getElementById('captured-image-input-pulang');
-                formData.append('captured_image', capturedImageInput.value);
+                        // Mengubah format jam ke format yang sama dengan pulangStartTime
+                        const formattedEndTime = (jamPulang.getHours() < 10 ? "0" : "") + jamPulang
+                            .getHours() +
+                            ":" + (jamPulang.getMinutes() < 10 ? "0" : "") + jamPulang.getMinutes();
 
-                var latitude = document.getElementById('latitudePulang').textContent;
-                var longitude = document.getElementById('longitudePulang').textContent;
-                formData.append('latitude', latitude);
-                formData.append('longitude', longitude);
+                        return formattedEndTime;
+                    });
 
-                $.ajax({
-                    url: '/karyawan/absensi-pulang',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    console.log("Current Time:", currentTime);
+                    console.log("Pulang Start Time:", pulangStartTime);
 
-                }).done(function(response) {
-                    console.log(response);
-                    location.reload();
-                }).fail(function(response) {
-                    console.log(response);
-                    location.reload();
-                });
+                    if (currentTime >= pulangStartTime && currentTime <= pulangEndTime) {
 
-                // Reset form
-                resetCapture('pulang');
+                        var formData = new FormData();
+                        // var csrfToken = $("meta[name='csrf-token']").attr("content");
+                        formData.append('_token', '{{ csrf_token() }}');
 
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: 'Absen pulang hanya dapat dilakukan antara jam 17:00 dan 18:15.',
-                });
-            }
+                        var capturedImageInput = document.getElementById('captured-image-input-pulang');
+                        formData.append('captured_image', capturedImageInput.value);
+
+                        var latitude = document.getElementById('latitudePulang').textContent;
+                        var longitude = document.getElementById('longitudePulang').textContent;
+                        formData.append('latitude', latitude);
+                        formData.append('longitude', longitude);
+
+                        $.ajax({
+                            url: '/karyawan/absensi-pulang',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success:function(response){
+                                console.log(response);
+                                location.reload();
+                            },
+                            error:function(xhr, status, error){
+                                console.log(xhr.responseText);
+                                // location.reload();
+                            }
+
+                        })
+
+                        // Reset form
+                        resetCapture('pulang');
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: `Absen pulang hanya dapat dilakukan pada jam yang sudah di tentukan.`,
+                        });
+                    }
+                }
+            });
 
 
 

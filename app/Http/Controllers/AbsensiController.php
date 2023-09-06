@@ -33,7 +33,6 @@ class AbsensiController extends Controller
 
     public function absenMasuk(Request $request)
     {
-        dd($request->all());
         $request->validate([
             'captured_image' => 'required',
             'latitude' => 'required',
@@ -83,10 +82,19 @@ class AbsensiController extends Controller
             }
         }
 
+        // Konversi lama telat dari menit menjadi format yang diinginkan
+        $jamTelat = floor($telat / 60); // Menghitung jam
+        $menitTelat = $telat % 60;      // Menghitung sisa menit
+        $detikTelat = $jamAbsen->second; // Menghitung detik
+
+        // Format lama telat dalam format yang diinginkan
+        $hasilTelat = "$jamTelat jam $menitTelat menit $detikTelat detik";
+
+
         // Validasi apakah lama telat lebih dari 30 menit
         if ($telat > 30) {
-            Alert::error('Telat lebih dari 30 menit', 'Anda terlalu telat untuk absen');
-            return response()->json(['message' => 'Anda terlalu telat untuk absen'], 400);
+            Alert::error('Telat lebih dari 30 menit', 'Anda telat untuk absen');
+            return response()->json(['message' => 'Anda telat untuk absen'], 400);
         }
 
         $allowLocation = LokasiKantor::all();
@@ -108,7 +116,7 @@ class AbsensiController extends Controller
             $absensi->jam_masuk = $jam;
             $absensi->lokasi_masuk = $latitude . ',' . $longitude;
             $absensi->foto_masuk = $fileName;
-            $absensi->telat = $telat;
+            $absensi->telat = $hasilTelat;
             $absensi->save();
 
             Alert::success('Absensi masuk berhasil disimpan', 'Selamat bekerja');
@@ -122,7 +130,7 @@ class AbsensiController extends Controller
     public function absenPulang(Request $request)
     {
         $request->validate([
-            'captured_image' => 'required',
+            // 'captured_image' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
         ]);
@@ -203,7 +211,7 @@ class AbsensiController extends Controller
             $absensi->save();
 
 
-            Alert::success('Absensi masuk berhasil disimpan', 'Selamat bekerja');
+            Alert::success('Absensi pulang berhasil disimpan', 'Hati Hati Dijalan');
             return response()->json(['message' => 'Absensi saved successfully'], 200);
         } else {
             Alert::error('Lokasi tidak valid untuk absen', 'Anda tidak berada di kantor');
