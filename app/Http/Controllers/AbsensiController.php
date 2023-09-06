@@ -228,4 +228,12 @@ class AbsensiController extends Controller
 
         return $absensi;
     }
+
+    public function getKaryawanAbsensi()
+    {
+        $karyawanId = auth()->user()->karyawan_id;
+        $cek = Absensi::where('karyawan_id', $karyawanId)->where('tanggal', now()->format('Y-m-d'))->first();
+
+        return $cek;
+    }
 }

@@ -149,4 +149,5 @@ Route::middleware(['karyawan'])->prefix('karyawan')->group(function () {
     Route::post('/ubahPassword/', [UpdatePasswordController::class, 'update'])->name('karyawan.ubahPassword.update');
     Route::get('/profile', [ProfileKaryawanController::class, 'profile'])->name('karyawan.profile');
     Route::post('/profile', [ProfileKaryawanController::class, 'updateProfile'])->name('karyawan.profile.update');
+    Route::get('/cekAbsenKaryawan', [AbsensiController::class, 'getKaryawanAbsensi'])->name('karyawan.getAbsen');
 });
