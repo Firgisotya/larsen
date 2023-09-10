@@ -48,26 +48,28 @@
 
             <!-- Modal -->
             <div class="modal fade" id="masuk" tabindex="-1" aria-labelledby="masukLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Absen Masuk</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
 
-
-                        <div class="modal-body">
-                            <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
-                                <h3 class="text-center">Lokasi Anda</h3>
-                                <div class="d-flex justify-content-center gap-2">
-                                    Latitude: <span id="latitudeMasuk" name="latitudeMasuk"></span>
-                                    Longitude: <span id="longitudeMasuk" name="longitudeMasuk"></span>
-                                </div>
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Absen Masuk</h5>
+                                <button type="button" class="btn-close" id="iconCloseMasuk" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
 
-                            <div id="webcam-masuk" class="d-flex justify-content-center">
-                                <video id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
-                                {{-- <div class="row">
+
+                            <div class="modal-body">
+                                <div id="lokasi" class="d-flex flex-column justify-content-center mb-6">
+                                    <h3 class="text-center">Lokasi Anda</h3>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        Latitude: <span id="latitudeMasuk" name="latitudeMasuk"></span>
+                                        Longitude: <span id="longitudeMasuk" name="longitudeMasuk"></span>
+                                    </div>
+                                </div>
+
+                                <div id="webcam-masuk" class="d-flex justify-content-center">
+                                    <video id="video-masuk" width="100%" height="100%" autoplay playsinline></video>
+                                    {{-- <div class="row">
                                     <img class="img-fluid mb-3 col-sm-5" id="imagePreview-masuk">
                                     <div class="custom-file ">
                                         <input type="file" accept="image/*" capture="camera" id="uploadInput-masuk"
@@ -75,29 +77,30 @@
                                         <label class="custom-file-label" for="uploadInput-masuk"></label>
                                     </div>
                                 </div> --}}
+                                </div>
+                                <div id="captured-image-masuk-container" style="display: none;">
+                                    <img id="captured-image-masuk" width="100%" height="100%" src=""
+                                        alt="Captured Image">
+                                </div>
+                                <input id="captured-image-input-masuk" type="hidden" name="webcam-masuk" value="">
+                                <input type="hidden" name="waktu-masuk" value="masuk">
+                                <div class="col-md-12 text-center">
+                                    <br />
+                                    <button id="capture-masuk" class="btn btn-primary" onclick="capture('masuk')">Ambil
+                                        Foto</button>
+                                    <button id="reset-masuk" class="btn btn-danger" style="display: none;"
+                                        onclick="resetCapture('masuk')">Reset</button>
+                                </div>
                             </div>
-                            <div id="captured-image-masuk-container" style="display: none;">
-                                <img id="captured-image-masuk" width="100%" height="100%" src=""
-                                    alt="Captured Image">
-                            </div>
-                            <input id="captured-image-input-masuk" type="hidden" name="webcam-masuk" value="">
-                            <input type="hidden" name="waktu-masuk" value="masuk">
-                            <div class="col-md-12 text-center">
-                                <br />
-                                <button id="capture-masuk" class="btn btn-primary" onclick="capture('masuk')">Ambil
-                                    Foto</button>
-                                <button id="reset-masuk" class="btn btn-danger" style="display: none;"
-                                    onclick="resetCapture('masuk')">Reset</button>
-                            </div>
-                        </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="btn-masuk" onclick="submitAbsenMasuk()"
-                                data-bs-dismiss="modal" disabled>Absen</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                <button type="button" id="btnSubmitMasuk" class="btn btn-success" id="btn-masuk"
+                                    onclick="submitAbsenMasuk()" data-bs-dismiss="modal">Absen</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+
             </div>
         </div>
 
@@ -121,7 +124,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Absen Pulang</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id="iconClosePulang" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
 
 
@@ -162,8 +166,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="btn-pulang" onclick="submitAbsenPulang()"
-                                data-bs-dismiss="modal" disabled>Absen</button>
+                            <button type="button" id="btnSubmitPulang" class="btn btn-success" id="btn-pulang"
+                                onclick="submitAbsenPulang()" data-bs-dismiss="modal">Absen</button>
                         </div>
                     </div>
                 </div>
@@ -331,67 +335,88 @@
         // Fungsi untuk mendapatkan waktu saat ini dalam format jam dan menit
         function getCurrentTime() {
             const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            return hours * 60 + minutes; // Menghitung waktu dalam menit
+            const time = now.toLocaleTimeString();
+            return time;
         }
+
+        function setJamMasuk() {
+            const jamMasuk = new Date(); // Membuat objek waktu dengan waktu saat ini
+            jamMasuk.setHours(01); // Mengatur jam menjadi 08
+            jamMasuk.setMinutes(0); // Mengatur menit menjadi 00
+            jamMasuk.setSeconds(0); // Mengatur detik menjadi 00
+
+            // Format waktu dalam bentuk HH:MM:SS
+            const formattedHours = jamMasuk.getHours() < 10 ? `0${jamMasuk.getHours()}` : jamMasuk.getHours();
+            const formattedMinutes = jamMasuk.getMinutes() < 10 ? `0${jamMasuk.getMinutes()}` : jamMasuk.getMinutes();
+            const formattedSeconds = jamMasuk.getSeconds() < 10 ? `0${jamMasuk.getSeconds()}` : jamMasuk.getSeconds();
+
+            // return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            return time;
+        }
+
+        function setJamPulang() {
+            const jamPulang = new Date(); // Membuat objek waktu dengan waktu saat ini
+            jamPulang.setHours(17); // Mengatur jam menjadi 17
+            jamPulang.setMinutes(0); // Mengatur menit menjadi 00
+            jamPulang.setSeconds(0); // Mengatur detik menjadi 00
+
+            // Format waktu dalam bentuk HH:MM:SS
+            const formattedHours = jamPulang.getHours() < 10 ? `0${jamPulang.getHours()}` : jamPulang.getHours();
+            const formattedMinutes = jamPulang.getMinutes() < 10 ? `0${jamPulang.getMinutes()}` : jamPulang.getMinutes();
+            const formattedSeconds = jamPulang.getSeconds() < 10 ? `0${jamPulang.getSeconds()}` : jamPulang.getSeconds();
+
+            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function formatTime(jam, menit, detik) {
+            // Mengecek apakah jam, menit, dan detik kurang dari 10, jika iya, tambahkan "0" di depannya
+            const formattedJam = jam < 10 ? `0${jam}` : jam;
+            const formattedMenit = menit < 10 ? `0${menit}` : menit;
+            const formattedDetik = detik < 10 ? `0${detik}` : detik;
+
+            // Mengembalikan waktu dalam format HH:MM:SS
+            return `${formattedJam}:${formattedMenit}:${formattedDetik}`;
+        }
+
 
         // Fungsi untuk memeriksa waktu dan mengaktifkan/menonaktifkan tombol absen
         function checkAbsenAvailability() {
-            const currentDate = new Date();
-            const currentTime = (currentDate.getHours() < 10 ? "0" : "") + currentDate.getHours() +
-                ":" + (currentDate.getMinutes() < 10 ? "0" : "") + currentDate.getMinutes();
 
-            // Lakukan permintaan AJAX untuk mengambil waktu masuk dan pulang dari server
-            fetch('/lokasi') // Ganti dengan URL yang sesuai di server Anda
-                .then(response => response.json())
-                .then(data => {
+            // Mengatur jam sekarang
+            const now = new Date();
+            const jamSekarang = now.getTime();
 
-                    // console.log("data : ", data);
-                    const masukStartTime = data.map(item => item
-                        .jam_masuk); // Ganti dengan nama kolom yang sesuai di respons JSON
+            // Mengatur jamAbsenMasuk
+            const jamAwalMasuk = new Date();
+            jamAwalMasuk.setHours(7,0,0);
+            const jamAkhirMasuk = new Date();
+            jamAkhirMasuk.setHours(10,0,0);
 
-                    const pulangStartTime = data.map(item => item
-                        .jam_pulang); // Ganti dengan nama kolom yang sesuai di respons JSON
+            const jamAwalPulang = new Date();
+            jamAwalPulang.setHours(16,0,0);
+            const jamAkhirPulang = new Date();
+            jamAkhirPulang.setHours(18,0,0);
 
+            console.log("jam saat ini :", jamSekarang);
 
-
-                    // Loop melalui waktu masuk dan menonaktifkan tombol masuk jika lebih dari 1 jam telah berlalu
-                    masukStartTime.forEach(jamMasuk => {
-                        const jamMasukDate = new Date(`01/01/2023 ${jamMasuk}`);
-                        jamMasukDate.setMinutes(jamMasukDate.getMinutes() + 60);
-                        jamMasukAbsen = (jamMasukDate.getHours() < 10 ? "0" : "") + jamMasukDate.getHours() +
-                            ":" + (jamMasukDate.getMinutes() < 10 ? "0" : "") + jamMasukDate.getMinutes();
-                        console.log(masukStartTime);
-
-                        if (currentTime >= masukStartTime && currentTime <= jamMasukAbsen) {
-                            console.log("btn masuk open");
-                            btnMasuk.removeAttribute("disabled"); // Menonaktifkan tombol absen masuk
-                        } else {
-                            modalBodyMasuk.innerHTML = "<p>Harap absen sesuai waktu yang ditentukan!</p>";
-                        }
-                    });
-
-                    pulangStartTime.forEach(jamPulang => {
-                        const jamPulangDate = new Date(`01/01/2023 ${jamPulang}`);
-                        jamPulangDate.setMinutes(jamPulangDate.getMinutes() + 60);
-                        jamPulangAbsen = (jamPulangDate.getHours() < 10 ? "0" : "") + jamPulangDate.getHours() +
-                            ":" + (jamPulangDate.getMinutes() < 10 ? "0" : "") + jamPulangDate.getMinutes();
-                        console.log(pulangStartTime);
-
-                        if (currentTime >= pulangStartTime && currentTime <= jamPulangAbsen) {
-                            console.log("btn pulang open");
-                            btnPulang.removeAttribute("disabled"); // Menonaktifkan tombol absen masuk
-                        } else {
-                            modalBodyPulang.innerHTML = "<p>Harap absen sesuai waktu yang ditentukan!</p>";
-                        }
-                    });
+            if (jamSekarang >= jamAwalMasuk && jamSekarang <= jamAkhirMasuk) {
+                console.log("absen masuk buka");
+                // btnMasuk.removeAttribute("disabled"); // Menonaktifkan tombol absen masuk
+            } else {
+                modalBodyMasuk.innerHTML = "<p>Harap absen sesuai waktu yang ditentukan!</p>";
+                document.getElementById("iconCloseMasuk").style.display = "none";
+                document.getElementById("btnSubmitMasuk").style.display = "none";
+            }
 
 
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                });
+            if (jamSekarang >= jamAwalPulang && jamSekarang <= jamAkhirPulang) {
+                console.log("absen pulang buka");
+                // btnPulang.removeAttribute("disabled"); // Menonaktifkan tombol absen pulang
+            } else {
+                modalBodyPulang.innerHTML = "<p>Harap absen sesuai waktu yang ditentukan!</p>";
+                document.getElementById("iconClosePulang").style.display = "none";
+                document.getElementById("btnSubmitPulang").style.display = "none";
+            }
 
         }
 
@@ -399,31 +424,31 @@
         setInterval(checkAbsenAvailability(), 2000);
 
         // cek udah absen
-        function getAbsen(waktu){
+        function getAbsen(waktu) {
 
             $.ajax({
-                        url: '{{ route("karyawan.getAbsen") }}',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            console.log("getAbsen : ", data);
-                            if(waktu == 'masuk'){
-                                if(data.jam_masuk != null && data.foto_masuk != null && data.lokasi_masuk != null){
-                                    modalBodyMasuk.innerHTML = "<p>Anda Sudah Absen Masuk</p>"
-                                }
-                            }
-                            if(waktu == 'pulang'){
-                                if(data.jam_pulang != null && data.foto_pulang != null && data.lokasi_pulang != null){
-                                    modalBodyPulang.innerHTML = "<p>Anda Sudah Absen Pulang</p>"
-                                }
-                            }
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.log(xhr.responseText);
-
+                url: '{{ route('karyawan.getAbsen') }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log("getAbsen : ", data);
+                    if (waktu == 'masuk') {
+                        if (data.jam_masuk != null && data.foto_masuk != null && data.lokasi_masuk != null) {
+                            modalBodyMasuk.innerHTML = "<p>Anda Sudah Absen Masuk</p>"
                         }
-                    })
+                    }
+                    if (waktu == 'pulang') {
+                        if (data.jam_pulang != null && data.foto_pulang != null && data.lokasi_pulang != null) {
+                            modalBodyPulang.innerHTML = "<p>Anda Sudah Absen Pulang</p>"
+                        }
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+
+                }
+            })
         }
 
 

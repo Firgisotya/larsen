@@ -66,21 +66,18 @@ class AbsensiController extends Controller
 
         // menghitung lama telat absensi
         $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $dueDate = LokasiKantor::all();
+        $dueDate = "08:00:00";
 
         $telat = null; // Menyimpan lama telat awal sebagai null
 
-        foreach ($dueDate as $date) {
-            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_masuk);
-
             // Hitung selisih antara waktu masuk dan batas waktu masuk
-            $telatTemp = $jamAbsen->diffInMinutes($jamBatas);
+            $telatTemp = $jamAbsen->diffInMinutes($dueDate);
 
             // Jika $telat masih null atau lebih kecil dari $telatTemp, maka update $telat
             if ($telat === null || $telatTemp < $telat) {
                 $telat = $telatTemp;
             }
-        }
+        
 
         // Konversi lama telat dari menit menjadi format yang diinginkan
         $jamTelat = floor($telat / 60); // Menghitung jam
@@ -161,21 +158,17 @@ class AbsensiController extends Controller
 
         // menghitung lama telat absensi
         $jamAbsen = Carbon::createFromFormat('H:i:s', $jam);
-        $dueDate = LokasiKantor::all();
+        $dueDate = "17:00:00";
 
         $telat = null; // Menyimpan lama telat awal sebagai null
 
-        foreach ($dueDate as $date) {
-            $jamBatas = Carbon::createFromFormat('H:i:s', $date->jam_pulang);
-
             // Hitung selisih antara waktu masuk dan batas waktu masuk
-            $telatTemp = $jamAbsen->diffInMinutes($jamBatas);
+            $telatTemp = $jamAbsen->diffInMinutes($dueDate);
 
             // Jika $telat masih null atau lebih kecil dari $telatTemp, maka update $telat
             if ($telat === null || $telatTemp < $telat) {
                 $telat = $telatTemp;
             }
-        }
 
         // Validasi apakah lama telat lebih dari 30 menit
         if ($telat > 30) {
