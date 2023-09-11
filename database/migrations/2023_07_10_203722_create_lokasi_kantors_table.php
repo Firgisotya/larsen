@@ -17,8 +17,6 @@ class CreateLokasiKantorsTable extends Migration
             $table->id();
             $table->string('nama_kantor');
             $table->string('alamat_kantor');
-            $table->time('jam_masuk');
-            $table->time('jam_pulang');
             $table->string('latitude');
             $table->string('longitude');
             $table->integer('radius');

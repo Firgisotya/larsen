@@ -47,32 +47,6 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="jam_masuk" class="form-label">Jam Masuk</label>
-                            <input type="time"
-                                class="form-control @error('jam_masuk') is-invalid
-                        @enderror"
-                                id="jam_masuk" placeholder="Jam Masuk" name="jam_masuk" required autofocus
-                                value="{{ old('jam_masuk') }}">
-                            @error('jam_masuk')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="jam_pulang" class="form-label">Jam Pulang</label>
-                            <input type="time"
-                                class="form-control @error('jam_pulang') is-invalid
-                        @enderror"
-                                id="jam_pulang" placeholder="Jam Pulang" name="jam_pulang" required autofocus
-                                value="{{ old('jam_pulang') }}">
-                            @error('jam_pulang')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
                             <label for="latitude" class="form-label">Latitude</label>
                             <input type="text"
                                 class="form-control @error('latitude') is-invalid

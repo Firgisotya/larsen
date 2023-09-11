@@ -28,8 +28,6 @@ class LokasiKantorController extends Controller
         $validateData = $request->validate([
             'nama_kantor' => 'required',
             'alamat_kantor' => 'required',
-            'jam_masuk' => 'required',
-            'jam_pulang' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
             'radius' => 'required'
@@ -60,8 +58,6 @@ class LokasiKantorController extends Controller
         $validateData = $request->validate([
             'nama_kantor' => 'required',
             'alamat_kantor' => 'required',
-            'jam_masuk' => 'required',
-            'jam_pulang' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
             'radius' => 'required'

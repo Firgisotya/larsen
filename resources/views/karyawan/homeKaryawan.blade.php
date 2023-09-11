@@ -332,53 +332,6 @@
             }
         });
 
-        // Fungsi untuk mendapatkan waktu saat ini dalam format jam dan menit
-        function getCurrentTime() {
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            return time;
-        }
-
-        function setJamMasuk() {
-            const jamMasuk = new Date(); // Membuat objek waktu dengan waktu saat ini
-            jamMasuk.setHours(01); // Mengatur jam menjadi 08
-            jamMasuk.setMinutes(0); // Mengatur menit menjadi 00
-            jamMasuk.setSeconds(0); // Mengatur detik menjadi 00
-
-            // Format waktu dalam bentuk HH:MM:SS
-            const formattedHours = jamMasuk.getHours() < 10 ? `0${jamMasuk.getHours()}` : jamMasuk.getHours();
-            const formattedMinutes = jamMasuk.getMinutes() < 10 ? `0${jamMasuk.getMinutes()}` : jamMasuk.getMinutes();
-            const formattedSeconds = jamMasuk.getSeconds() < 10 ? `0${jamMasuk.getSeconds()}` : jamMasuk.getSeconds();
-
-            // return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-            return time;
-        }
-
-        function setJamPulang() {
-            const jamPulang = new Date(); // Membuat objek waktu dengan waktu saat ini
-            jamPulang.setHours(17); // Mengatur jam menjadi 17
-            jamPulang.setMinutes(0); // Mengatur menit menjadi 00
-            jamPulang.setSeconds(0); // Mengatur detik menjadi 00
-
-            // Format waktu dalam bentuk HH:MM:SS
-            const formattedHours = jamPulang.getHours() < 10 ? `0${jamPulang.getHours()}` : jamPulang.getHours();
-            const formattedMinutes = jamPulang.getMinutes() < 10 ? `0${jamPulang.getMinutes()}` : jamPulang.getMinutes();
-            const formattedSeconds = jamPulang.getSeconds() < 10 ? `0${jamPulang.getSeconds()}` : jamPulang.getSeconds();
-
-            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-        }
-
-        function formatTime(jam, menit, detik) {
-            // Mengecek apakah jam, menit, dan detik kurang dari 10, jika iya, tambahkan "0" di depannya
-            const formattedJam = jam < 10 ? `0${jam}` : jam;
-            const formattedMenit = menit < 10 ? `0${menit}` : menit;
-            const formattedDetik = detik < 10 ? `0${detik}` : detik;
-
-            // Mengembalikan waktu dalam format HH:MM:SS
-            return `${formattedJam}:${formattedMenit}:${formattedDetik}`;
-        }
-
-
         // Fungsi untuk memeriksa waktu dan mengaktifkan/menonaktifkan tombol absen
         function checkAbsenAvailability() {
 

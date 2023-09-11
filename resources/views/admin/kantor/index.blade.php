@@ -30,8 +30,6 @@
                                     <th scope="col">No</th>
                                     <th scope="col">Nama Kantor</th>
                                     <th scope="col">Alamat Kantor</th>
-                                    <th scope="col">Jam Masuk</th>
-                                    <th scope="col">Jam Pulang</th>
                                     <th scope="col">Latitude</th>
                                     <th scope="col">Longitude</th>
                                     <th scope="col">Radius</th>
@@ -44,8 +42,6 @@
                                         <th scope="row">{{ $loop->index + 1 }}</th>
                                         <td>{{ $item->nama_kantor }}</td>
                                         <td>{{ $item->alamat_kantor }}</td>
-                                        <td>{{ $item->jam_masuk }}</td>
-                                        <td>{{ $item->jam_pulang }}</td>
                                         <td>{{ $item->latitude }}</td>
                                         <td>{{ $item->longitude }}</td>
                                         <td>{{ $item->radius }} Meter</td>
